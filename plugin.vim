@@ -1,5 +1,3 @@
-" $XDG_CONFIG_HOME/nvim/plugin.vim
-
 call plug#begin('~/.vim/plugged')
 " Syntax
 Plug 'bfrg/vim-cpp-modern'
