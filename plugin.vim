@@ -15,7 +15,6 @@ Plug 'preservim/nerdtree' |
             \ Plug 'Xuyuanp/nerdtree-git-plugin' |
             \ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-fugitive'
-Plug 'yuttie/comfortable-motion.vim'
 
 " Themes
 Plug 'dracula/vim', { 'as': 'dracula' }

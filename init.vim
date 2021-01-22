@@ -17,13 +17,22 @@ inoremap kj <Esc>
 tnoremap kj <C-\><C-n>
 noremap <C-l> :noh<CR><C-l>
 
+" Use alt + hjkl to resize windows
+nnoremap <M-j>    :resize -1<CR>
+nnoremap <M-k>    :resize +1<CR>
+nnoremap <M-h>    :vertical resize -1<CR>
+nnoremap <M-l>    :vertical resize +1<CR>
+
 nnoremap <S-tab> :NERDTreeToggle<CR>
 command NCD NERDTreeCWD
 command NFD NERDTreeFind
 
 set number
 set nowrap
+set cursorline
+
 set wildmenu
+set pumheight=10
 
 set hlsearch
 set incsearch
