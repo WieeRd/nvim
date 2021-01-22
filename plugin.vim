@@ -26,6 +26,7 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'ayu-theme/ayu-vim'
 Plug 'relastle/bluewery.vim'
 Plug 'Mizux/vim-colorschemes'
+Plug 'ciaranm/inkpot'
 
 " Misc
 Plug 'johngrib/vim-game-code-break'
