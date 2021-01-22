@@ -1,4 +1,4 @@
-call plug#begin('~/.vim/plugged')
+call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
 " Syntax
 Plug 'bfrg/vim-cpp-modern'
 Plug 'vim-python/python-syntax'
