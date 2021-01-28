@@ -8,6 +8,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'Yggdroot/indentLine'
 Plug 'Raimondi/delimitMate'
+Plug 'jeetsukumaran/vim-pythonsense'
 
 " IDE
 Plug 'ctrlpvim/ctrlp.vim'
