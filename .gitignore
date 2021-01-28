@@ -3,4 +3,5 @@
 !init.vim
 !plugin.vim
 !autoload/
+!plug.vim
 !README.md
