@@ -16,6 +16,7 @@ Plug 'preservim/nerdtree' |
             \ Plug 'Xuyuanp/nerdtree-git-plugin' |
             \ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-fugitive'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Themes
 Plug 'dracula/vim', { 'as': 'dracula' }
