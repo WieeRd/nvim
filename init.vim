@@ -38,11 +38,14 @@ set pumheight=10
 
 set hlsearch
 set incsearch
+set ignorecase
+set smartcase
 
 set clipboard=unnamedplus
 set mouse=c
 
 set tabstop=4
+set expandtab
 set shiftwidth=4
 
 set smartindent
