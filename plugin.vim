@@ -9,6 +9,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'Yggdroot/indentLine'
 Plug 'Raimondi/delimitMate'
+Plug 'jeetsukumaran/vim-pythonsense'
 
 " IDE
 Plug 'ctrlpvim/ctrlp.vim'
@@ -16,6 +17,7 @@ Plug 'preservim/nerdtree' |
 "            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
 "            \ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-fugitive'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Themes
 Plug 'dracula/vim', { 'as': 'dracula' }

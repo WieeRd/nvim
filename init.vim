@@ -3,7 +3,9 @@ let $LANG = 'en_US'
 
 let $vimrc = '$XDG_CONFIG_HOME/nvim/init.vim'
 let $plugin = '$XDG_CONFIG_HOME/nvim/plugin.vim'
+let $coc_config = '$XDG_CONFIG_HOME/nvim/coc_config.vim'
 source $plugin
+" source $coc_config
 
 set noundofile
 set noswapfile
@@ -43,6 +45,7 @@ set clipboard=unnamedplus
 set mouse=c
 
 set tabstop=4
+set expandtab
 set shiftwidth=4
 
 set smartindent
