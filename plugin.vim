@@ -1,6 +1,7 @@
 call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
 " Syntax
-Plug 'bfrg/vim-cpp-modern'
+Plug 'octol/vim-cpp-enhanced-highlight'
+" Plug 'bfrg/vim-cpp-modern'
 Plug 'vim-python/python-syntax'
 
 " Tools
@@ -12,8 +13,8 @@ Plug 'Raimondi/delimitMate'
 " IDE
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'preservim/nerdtree' |
-            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
-            \ Plug 'ryanoasis/vim-devicons'
+"            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+"            \ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-fugitive'
 
 " Themes
@@ -32,6 +33,17 @@ Plug 'johngrib/vim-game-code-break'
 
 call plug#end()
 
+" cpp syntax config
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+
+" python syntax
+let g:python_highlight_all = 1
+
 " IndentLine config
 autocmd VimEnter * if bufname('%') == '' | IndentLinesDisable | endif
 let g:indentLine_char = '┊'
@@ -46,7 +58,7 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 let NERDTreeShowHidden=1
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     \ quit | endif
-let g:NERDTreeGitStatusUseNerdFonts = 1
+" let g:NERDTreeGitStatusUseNerdFonts = 1
 
 let ayucolor="mirage"
 let g:oceanic_next_terminal_bold = 1

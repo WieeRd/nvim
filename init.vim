@@ -36,6 +36,8 @@ set pumheight=10
 
 set hlsearch
 set incsearch
+set ignorecase
+set smartcase
 
 set clipboard=unnamedplus
 set mouse=c
