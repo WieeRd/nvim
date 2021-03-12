@@ -3,13 +3,16 @@ let $LANG = 'en_US'
 
 let $vimrc = '$XDG_CONFIG_HOME/nvim/init.vim'
 let $plugin = '$XDG_CONFIG_HOME/nvim/plugin.vim'
-let $coc_config = '$XDG_CONFIG_HOME/nvim/coc_config.vim'
 source $plugin
-" source $coc_config
 
 set noundofile
 set noswapfile
 set encoding=UTF-8
+
+set hidden
+set updatetime=200
+set shortmess+=c
+set signcolumn=no
 
 set t_Co=256
 set termguicolors
@@ -24,10 +27,6 @@ nnoremap <M-j>    :resize -1<CR>
 nnoremap <M-k>    :resize +1<CR>
 nnoremap <M-h>    :vertical resize -1<CR>
 nnoremap <M-l>    :vertical resize +1<CR>
-
-nnoremap <S-tab> :NERDTreeToggle<CR>
-command NCD NERDTreeCWD
-command NFD NERDTreeFind
 
 set number
 set nowrap

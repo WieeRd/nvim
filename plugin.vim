@@ -14,10 +14,11 @@ Plug 'jeetsukumaran/vim-pythonsense'
 " IDE
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'preservim/nerdtree' |
-"            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
-"            \ Plug 'ryanoasis/vim-devicons'
+           \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+           \ Plug 'ryanoasis/vim-devicons'
+Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Themes
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -42,9 +43,11 @@ let g:cpp_class_decl_highlight = 1
 let g:cpp_posix_standard = 1
 let g:cpp_experimental_template_highlight = 1
 let g:cpp_concepts_highlight = 1
+let c_no_curly_error=1
 
 " python syntax
 let g:python_highlight_all = 1
+let g:is_pythonsense_suppress_motion_keymaps = 1
 
 " IndentLine config
 autocmd VimEnter * if bufname('%') == '' | IndentLinesDisable | endif
@@ -61,7 +64,32 @@ let NERDTreeShowHidden=1
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     \ quit | endif
 " let g:NERDTreeGitStatusUseNerdFonts = 1
+nnoremap <S-tab> :NERDTreeToggle<CR>
+command NCD NERDTreeCWD
+command NFD NERDTreeFind
 
+" GitGutter
+command GS GitGutterSignsEnable | set signcolumn=yes:1
+command GH GitGutterSignsDisable | set signcolumn=no
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+
+" coc.nvim
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" colorschemes
 let ayucolor="mirage"
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
