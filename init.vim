@@ -28,6 +28,9 @@ nnoremap <M-k>    :resize +1<CR>
 nnoremap <M-h>    :vertical resize -1<CR>
 nnoremap <M-l>    :vertical resize +1<CR>
 
+command SV mksession! ~/.vimlast
+command LD source ~/.vimlast
+
 set number
 set nowrap
 set cursorline
