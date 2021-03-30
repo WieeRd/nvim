@@ -7,8 +7,10 @@ Plug 'vim-python/python-syntax'
 " Tools
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'Yggdroot/indentLine'
+Plug 'tpope/vim-unimpaired'
+
 Plug 'Raimondi/delimitMate'
+Plug 'Yggdroot/indentLine'
 Plug 'jeetsukumaran/vim-pythonsense'
 
 " IDE
