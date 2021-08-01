@@ -1,4 +1,5 @@
 call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
+
 " Syntax
 Plug 'octol/vim-cpp-enhanced-highlight'
 " Plug 'bfrg/vim-cpp-modern'
@@ -13,32 +14,35 @@ Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
 Plug 'jeetsukumaran/vim-pythonsense'
 
-" IDE
+" IDE-like
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'preservim/nerdtree' |
            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
            \ Plug 'ryanoasis/vim-devicons'
+
+" Git
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/gv.vim'
 
 " Themes
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'mhartington/oceanic-next'
-Plug 'vim-scripts/greenvision'
-Plug 'Michal-Miko/vim-mono-red'
+Plug 'sainnhe/sonokai'
 Plug 'nanotech/jellybeans.vim'
-Plug 'ayu-theme/ayu-vim'
-Plug 'relastle/bluewery.vim'
-Plug 'Mizux/vim-colorschemes'
-Plug 'ciaranm/inkpot'
+Plug 'junegunn/seoul256.vim'
+Plug 'Michal-Miko/vim-mono-red'
+Plug 'vim-scripts/greenvision'
 
 " Misc
 Plug 'johngrib/vim-game-code-break'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 
 call plug#end()
 
-" cpp syntax config
+" cpp syntax
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
@@ -51,22 +55,23 @@ let c_no_curly_error=1
 let g:python_highlight_all = 1
 let g:is_pythonsense_suppress_motion_keymaps = 1
 
-" IndentLine config
+" IndentLine
 autocmd VimEnter * if bufname('%') == '' | IndentLinesDisable | endif
 let g:indentLine_char = '┊'
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_first_char = '┊' 
 
-" CtrlP config
+" CtrlP
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 
-" NERDTree config
+" NERDTree
 let NERDTreeShowHidden=1
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     \ quit | endif
 " let g:NERDTreeGitStatusUseNerdFonts = 1
 nnoremap <S-tab> :NERDTreeToggle<CR>
+command NT NERDTreeToggle
 command NCD NERDTreeCWD
 command NFD NERDTreeFind
 
@@ -88,7 +93,7 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Enter to select first
+" Enter to select first match
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
@@ -96,6 +101,7 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
+" K to show documentation
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -107,7 +113,19 @@ function! s:show_documentation()
   endif
 endfunction
 
-" colorschemes
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" colorscheme
 let ayucolor="mirage"
+
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
+
+let g:sonokai_style='default'
+
+" Goyo
+command Focus Goyo 50%x90% | IndentLinesDisable

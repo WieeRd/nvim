@@ -1,6 +1,7 @@
 set langmenu=en_US
 let $LANG = 'en_US'
 
+" add 'export XDG_CONFIG_HOME=~/.config' to ~/.bashrc
 let $vimrc = '$XDG_CONFIG_HOME/nvim/init.vim'
 let $plugin = '$XDG_CONFIG_HOME/nvim/plugin.vim'
 source $plugin
@@ -16,11 +17,12 @@ set signcolumn=no
 
 set t_Co=256
 set termguicolors
-colorscheme dracula
+colo sonokai
 
 inoremap kj <Esc>
 tnoremap kj <C-\><C-n>
 noremap <C-l> :noh<CR><C-l>
+nnoremap <C-s> :w<CR>
 
 " Use alt + hjkl to resize windows
 nnoremap <M-j>    :resize -1<CR>
