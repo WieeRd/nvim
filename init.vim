@@ -1,7 +1,7 @@
 set langmenu=en_US
 let $LANG = 'en_US'
 
-" add 'export XDG_CONFIG_HOME=~/.config' to ~/.bashrc
+" export XDG_CONFIG_HOME=~/.config
 let $vimrc = '$XDG_CONFIG_HOME/nvim/init.vim'
 let $plugin = '$XDG_CONFIG_HOME/nvim/plugin.vim'
 source $plugin
@@ -10,18 +10,19 @@ set noundofile
 set noswapfile
 set encoding=UTF-8
 
-set hidden
-set updatetime=200
-set shortmess+=c
-set signcolumn=no
-
 set t_Co=256
 set termguicolors
 colo sonokai
 
+" Esc alternative
 inoremap kj <Esc>
 tnoremap kj <C-\><C-n>
-noremap <C-l> :noh<CR><C-l>
+
+" use arrow keys for scrolling
+nnoremap <Up> <C-y>
+nnoremap <Down> <C-e>
+
+nnoremap <C-l> :noh<CR><C-l>
 nnoremap <C-s> :w<CR>
 
 " Use alt + hjkl to resize windows
@@ -33,6 +34,12 @@ nnoremap <M-l>    :vertical resize +1<CR>
 command SV mksession! ~/.vimlast
 command LD source ~/.vimlast
 
+set hidden
+set updatetime=200
+set shortmess+=c
+set scrolloff=5
+
+set signcolumn=no
 set number
 set nowrap
 set cursorline

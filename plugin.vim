@@ -128,4 +128,25 @@ let g:oceanic_next_terminal_italic = 1
 let g:sonokai_style='default'
 
 " Goyo
-command Focus Goyo 50%x90% | IndentLinesDisable
+map <F4> :Goyo<CR>
+let g:goyo_width="45%"
+let g:goyo_height="90%"
+let s:scrolloff_modified=float2nr(winheight(0)*0.9*0.33)
+
+function! s:goyo_enter()
+  let s:scrolloff_default = &scrolloff
+  let &scrolloff=s:scrolloff_modified
+  set noshowmode
+  IndentLinesDisable
+  Limelight
+endfunction
+
+function! s:goyo_leave()
+  let &scrolloff=s:scrolloff_default
+  set showmode
+  IndentLinesEnable
+  Limelight!
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
