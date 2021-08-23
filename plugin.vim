@@ -12,6 +12,7 @@ Plug 'tpope/vim-unimpaired'
 
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
+" Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'jeetsukumaran/vim-pythonsense'
 
 " IDE-like
@@ -20,6 +21,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'preservim/nerdtree' |
            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
            \ Plug 'ryanoasis/vim-devicons'
+" Plug 'bluz71/vim-moonfly-statusline'
 
 " Git
 Plug 'airblade/vim-gitgutter'
@@ -30,6 +32,7 @@ Plug 'junegunn/gv.vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'mhartington/oceanic-next'
 Plug 'sainnhe/sonokai'
+Plug 'arcticicestudio/nord-vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'junegunn/seoul256.vim'
 Plug 'Michal-Miko/vim-mono-red'
@@ -120,15 +123,13 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " colorscheme
-let ayucolor="mirage"
-
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
 
 let g:sonokai_style='default'
 
 " Goyo
-map <F4> :Goyo<CR>
+map <F4> :Goyo<CR><C-l>
 let g:goyo_width="45%"
 let g:goyo_height="90%"
 let s:scrolloff_modified=float2nr(winheight(0)*0.9*0.33)
@@ -137,6 +138,10 @@ function! s:goyo_enter()
   let s:scrolloff_default = &scrolloff
   let &scrolloff=s:scrolloff_modified
   set noshowmode
+  set nocursorline
+  augroup cmdline
+    autocmd CmdlineLeave : echo ''
+  augroup END
   IndentLinesDisable
   Limelight
 endfunction
@@ -144,9 +149,14 @@ endfunction
 function! s:goyo_leave()
   let &scrolloff=s:scrolloff_default
   set showmode
+  set cursorline
+  autocmd! cmdline
   IndentLinesEnable
   Limelight!
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+" moonfly
+let g:moonflyIgnoreDefaultColors = 1

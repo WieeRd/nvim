@@ -1,4 +1,5 @@
 set langmenu=en_US
+set encoding=UTF-8
 let $LANG = 'en_US'
 
 " export XDG_CONFIG_HOME=~/.config
@@ -8,7 +9,6 @@ source $plugin
 
 set noundofile
 set noswapfile
-set encoding=UTF-8
 
 set t_Co=256
 set termguicolors
@@ -31,9 +31,11 @@ nnoremap <M-k>    :resize +1<CR>
 nnoremap <M-h>    :vertical resize -1<CR>
 nnoremap <M-l>    :vertical resize +1<CR>
 
-command SV mksession! ~/.vimlast
-command LD source ~/.vimlast
+" Save & Load session
+command SV mks! ~/.vimlast
+command LD so ~/.vimlast
 
+" Settings I forgot what it means
 set hidden
 set updatetime=200
 set shortmess+=c
