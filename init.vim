@@ -34,6 +34,9 @@ nnoremap <M-l>    :vertical resize +1<CR>
 " Save & Load session
 command SV mks! ~/.vimlast
 command LD so ~/.vimlast
+noremap <F1> :wqa<CR>
+noremap <F2> :SV<CR>
+noremap <F3> :LD<CR>
 
 " Settings I forgot what it means
 set hidden

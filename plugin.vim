@@ -11,16 +11,18 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 
 Plug 'Raimondi/delimitMate'
-Plug 'Yggdroot/indentLine'
-" Plug 'lukas-reineke/indent-blankline.nvim'
+" Plug 'Yggdroot/indentLine'
+Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'jeetsukumaran/vim-pythonsense'
 
 " IDE-like
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'preservim/nerdtree' |
-           \ Plug 'Xuyuanp/nerdtree-git-plugin' |
-           \ Plug 'ryanoasis/vim-devicons'
+" Plug 'preservim/nerdtree' |
+"            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+"            \ Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'bluz71/vim-moonfly-statusline'
 
 " Git
@@ -58,25 +60,26 @@ let c_no_curly_error=1
 let g:python_highlight_all = 1
 let g:is_pythonsense_suppress_motion_keymaps = 1
 
-" IndentLine
-autocmd VimEnter * if bufname('%') == '' | IndentLinesDisable | endif
+" " IndentLine
+" autocmd VimEnter * if bufname('%') == '' | IndentLinesDisable | endif
 let g:indentLine_char = '┊'
-let g:indentLine_showFirstIndentLevel = 1
-let g:indentLine_first_char = '┊' 
+" let g:indentLine_showFirstIndentLevel = 1
+" let g:indentLine_first_char = '┊'
 
 " CtrlP
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 
-" NERDTree
-let NERDTreeShowHidden=1
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    \ quit | endif
-" let g:NERDTreeGitStatusUseNerdFonts = 1
-nnoremap <S-tab> :NERDTreeToggle<CR>
-command NT NERDTreeToggle
-command NCD NERDTreeCWD
-command NFD NERDTreeFind
+" " NERDTree
+" let NERDTreeShowHidden=1
+" autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+"     \ quit | endif
+" " let g:NERDTreeGitStatusUseNerdFonts = 1
+" nnoremap <C-n> :NERDTreeToggle<CR>
+" command NCD NERDTreeCWD
+" command NFD NERDTreeFind
+
+nnoremap <C-n> :NvimTreeToggle<CR>
 
 " GitGutter
 command GS GitGutterSignsEnable | set signcolumn=yes:1
@@ -92,8 +95,8 @@ inoremap <silent><expr> <TAB>
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Enter to select first match
@@ -107,13 +110,13 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 " K to show documentation
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+    else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
 endfunction
 
 " GoTo code navigation.
@@ -135,24 +138,24 @@ let g:goyo_height="90%"
 let s:scrolloff_modified=float2nr(winheight(0)*0.9*0.33)
 
 function! s:goyo_enter()
-  let s:scrolloff_default = &scrolloff
-  let &scrolloff=s:scrolloff_modified
-  set noshowmode
-  set nocursorline
-  augroup cmdline
-    autocmd CmdlineLeave : echo ''
-  augroup END
-  IndentLinesDisable
-  Limelight
+    let s:scrolloff_default = &scrolloff
+    let &scrolloff=s:scrolloff_modified
+    set noshowmode
+    set nocursorline
+    augroup cmdline
+        autocmd CmdlineLeave : echo ''
+    augroup END
+    IndentBlanklineDisable
+    Limelight
 endfunction
 
 function! s:goyo_leave()
-  let &scrolloff=s:scrolloff_default
-  set showmode
-  set cursorline
-  autocmd! cmdline
-  IndentLinesEnable
-  Limelight!
+    let &scrolloff=s:scrolloff_default
+    set showmode
+    set cursorline
+    autocmd! cmdline
+    IndentBlanklineEnable
+    Limelight!
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
