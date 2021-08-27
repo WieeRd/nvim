@@ -79,13 +79,27 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 " command NCD NERDTreeCWD
 " command NFD NERDTreeFind
 
+" nvim-tree.lua
 nnoremap <C-n> :NvimTreeToggle<CR>
+let g:nvim_tree_ignore = [ '.git', 'node_modules', '__pycache__' ]
+let g:nvim_tree_gitignore = 1
+let g:nvim_tree_auto_close = 1
 
 " GitGutter
-command GS GitGutterSignsEnable | set signcolumn=yes:1
-command GH GitGutterSignsDisable | set signcolumn=no
+command GShow GitGutterLineHighlightsToggle
+command GHide GitGutterFold
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
+
+nmap gs <Plug>(GitGutterPreviewHunk)
+" nmap ghs <Plug>(GitGutterStageHunk)
+nmap ghu <Plug>(GitGutterUndoHunk)
+
+" hunk text object
+omap ih <Plug>(GitGutterTextObjectInnerPending)
+omap ah <Plug>(GitGutterTextObjectOuterPending)
+xmap ih <Plug>(GitGutterTextObjectInnerVisual)
+xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 
 " coc.nvim
 inoremap <silent><expr> <TAB>

@@ -1,4 +1,5 @@
 {
     "pyright.disableSelfClsNotAccessed": true,
-    "clangd.path": "/home/wieerd/.config/coc/extensions/coc-clangd-data/install/11.0.0/clangd_11.0.0/bin/clangd"
+    "clangd.path": "/home/wieerd/.config/coc/extensions/coc-clangd-data/install/11.0.0/clangd_11.0.0/bin/clangd",
+    "git.enableGutters": true
 }
