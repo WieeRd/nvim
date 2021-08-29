@@ -24,6 +24,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'bluz71/vim-moonfly-statusline'
+Plug 'akinsho/toggleterm.nvim'
 
 " Git
 Plug 'airblade/vim-gitgutter'
@@ -66,6 +67,9 @@ let g:indentLine_char = '┊'
 " let g:indentLine_showFirstIndentLevel = 1
 " let g:indentLine_first_char = '┊'
 
+" IndentLines
+command IB IndentBlanklineToggle
+
 " CtrlP
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
@@ -80,6 +84,7 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 " command NFD NERDTreeFind
 
 " nvim-tree.lua
+command NT NvimTreeToggle
 nnoremap <C-n> :NvimTreeToggle<CR>
 let g:nvim_tree_ignore = [ '.git', 'node_modules', '__pycache__' ]
 let g:nvim_tree_gitignore = 1
@@ -174,6 +179,11 @@ endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+" ToggleTerm
+command Term ToggleTerm direction="horizontal"
+nnoremap <S-tab> :ToggleTerm direction="float"<CR>
+tnoremap <silent><S-tab> <C-\><C-n>:q<CR>
 
 " moonfly
 let g:moonflyIgnoreDefaultColors = 1

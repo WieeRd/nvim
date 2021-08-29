@@ -44,10 +44,11 @@ set updatetime=200
 set shortmess+=c
 set scrolloff=5
 
+set laststatus=1
 set signcolumn=no
 set number
 set nowrap
-set cursorline
+" set cursorline
 
 set wildmenu
 set pumheight=10
