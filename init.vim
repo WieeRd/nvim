@@ -19,6 +19,7 @@ inoremap kj <Esc>
 tnoremap kj <C-\><C-n>
 
 " use arrow keys for scrolling
+" TODO: find better use for <Left> <Right>
 nnoremap <Up> <C-y>
 nnoremap <Down> <C-e>
 

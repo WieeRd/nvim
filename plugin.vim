@@ -1,6 +1,7 @@
 call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
 
 " Syntax
+" TODO: nvim-treesitter can replace all of these
 Plug 'octol/vim-cpp-enhanced-highlight'
 " Plug 'bfrg/vim-cpp-modern'
 Plug 'vim-python/python-syntax'
@@ -45,6 +46,7 @@ Plug 'vim-scripts/greenvision'
 Plug 'johngrib/vim-game-code-break'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
+Plug 'psliwka/vim-smoothie'
 
 call plug#end()
 
@@ -67,7 +69,7 @@ let g:indentLine_char = '┊'
 " let g:indentLine_showFirstIndentLevel = 1
 " let g:indentLine_first_char = '┊'
 
-" IndentLines
+" IndentBlankLine
 command IB IndentBlanklineToggle
 
 " CtrlP
@@ -160,7 +162,7 @@ function! s:goyo_enter()
     let s:scrolloff_default = &scrolloff
     let &scrolloff=s:scrolloff_modified
     set noshowmode
-    set nocursorline
+    " set nocursorline
     augroup cmdline
         autocmd CmdlineLeave : echo ''
     augroup END
@@ -171,7 +173,7 @@ endfunction
 function! s:goyo_leave()
     let &scrolloff=s:scrolloff_default
     set showmode
-    set cursorline
+    " set cursorline
     autocmd! cmdline
     IndentBlanklineEnable
     Limelight!
