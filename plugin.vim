@@ -5,13 +5,15 @@ call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
 Plug 'octol/vim-cpp-enhanced-highlight'
 " Plug 'bfrg/vim-cpp-modern'
 Plug 'vim-python/python-syntax'
+Plug 'psf/black'
 
 " Tools
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 
-Plug 'Raimondi/delimitMate'
+" Plug 'Raimondi/delimitMate'
+Plug 'jiangmiao/auto-pairs'
 " Plug 'Yggdroot/indentLine'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'jeetsukumaran/vim-pythonsense'
@@ -86,11 +88,13 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 " command NFD NERDTreeFind
 
 " nvim-tree.lua
+lua require 'nvim-tree'.setup()
 command NT NvimTreeToggle
-nnoremap <C-n> :NvimTreeToggle<CR>
-let g:nvim_tree_ignore = [ '.git', 'node_modules', '__pycache__' ]
+nnoremap <silent><C-n> :NvimTreeToggle<CR>
+" let g:nvim_tree_ignore = [ '.git', 'node_modules', '__pycache__' ]
 let g:nvim_tree_gitignore = 1
-let g:nvim_tree_auto_close = 1
+" let g:nvim_tree_auto_close = 1
+" let g:nvim_tree_disable_netrw = 0
 
 " GitGutter
 command GShow GitGutterLineHighlightsToggle
@@ -143,7 +147,7 @@ endfunction
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " colorscheme

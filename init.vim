@@ -63,8 +63,8 @@ set clipboard=unnamedplus
 set mouse=c
 
 set tabstop=4
-set expandtab
 set shiftwidth=4
+set expandtab
 
-set smartindent
 set autoindent
+set smartindent
