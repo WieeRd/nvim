@@ -1,7 +1,1 @@
-*
-!.gitignore
-!init.vim
-!ginit.vim
-!plugin.vim
-!README.md
-!coc-settings.json
+plugged/

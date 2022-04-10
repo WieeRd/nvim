@@ -2,15 +2,16 @@ set langmenu=en_US
 set encoding=UTF-8
 let $LANG = 'en_US'
 
-" export XDG_CONFIG_HOME=~/.config
-let $vimrc = '$XDG_CONFIG_HOME/nvim/init.vim'
-let $plugin = '$XDG_CONFIG_HOME/nvim/plugin.vim'
+let $vimrc = expand('<sfile>:p:h') .. '/init.vim'
+let $plugin = expand('<sfile>:p:h') .. '/plugin.vim'
 source $plugin
 
 set noundofile
 set noswapfile
 
-set t_Co=256
+set clipboard=unnamedplus
+set mouse=c
+
 set termguicolors
 colo sonokai
 
@@ -18,53 +19,59 @@ colo sonokai
 inoremap kj <Esc>
 tnoremap kj <C-\><C-n>
 
-" use arrow keys for scrolling
-" TODO: find better use for <Left> <Right>
+" Up/Down arrow keys for scrolling
+" by doing this, mouse wheel scroll page without moving cursor
 nnoremap <Up> <C-y>
 nnoremap <Down> <C-e>
 
+" Right/Left arrow keys for navigating tab pages
+" TODO: find better use of these keys
+noremap <Left> gt
+noremap <Right> gT
+
+" clear search highlights when redrawing screen with Ctrl+L
 nnoremap <C-l> :noh<CR><C-l>
+" I keep using Ctrl+S unconsciously even when using vim haha
 nnoremap <C-s> :w<CR>
 
-" Use alt + hjkl to resize windows
-nnoremap <M-j>    :resize -1<CR>
-nnoremap <M-k>    :resize +1<CR>
-nnoremap <M-h>    :vertical resize -1<CR>
-nnoremap <M-l>    :vertical resize +1<CR>
+" use alt + hjkl to resize windows
+nnoremap <silent> <M-j> :resize -1<CR>
+nnoremap <silent> <M-k> :resize +1<CR>
+nnoremap <silent> <M-h> :vertical resize -1<CR>
+nnoremap <silent> <M-l> :vertical resize +1<CR>
 
-" Save & Load session
-command SV mks! ~/.vimlast
-command LD so ~/.vimlast
-noremap <F1> :wqa<CR>
-noremap <F2> :SV<CR>
-noremap <F3> :LD<CR>
+" quit after saving current session and all files
+noremap <silent> <F2> :mksession! ~/.vimlast <bar> wqa<CR>
+" continue where I left off
+noremap <silent> <F3> :source ~/.vimlast<CR><C-l>
 
-" Settings I forgot what it means
+" settings I forgot what it means
 set hidden
 set updatetime=200
 set shortmess+=c
-set scrolloff=5
 
+" visual settings
 set laststatus=1
 set signcolumn=no
 set number
 set nowrap
-" set cursorline
-
+set nocursorline
+set scrolloff=5
 set wildmenu
 set pumheight=10
 
+" searching settings
 set hlsearch
 set incsearch
 set ignorecase
 set smartcase
 
-set clipboard=unnamedplus
-set mouse=c
-
+" tab/indentation settings
 set tabstop=4
-set shiftwidth=4
-set expandtab
+set shiftwidth=0
+set noexpandtab
 
+filetype plugin indent on
 set autoindent
-set smartindent
+" set smartindent
+set cindent

@@ -22,12 +22,13 @@ Plug 'jeetsukumaran/vim-pythonsense'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'preservim/nerdtree' |
-"            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
-"            \ Plug 'ryanoasis/vim-devicons'
+"			 \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+"			 \ Plug 'ryanoasis/vim-devicons'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'bluz71/vim-moonfly-statusline'
 Plug 'akinsho/toggleterm.nvim'
+Plug 'github/copilot.vim'
 
 " Git
 Plug 'airblade/vim-gitgutter'
@@ -120,8 +121,8 @@ inoremap <silent><expr> <TAB>
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Enter to select first match
@@ -135,13 +136,13 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 " K to show documentation
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    elseif (coc#rpc#ready())
-        call CocActionAsync('doHover')
-    else
-        execute '!' . &keywordprg . " " . expand('<cword>')
-    endif
+	if (index(['vim','help'], &filetype) >= 0)
+		execute 'h '.expand('<cword>')
+	elseif (coc#rpc#ready())
+		call CocActionAsync('doHover')
+	else
+		execute '!' . &keywordprg . " " . expand('<cword>')
+	endif
 endfunction
 
 " GoTo code navigation.
@@ -163,24 +164,24 @@ let g:goyo_height="90%"
 let s:scrolloff_modified=float2nr(winheight(0)*0.9*0.33)
 
 function! s:goyo_enter()
-    let s:scrolloff_default = &scrolloff
-    let &scrolloff=s:scrolloff_modified
-    set noshowmode
-    " set nocursorline
-    augroup cmdline
-        autocmd CmdlineLeave : echo ''
-    augroup END
-    IndentBlanklineDisable
-    Limelight
+	let s:scrolloff_default = &scrolloff
+	let &scrolloff=s:scrolloff_modified
+	set noshowmode
+	" set nocursorline
+	augroup cmdline
+		autocmd CmdlineLeave : echo ''
+	augroup END
+	IndentBlanklineDisable
+	Limelight
 endfunction
 
 function! s:goyo_leave()
-    let &scrolloff=s:scrolloff_default
-    set showmode
-    " set cursorline
-    autocmd! cmdline
-    IndentBlanklineEnable
-    Limelight!
+	let &scrolloff=s:scrolloff_default
+	set showmode
+	" set cursorline
+	autocmd! cmdline
+	IndentBlanklineEnable
+	Limelight!
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
