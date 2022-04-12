@@ -2,8 +2,9 @@ set langmenu=en_US
 set encoding=UTF-8
 let $LANG = 'en_US'
 
-let $vimrc = expand('<sfile>:p:h') .. '/init.vim'
-let $plugin = expand('<sfile>:p:h') .. '/plugin.vim'
+let $dotvim = expand('<sfile>:p:h') " $XDG_CONFIG_HOME/nvim
+let $vimrc = $dotvim .. '/init.vim'
+let $plugin = $dotvim .. '/plugin.vim'
 source $plugin
 
 set noundofile
@@ -41,9 +42,9 @@ nnoremap <silent> <M-h> :vertical resize -1<CR>
 nnoremap <silent> <M-l> :vertical resize +1<CR>
 
 " quit after saving current session and all files
-noremap <silent> <F2> :mksession! ~/.vimlast <bar> wqa<CR>
+noremap <silent> <F2> :mksession! ~/Session.vim <bar> wqa<CR>
 " continue where I left off
-noremap <silent> <F3> :source ~/.vimlast<CR><C-l>
+noremap <silent> <F3> :source ~/Session.vim<CR><C-l>
 
 " settings I forgot what it means
 set hidden

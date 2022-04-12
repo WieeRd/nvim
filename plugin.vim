@@ -1,4 +1,4 @@
-call plug#begin('$XDG_CONFIG_HOME/nvim/plugged')
+call plug#begin($dotvim .. '/plugged')
 
 " Syntax
 " TODO: nvim-treesitter can replace all of these
@@ -21,9 +21,6 @@ Plug 'jeetsukumaran/vim-pythonsense'
 " IDE-like
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
-" Plug 'preservim/nerdtree' |
-"			 \ Plug 'Xuyuanp/nerdtree-git-plugin' |
-"			 \ Plug 'ryanoasis/vim-devicons'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'bluz71/vim-moonfly-statusline'
@@ -41,7 +38,6 @@ Plug 'mhartington/oceanic-next'
 Plug 'sainnhe/sonokai'
 Plug 'arcticicestudio/nord-vim'
 Plug 'nanotech/jellybeans.vim'
-Plug 'junegunn/seoul256.vim'
 Plug 'Michal-Miko/vim-mono-red'
 Plug 'vim-scripts/greenvision'
 
@@ -78,15 +74,6 @@ command IB IndentBlanklineToggle
 " CtrlP
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-
-" " NERDTree
-" let NERDTreeShowHidden=1
-" autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-"     \ quit | endif
-" " let g:NERDTreeGitStatusUseNerdFonts = 1
-" nnoremap <C-n> :NERDTreeToggle<CR>
-" command NCD NERDTreeCWD
-" command NFD NERDTreeFind
 
 " nvim-tree.lua
 lua require 'nvim-tree'.setup()
