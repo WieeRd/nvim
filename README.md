@@ -4,9 +4,9 @@ I'm too lazy to use a mouse.
 
 # TODO:
 
-- Make lite version branch
-- Get on the Lua hype train
-- Help I really need to sleep
+- 'Light' branch - Minimal config to use over SSH
+- 'Heavy' branch - Hop on Lua hypetrain
+- Why do I prioritize ricing vim over actual projects
 
 ### Cause serious vim addiction to my friends  
 

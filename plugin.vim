@@ -1,7 +1,6 @@
 call plug#begin($dotvim .. '/plugged')
 
 " Syntax
-" TODO: nvim-treesitter can replace all of these
 Plug 'octol/vim-cpp-enhanced-highlight'
 " Plug 'bfrg/vim-cpp-modern'
 Plug 'vim-python/python-syntax'
@@ -62,14 +61,9 @@ let c_no_curly_error=1
 let g:python_highlight_all = 1
 let g:is_pythonsense_suppress_motion_keymaps = 1
 
-" " IndentLine
-" autocmd VimEnter * if bufname('%') == '' | IndentLinesDisable | endif
-let g:indentLine_char = '┊'
-" let g:indentLine_showFirstIndentLevel = 1
-" let g:indentLine_first_char = '┊'
-
 " IndentBlankLine
 command IB IndentBlanklineToggle
+let g:indentLine_char = '┊'
 
 " CtrlP
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
@@ -91,7 +85,7 @@ nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 
 nmap gs <Plug>(GitGutterPreviewHunk)
-" nmap ghs <Plug>(GitGutterStageHunk)
+nmap ghs <Plug>(GitGutterStageHunk)
 nmap ghu <Plug>(GitGutterUndoHunk)
 
 " hunk text object

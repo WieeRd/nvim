@@ -2,7 +2,7 @@ set langmenu=en_US
 set encoding=UTF-8
 let $LANG = 'en_US'
 
-let $dotvim = expand('<sfile>:p:h') " $XDG_CONFIG_HOME/nvim
+let $dotvim = expand('<sfile>:p:h') " same as '$XDG_CONFIG_HOME/nvim' or '~/.config/nvim'
 let $vimrc = $dotvim .. '/init.vim'
 let $plugin = $dotvim .. '/plugin.vim'
 source $plugin
@@ -21,12 +21,11 @@ inoremap kj <Esc>
 tnoremap kj <C-\><C-n>
 
 " Up/Down arrow keys for scrolling
-" by doing this, mouse wheel scroll page without moving cursor
+" This also override behavior of mouse wheel
 nnoremap <Up> <C-y>
 nnoremap <Down> <C-e>
 
 " Right/Left arrow keys for navigating tab pages
-" TODO: find better use of these keys
 noremap <Left> gt
 noremap <Right> gT
 
