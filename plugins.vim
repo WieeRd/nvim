@@ -1,4 +1,4 @@
-call plug#begin($dotvim .. '/plugged')
+call plug#begin($dotvim .. '/.plugged')
 
 " Syntax
 Plug 'octol/vim-cpp-enhanced-highlight'
