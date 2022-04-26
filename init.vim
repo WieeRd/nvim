@@ -1,4 +1,7 @@
-let $dotvim = stdpath('config') " ~/.config/nvim
+" always set to '~/.config/nvim'; not portable
+" let $dotvim = stdpath('config')
+
+let $dotvim = expand('<sfile>:p:h')
 let $vimrc = $dotvim .. '/init.vim'
 
 let $option = $dotvim .. '/options.vim'
