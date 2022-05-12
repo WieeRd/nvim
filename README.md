@@ -9,7 +9,7 @@ I'm too lazy to use a mouse.
 - Plugin Idea: Open 'author/plugin' in browser (`xdg-open`)
 - Why do I prioritize ricing vim over actual projects
 
-### Cause serious vim addiction to my friends  
+### Cause serious vim addiction to my friends
 
 - [ ] [Skuld Norniern](https://github.com/SkuldNorniern "fellow fox lover :D") (1/5)
 

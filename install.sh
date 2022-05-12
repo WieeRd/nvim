@@ -11,7 +11,8 @@ pkglist="
   python
   ripgrep
   rust
-  stylua
+  sdl2
+  sdl2_mixer
   tree-sitter
   xclip
 "

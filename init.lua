@@ -1,13 +1,22 @@
 local vim = vim
+-- was told to disable shada while sourcing config, don't know why
+vim.opt.shadafile = "NONE" 
 
--- env.dotvim = fn.stdpath("config")  -- always '~/.config/nvim'
+-- ultimately aiming for portable config
 if not vim.env.dotvim then
-  vim.env.dotvim = vim.fn.expand("<sfile>:h:p")  -- where init.lua is located
+  -- always '~/.config/nvim'
+  -- vim.env.dotvim = fn.stdpath("config")
+
+  -- where init.lua is located
+  vim.env.dotvim = vim.fn.expand("<sfile>:h:p")
 end
 
-require("globals")
-require("options")
-require("keymaps")
+-- pcall(require, "impatient")
+require("custom.globals")
+require("custom.options")
+require("custom.keymaps")
+-- require("custom.commands")
+-- require("custom.autocmds")
 
 vim.api.nvim_create_user_command(
   "PackerSync",
@@ -18,10 +27,9 @@ vim.api.nvim_create_user_command(
   {}
 )
 
-vim.api.nvim_create_user_command(
-  "PackerReset",
-  "luafile $dotvim/lua/plugins.lua",
-  {}
-)
+vim.g.tokyonight_style = "night"
+vim.g.tokyonight_italic_keywords = false
+vim.g.tokyonight_lualine_bold = true
+vim.cmd("colorscheme tokyonight")
 
-vim.cmd("colorscheme sonokai")
+vim.opt.shadafile = ""

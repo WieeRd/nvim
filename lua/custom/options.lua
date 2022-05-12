@@ -1,9 +1,9 @@
+-- [[ options: ':set opt' stuff ]] --
 local opt = vim.opt
 
 opt.langmenu = "en_US"
 opt.encoding = "UTF-8"
 
--- TODO: 'undodir'
 opt.undofile = false
 opt.swapfile = false
 
@@ -15,13 +15,14 @@ opt.hidden = true
 opt.updatetime = 200
 opt.shortmess:append("c")
 
--- ui
-opt.laststatus = 1
+-- UI
+opt.laststatus = 2
 opt.signcolumn = "no"
+opt.foldcolumn = "0"  -- "auto:9"
 opt.number = true
 opt.wrap = false
 opt.cursorline = false
-opt.scrolloff = 5
+opt.scrolloff = 7
 opt.sidescrolloff = 5
 
 -- completion menu
@@ -43,6 +44,3 @@ opt.shiftwidth = 0
 -- autoindent
 opt.autoindent = true
 opt.cindent = true
-
--- remove '~' in the lines after EOF
--- opt.fillchars="eob: "
