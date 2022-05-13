@@ -93,7 +93,12 @@ use { "tpope/vim-unimpaired", requires = "tpope/vim-repeat" }
 -- operators for commenting (gc, gb)
 use {
   "numToStr/Comment.nvim",
-  keys = { { 'n', "gc" }, { 'n', "gb" } },
+  keys = {
+    { 'n', "gc" },
+    { 'n', "gb" },
+    { 'v', "gc" },
+    { 'v', "gb" },
+  },
   config = [[require("plugins.comment")]],
   -- correctly comment embedded codes in other languages
   requires = "JoosepAlviste/nvim-ts-context-commentstring"
@@ -125,6 +130,23 @@ use {
 }
 
 
+---------------------------
+-- [[ Git Integration ]] --
+---------------------------
+
+-- automatically cd to project root. alternative: "project.nvim"
+use { "airblade/vim-rooter", config = [[vim.g.rooter_cd_cmd = 'lcd']] }
+
+-- the alpha and the omega of git integration
+use { "tpope/vim-fugitive", event = "User InGitRepo" }
+
+-- git commit browser (interactable `git log`)
+use { "junegunn/gv.vim", cmd = "GV" }
+
+-- use "lewis6991/gitsigns.nvim"
+-- use "airblade/vim-gitgutter"
+
+
 ------------------------------------------
 -- [[ Aesthetic: Visual Enhancements ]] --
 ------------------------------------------
@@ -136,7 +158,6 @@ use {
     require("indent_blankline").setup({
       char = '┊',
       show_current_context = true,
-      -- TODO: ColorScheme autocmd `highlight IndentBlanklineContextChar`
     })
   end
 }

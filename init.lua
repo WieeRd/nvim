@@ -1,5 +1,6 @@
 local vim = vim
--- was told to disable shada while sourcing config, don't know why
+
+-- disable shada while sourcing config
 vim.opt.shadafile = "NONE" 
 
 -- ultimately aiming for portable config
@@ -11,12 +12,12 @@ if not vim.env.dotvim then
   vim.env.dotvim = vim.fn.expand("<sfile>:h:p")
 end
 
--- pcall(require, "impatient")
+pcall(require, "impatient")
 require("custom.globals")
 require("custom.options")
 require("custom.keymaps")
--- require("custom.commands")
--- require("custom.autocmds")
+require("custom.commands")
+require("custom.autocmds")
 
 vim.api.nvim_create_user_command(
   "PackerSync",

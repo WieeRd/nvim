@@ -2,6 +2,7 @@
 
 pkglist="
   ctags
+  curl
   fd
   fzf
   git
