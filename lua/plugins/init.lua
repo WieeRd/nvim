@@ -60,6 +60,9 @@ use {
 -- motions & text objects for class, function, statement.
 use { "nvim-treesitter/nvim-treesitter-textobjects" }
 
+-- autopairs for text delimiters (e.g. function-end in lua)
+use { "RRethy/nvim-treesitter-endwise", ft = { "ruby", "lua", "vim", "sh" } }
+
 -- view & interact with treesitter syntax tree
 use { "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" }
 
@@ -174,6 +177,8 @@ use {
 -- highlight other uses of the word under the cursor
 -- use "RRethy/vim-illuminate"  -- TODO: lsp integration
 
+use { "norcalli/nvim-colorizer.lua", config = [[require("colorizer").setup()]] }
+
 -- smooth physics based scrolling motion
 use "psliwka/vim-smoothie"
 
@@ -234,7 +239,7 @@ use {
     local function setup()
       -- default, typewriter, mario, sword, bubble
       vim.g.keysound_theme = "default"
-      vim.g.keysound_volume = 700
+      vim.g.keysound_volume = 500
       vim.cmd("KeysoundEnable")
     end
     vim.schedule(setup)
@@ -244,3 +249,6 @@ use {
 
 -- fixes cursorhold blocking bug
 use "antoinemadec/FixCursorHold.nvim"
+
+-- fixes 'gx' keybind (open in external app)
+use { "felipec/vim-sanegx", keys = "gx" }

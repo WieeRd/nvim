@@ -9,24 +9,21 @@ require("nvim-treesitter.configs").setup({
     "vim",
   },
 
-  ignore_install = { "help" },
-
   highlight = {
     enable = true,
-    disable = { "help" },
+    disable = { "help" },  -- vimdoc highlight is very broken atm
     additional_vim_regex_highlighting = false,
   },
 
-  -- -- TODO: couldn't figure out proper keybinds
-  -- incremental_selection = {
-  --   enable = true,
-  --   keymaps = {
-  --     init_selection = "gn",
-  --     scope_incremental = "gs",  -- 'grow scope'
-  --     node_incremental = "gn",  -- 'grow node'
-  --     node_decremental = "gN",
-  --   },
-  -- },
+  incremental_selection = {
+    enable = false,  -- TODO: figure out proper keymaps
+    keymaps = {
+      init_selection = "gn",
+      scope_incremental = "gs",  -- 'grow scope'
+      node_incremental = "gn",  -- 'grow node'
+      node_decremental = "gN",
+    },
+  },
 
   indent = { enable = true },
 
@@ -75,6 +72,8 @@ require("nvim-treesitter.configs").setup({
     },
   },
 
+  endwise = { enable = true },
+
   playground = {
     enable = true
   },
@@ -92,25 +91,8 @@ require("nvim-treesitter.configs").setup({
 })
 
 
-local vim = vim
-
 -- automatically TS fold every buffer
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldlevel = 999  -- all folds are opened by default
-
--- -- manually activate TS folding
--- vim.api.nvim_create_user_command(
---   "Fold",  -- could use "<Leader>tf" mapping instead of command
---   function()
---     if vim.wo.foldmethod ~= "expr" then
---       vim.wo.foldmethod = "expr"
---       vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
---       vim.wo.foldlevel = 0
---     else
---       vim.wo.foldmethod = "manual"
---       vim.wo.foldlevel = 999  -- in case of javascript (9 won't be enough)
---     end
---   end,
---   {}
--- )
+local opt = vim.opt
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldlevel = 999  -- in case of javascript (9 won't be enough)
