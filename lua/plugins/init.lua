@@ -137,11 +137,22 @@ use {
 -- [[ Git Integration ]] --
 ---------------------------
 
--- automatically cd to project root. alternative: "project.nvim"
+-- automatically cd to project root (detects .git)
 use { "airblade/vim-rooter", config = [[vim.g.rooter_cd_cmd = 'lcd']] }
 
--- the alpha and the omega of git integration
-use { "tpope/vim-fugitive", event = "User InGitRepo" }
+-- wrapped ex command `:Git`, interactable git status
+use {
+  "tpope/vim-fugitive",
+  event = "User InGitRepo",
+  config = [[vim.keymap.set('n', "<Leader>gs", "<Cmd>tab G<CR>")]],
+}
+
+-- view and manipulate hunks (chunk of git diffs)
+use {
+  "lewis6991/gitsigns.nvim",
+  event = "User InGitRepo",
+  config = [[require("plugins.gitsigns")]],
+}
 
 -- git commit browser (interactable `git log`)
 use { "junegunn/gv.vim", cmd = "GV" }

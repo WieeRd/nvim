@@ -17,7 +17,7 @@ opt.shortmess:append("c")
 
 -- UI
 opt.laststatus = 2
-opt.signcolumn = "no"
+opt.signcolumn = "auto"
 opt.foldcolumn = "0"  -- "auto:9"
 opt.number = true
 opt.wrap = false
