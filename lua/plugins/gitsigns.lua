@@ -49,6 +49,12 @@ local function prev_hunk()
   return "<Ignore>"
 end 
 
+local function line_info(blame_opts)
+  local acts = gs.get_actions()
+  local func = acts.preview_hunk or acts.blame_line
+  if func then func(blame_opts) end
+end
+
 -- hunk motion
 map({ 'n', 'x' }, "]c", next_hunk, { expr = true })
 map({ 'n', 'x' }, "[c", prev_hunk, { expr = true })
@@ -62,18 +68,18 @@ map({ 'n', 'x' }, "ghr", ":Gitsigns reset_hunk<CR>")
 map({ 'n', 'x' }, "ghs", ":Gitsigns stage_hunk<CR>")
 map({ 'n', 'x' }, "ghu", ":Gitsigns undo_stage_hunk<CR>")
 
-local function line_info(blame_opts)
-  local acts = gs.get_actions()
-  local func = acts.preview_hunk or acts.blame_line
-  if func then func(blame_opts) end
-end
+-- buffer actions
+map('n', "<Leader>gr", gs.reset_buffer)  -- :Git restore %
+map('n', "<Leader>gs", gs.stage_buffer)  -- :Git add %
+map('n', "<Leader>gu", gs.reset_buffer_index)  -- :Git reset %
 
--- line info: hunk preview or line blame
-map('n', "<Leader>gi", function() line_info({ full = true }) end)
+-- line info: hunk or blame preview
+map('n', "<Leader>gp", function() line_info({ full = true }) end)
 
--- diff highlight
+-- toggle diff highlight
 map('n', "<Leader>gl", gs.toggle_linehl)
-map('n', "<Leader>gn", gs.toggle_signs)
+map('n', "<Leader>g+", gs.toggle_signs)
+map('n', "<Leader>g0", gs.toggle_numhl)
 map('n', "<leader>gd", gs.toggle_deleted)
 
 -- live blame current line
