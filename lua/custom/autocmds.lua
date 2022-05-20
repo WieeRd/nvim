@@ -26,26 +26,38 @@ autocmd(
 -- When current tab is closed, go to last accessed tab
 -- rather than the tab in the right (default behavior)
 
-local last_left_tab = nil
-local last_accessed_tab = nil
+local last_left = nil
+local last_accessed = nil
+local last_entered = nil
 
-local function tableave()
-  last_left_tab = api.nvim_get_current_tabpage()
+local function tab_leave()
+  -- since TabLeave is invoked before TabClosed,
+  -- `last_left` actually contains the closed tab
+  -- by the time `tab_closed()` is called.
+  last_left = api.nvim_get_current_tabpage()
 end
 
-local function tabenter()
-  last_accessed_tab = last_left_tab
+local function tab_enter()
+  -- that is why the real last accessed tab
+  -- has to be recorded on TabEnter
+  last_accessed = last_left
+  last_entered = api.nvim_get_current_tabpage()
 end
 
-local function tabclosed()
-  if api.nvim_tabpage_is_valid(last_accessed_tab) then
-    api.nvim_set_current_tabpage(last_accessed_tab)
+local function tab_closed()
+  if (
+    -- only if current tabpage is being closed
+    last_left == last_entered
+    -- only if last accessed page is still available
+    and api.nvim_tabpage_is_valid(last_accessed)
+  ) then
+    api.nvim_set_current_tabpage(last_accessed)
   end
 end
 
-autocmd("TabLeave", { callback = tableave })
-autocmd("TabEnter", { callback = tabenter })
-autocmd("TabClosed", { callback = tabclosed })
+autocmd("TabLeave", { callback = tab_leave })
+autocmd("TabEnter", { callback = tab_enter })
+autocmd("TabClosed", { callback = tab_closed })
 
 
 -- [[ Event: ColorScheme ]]
