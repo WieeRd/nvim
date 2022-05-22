@@ -80,7 +80,7 @@ map('n', "<Leader>gp", function() line_info({ full = true }) end)
 map('n', "<Leader>gl", gs.toggle_linehl)
 map('n', "<Leader>g+", gs.toggle_signs)
 map('n', "<Leader>g0", gs.toggle_numhl)
-map('n', "<leader>gd", gs.toggle_deleted)
+map('n', "<leader>g-", gs.toggle_deleted)
 
 -- live blame current line
 map('n', "<Leader>gc", gs.toggle_current_line_blame)

@@ -25,6 +25,13 @@ local config = {
 packer.init(config)
 packer.reset()
 
+local map = vim.keymap.set
+map('n', "<Leader>ps", packer.sync)
+map('n', "<Leader>pc", packer.compile)
+map('n', "<Leader>pt", packer.status)
+map('n', "<Leader>pp", packer.profile_output)
+map('n', "<Leader>pl", ":PackerLoad ")
+
 ------------------------------------------
 -- [[ Meta: Manage & Profile plugins ]] --
 ------------------------------------------
@@ -33,11 +40,21 @@ packer.reset()
 use { "lewis6991/impatient.nvim", disable = false }
 
 -- packer.nvim can manage itself
--- TODO: create <Leader>p keymaps
-use { "wbthomason/packer.nvim", cmd = "Packer*", config = [[require("plugins")]] }
+use {
+  "wbthomason/packer.nvim",
+  cmd = "Packer*",
+  keys = "<Leader>p",
+  config = [[require("plugins")]],
+}
 
 -- measure & profile startup time
 use { "dstein64/vim-startuptime", cmd = "StartupTime" }
+
+-- provide filetype icons
+use "kyazdani42/nvim-web-devicons"
+
+-- collection of useful nvim-lua functions
+use "nvim-lua/plenary.nvim"
 
 
 ----------------------
@@ -151,13 +168,22 @@ use {
   "lewis6991/gitsigns.nvim",
   event = "User InGitRepo",
   config = [[require("plugins.gitsigns")]],
+  requires = "tpope/vim-repeat"
 }
 
--- git commit browser (interactable `git log`)
+-- commit log browser (interactable `git log`)
 use { "junegunn/gv.vim", cmd = "GV" }
 
--- use "lewis6991/gitsigns.nvim"
--- use "airblade/vim-gitgutter"
+-- view all modified files
+use {
+  "sindrets/diffview.nvim",
+  keys = "<Leader>gd",
+  config = function()
+    local map = _G.vim.keymap.set 
+    map('n', "<Leader>gdo", ":DiffviewOpen ")
+    map('n', "<Leader>gdf", ":DiffviewFileHistory ")
+  end,
+}
 
 
 ------------------------------------------
