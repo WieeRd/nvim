@@ -222,7 +222,8 @@ use "psliwka/vim-smoothie"
 use {
   "folke/zen-mode.nvim",
   cmd = "ZenMode",
-  wants = "twilight.nvim",  -- wasn't documented in README but somehow works what
+  keys = "<Leader>z",
+  wants = "twilight.nvim",
   config = [[require("plugins.zen-mode")]],
 }
 
