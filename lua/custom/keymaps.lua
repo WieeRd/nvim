@@ -15,6 +15,11 @@ map('n', "<Esc>", "<Esc><Cmd>noh <Bar> echo ''<CR>")
 -- I keep using Ctrl+S unconsciously even when using vim
 map('n', "<C-s>", "<Cmd>silent write<CR>")
 
+-- frequently used commands
+-- map('n', "<Leader>w", "<Cmd>silent write<CR>")
+-- map('n', "<Leader>q", "<Cmd>quit<CR>")
+-- map('n', "<Leader>x", "<Cmd>xall<CR>")
+
 -- Delete without worrying about yanked content
 map('n', "yp", [["0p]])  -- paste from yank register
 map('n', "yd", [["0d]])  -- delete into yank register
@@ -28,6 +33,9 @@ map({ 'n', 'o' }, "<M-l>", "<C-w>>")
 -- Tab navigation
 map({ 'n', 'o' }, "]t", "gt")
 map({ 'n', 'o' }, "[t", "gT")
+
+map('n', "]T", "<Cmd>tabmove +1<CR>")
+map('n', "[T", "<Cmd>tabmove -1<CR>")
 
 map('n', "<Leader>1", "1gt")
 map('n', "<Leader>2", "2gt")

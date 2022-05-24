@@ -28,9 +28,11 @@ vim.api.nvim_create_user_command(
   {}
 )
 
-vim.g.tokyonight_style = "night"
-vim.g.tokyonight_italic_keywords = false
-vim.g.tokyonight_lualine_bold = true
+local g = vim.g
+g.tokyonight_style = "night"
+g.tokyonight_italic_keywords = false
+g.tokyonight_dark_float = false
+g.tokyonight_lualine_bold = true
 vim.cmd("colorscheme tokyonight")
 
 vim.opt.shadafile = ""

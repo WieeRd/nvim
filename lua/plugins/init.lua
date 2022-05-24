@@ -14,9 +14,9 @@ local config = {
   ),
   display = {
     open_fn = function()
-      return util.float({ border = "shadow" })
+      return util.float({ border = "rounded" })
     end,
-    prompt_border = "shadow"
+    prompt_border = "rounded"
   },
   profile = { enable = true, threshold = 0 },
   autoremove = false,
@@ -25,8 +25,15 @@ local config = {
 packer.init(config)
 packer.reset()
 
+-- reload plugin configs before sync
+local function sync()
+  package.loaded["plugins"] = nil
+  require("plugins")
+  packer.sync()
+end
+
 local map = vim.keymap.set
-map('n', "<Leader>ps", packer.sync)
+map('n', "<Leader>ps", sync)
 map('n', "<Leader>pc", packer.compile)
 map('n', "<Leader>pt", packer.status)
 map('n', "<Leader>pp", packer.profile_output)

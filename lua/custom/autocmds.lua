@@ -71,7 +71,7 @@ highlight WinSeparator guifg=NONE
 
 theme_conf["tokyonight"] = [[
 highlight IndentBlanklineContextChar guifg=#7684c2
-highlight WinSeparator guifg=#000000
+" highlight WinSeparator guifg=#000000
 ]]
 
 local function colorscheme(info)
