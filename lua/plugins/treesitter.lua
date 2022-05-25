@@ -16,30 +16,45 @@ require("nvim-treesitter.configs").setup({
   },
 
   incremental_selection = {
-    enable = false,  -- TODO: figure out proper keymaps
+    enable = true,
     keymaps = {
-      init_selection = "gn",
-      scope_incremental = "gs",  -- 'grow scope'
-      node_incremental = "gn",  -- 'grow node'
-      node_decremental = "gN",
+      init_selection = "<Tab>",
+      scope_incremental = "<Nop>",  -- 'grow scope'
+      node_incremental = "<Tab>",  -- 'grow node'
+      node_decremental = "<S-Tab>",
     },
   },
 
   indent = { enable = true },
+
+  textsubjects = {
+    enable = true,
+    prev_selection = "<BS>", -- (Optional) keymap to select the previous selection
+    keymaps = {
+      ["<CR>"] = "textsubjects-smart",
+      ["a<CR>"] = "textsubjects-container-outer",
+      ["i<CR>"] = "textsubjects-container-inner",
+    },
+  },
 
   textobjects = {
     select = {
       enable = true,
       lookahead = true,
       keymaps = {
-        -- would be nice it removes next whitespace too
-        -- TODO: if/for textobjs
         ["ac"] = "@class.outer",
         ["ic"] = "@class.inner",
         ["af"] = "@function.outer",
         ["if"] = "@function.inner",
-        ["as"] = "@statement.outer",  -- TODO: doesn't work in lua, gotta PR
-        ["a/"] = "@comment.outer",  -- TODO: doesn't include whitespace at the beginning
+        ["ai"] = "@conditional.outer",
+        ["ii"] = "@conditional.inner",
+        ["al"] = "@loop.outer",
+        ["il"] = "@loop.inner",
+
+        -- will be removed when C/C++ support for textsubjects is merged (#19)
+        ["as"] = "@statement.outer",
+        -- TODO: delete comment EOL (#128)
+        ["a/"] = "@comment.outer",
       },
     },
     move = {
@@ -91,8 +106,13 @@ require("nvim-treesitter.configs").setup({
 })
 
 
+
+-- TODO: folds doesn't seem to get updated when buffer is edited
+-- vim.cmd("set foldmethod=manual | set foldmethod=expr")
+-- vim.keymap.set('n', "zc", "fold current context")
+
 -- automatically TS fold every buffer
 local opt = vim.opt
-opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldlevel = 999  -- in case of javascript (9 won't be enough)
+-- opt.foldmethod = "expr"
+-- opt.foldlevel = 999

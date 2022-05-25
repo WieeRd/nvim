@@ -13,12 +13,18 @@ map('i', "kj", "<Esc>")
 map('n', "<Esc>", "<Esc><Cmd>noh <Bar> echo ''<CR>")
 
 -- I keep using Ctrl+S unconsciously even when using vim
-map('n', "<C-s>", "<Cmd>silent write<CR>")
+map('n', "<C-s>", function()
+  vim.notify(
+    "Use <Leader>w instead!",
+    vim.log.levels.WARN,
+    { title = "keymaps.lua" }
+  )
+end)
 
 -- frequently used commands
--- map('n', "<Leader>w", "<Cmd>silent write<CR>")
--- map('n', "<Leader>q", "<Cmd>quit<CR>")
--- map('n', "<Leader>x", "<Cmd>xall<CR>")
+map('n', "<Leader>w", "<Cmd>silent write<CR>")
+map('n', "<Leader>q", "<Cmd>quit<CR>")
+map('n', "<Leader>x", "<Cmd>xall<CR>")
 
 -- Delete without worrying about yanked content
 map('n', "yp", [["0p]])  -- paste from yank register

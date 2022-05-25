@@ -51,8 +51,17 @@ end
 
 local function line_info(blame_opts)
   local acts = gs.get_actions()
+  if not acts then
+    return false
+  end
+
   local func = acts.preview_hunk or acts.blame_line
-  if func then func(blame_opts) end
+  if not func then
+    return false
+  end
+
+  func(blame_opts)
+  return true 
 end
 
 -- hunk motion
@@ -77,6 +86,7 @@ map('n', "<Leader>gu", gs.reset_buffer_index)  -- :Git reset %
 map('n', "<Leader>gp", function() line_info({ full = true }) end)
 
 -- toggle diff highlight
+map('n', "<Leader>gh", function() gs.toggle_linehl() gs.toggle_numhl() end)
 map('n', "<Leader>gl", gs.toggle_linehl)
 map('n', "<Leader>g+", gs.toggle_signs)
 map('n', "<Leader>g0", gs.toggle_numhl)

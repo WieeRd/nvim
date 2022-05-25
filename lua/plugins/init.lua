@@ -75,6 +75,10 @@ use {
   config = [[require("plugins.treesitter")]],
 }
 
+-- context based text object
+-- TODO: PR for better Python & Lua support
+use "RRethy/nvim-treesitter-textsubjects"
+
 -- motions & text objects for class, function, statement.
 use { "nvim-treesitter/nvim-treesitter-textobjects" }
 
@@ -184,11 +188,12 @@ use { "junegunn/gv.vim", cmd = "GV" }
 -- view all modified files
 use {
   "sindrets/diffview.nvim",
+  cmd = { "DiffviewOpen", "DiffviewFileHistory" },
   keys = "<Leader>gd",
   config = function()
     local map = _G.vim.keymap.set 
-    map('n', "<Leader>gdo", ":DiffviewOpen ")
-    map('n', "<Leader>gdf", ":DiffviewFileHistory ")
+    map('n', "<Leader>gdo", "<Cmd>DiffviewOpen<CR>")
+    map('n', "<Leader>gdf", "<Cmd>DiffviewFileHistory<CR>")
   end,
 }
 

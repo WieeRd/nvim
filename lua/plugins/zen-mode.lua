@@ -1,5 +1,7 @@
 local vim = vim
 local config = {}
+-- TODO: keep tabline & statusline
+-- TODO: toggle(config) doesn't apply backdrop value
 
 -- minimal config that merely centers the window
 config["center"] = {
@@ -24,8 +26,8 @@ config["center"] = {
   },
 
   on_open = function(win)
-    -- cursor will always remain at center 40% of the screen
-    vim.wo.scrolloff = vim.fn.float2nr(vim.fn.winheight(win)*0.3)
+    -- cursor will always remain at center 30% of the screen
+    vim.wo.scrolloff = vim.fn.float2nr(vim.fn.winheight(win)*0.35)
 
     -- automatically clear last executed command
     vim.api.nvim_create_augroup("clearcmd", {})
