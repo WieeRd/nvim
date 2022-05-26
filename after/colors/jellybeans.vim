@@ -1,0 +1,1 @@
+highlight WinSeparator guifg=NONE

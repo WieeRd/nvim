@@ -11,6 +11,7 @@ local function check_git_repo()
   local cmd = "git rev-parse --is-inside-work-tree"
   if fn.system(cmd) == "true\n" then
     -- XXX: dispatching event somehow clears startup screen
+    -- turns out it's not the autocmd itself, it's Fugitive causing this bug
     api.nvim_exec_autocmds("User", { pattern = "InGitRepo" })
     return true  -- removes autocmd after lazy loading git plugins
   end
@@ -61,36 +62,10 @@ autocmd("TabClosed", { callback = tab_closed })
 
 
 -- [[ Event: ColorScheme ]]
--- custom highlight modifications for each theme
-
-local theme_conf = {}
-
-theme_conf["jellybeans"] = [[
-highlight WinSeparator guifg=NONE
-]]
-
-theme_conf["tokyonight"] = [[
-highlight IndentBlanklineContextChar guifg=#7684c2
-" highlight WinSeparator guifg=#000000
-]]
+-- override colorscheme's highlight groups in 'after/colors/*.vim'
 
 local function colorscheme(info)
-  local config = theme_conf[info.match]
-  if config then
-    vim.cmd(config)
-  end
+  vim.cmd("runtime! after/colors/" .. info.match .. ".vim")
 end
 
 autocmd("ColorScheme", { callback = colorscheme })
-
--- NOTE:
-
--- sonoakai diff highlights
--- highlight DiffAdd    ctermbg=22 guibg=#394634
--- highlight DiffChange ctermbg=17 guibg=#354157
--- highlight DiffDelete ctermbg=52 guibg=#55393d
-
--- tokyonight diff highlights
--- highlight DiffAdd    ctermbg=4 guibg=#20303B
--- highlight DiffChange ctermbg=5 guibg=#1F2231
--- highlight DiffDelete ctermfg=12 ctermbg=6 guibg=#37222C
