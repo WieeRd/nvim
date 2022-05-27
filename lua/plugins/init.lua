@@ -198,6 +198,33 @@ use {
 }
 
 
+----------------------
+-- [[ Completion ]] --
+----------------------
+
+-- use { "L3MON4D3/LuaSnip" }
+-- use { "danymat/neogen" }
+
+use {
+  "hrsh7th/nvim-cmp",
+  config = [[require("plugins.cmp")]],
+  requires = {
+    "onsails/lspkind.nvim",
+    "hrsh7th/cmp-nvim-lua",
+    -- "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-path",
+    "hrsh7th/cmp-cmdline",
+    "f3fora/cmp-spell",
+    "saadparwaiz1/cmp_luasnip",
+    -- "lukas-reineke/cmp-under-comparator",
+  }
+}
+
+-- pair programming with AI because I don't have any friends
+use { "github/copilot.vim", cmd = "Copilot" }  -- TODO: copilot as omnifunc
+
+
 ------------------------------------------
 -- [[ Aesthetic: Visual Enhancements ]] --
 ------------------------------------------

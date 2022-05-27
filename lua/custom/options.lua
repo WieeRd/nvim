@@ -20,12 +20,14 @@ opt.laststatus = 2
 opt.signcolumn = "auto"
 opt.foldcolumn = "0"  -- "auto:9"
 opt.number = true
+opt.relativenumber = true
 opt.wrap = false
 opt.cursorline = false
 opt.scrolloff = 7
 opt.sidescrolloff = 5
 
 -- completion menu
+opt.completeopt = { "menu", "menuone", "noselect" }
 opt.wildmode = "full"
 opt.wildmenu = true
 opt.pumheight = 10
