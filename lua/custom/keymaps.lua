@@ -1,5 +1,7 @@
 -- [[ keymaps: ':map' stuff ]] --
 -- TODO: add 'desc' field to mappings
+-- TODO: toggle boolean value (true, false)
+-- NOTE: i_Ctrl-k is very useful for entering <> keycodes
 local map = vim.keymap.set
 
 -- set <Leader> to <Space>

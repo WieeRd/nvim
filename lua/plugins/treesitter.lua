@@ -25,11 +25,16 @@ require("nvim-treesitter.configs").setup({
     },
   },
 
-  indent = { enable = true },
+  indent = {
+    enable = false,  -- Python's TS autoindent is broken atm
+    disable = { "python" },
+  },
+  -- TODO: C++ class indention is broken as well wtf
+  yati = { enable = true },  -- using yati instead while it gets fixed
 
   textsubjects = {
     enable = true,
-    prev_selection = "<BS>", -- (Optional) keymap to select the previous selection
+    prev_selection = "<BS>",
     keymaps = {
       ["<CR>"] = "textsubjects-smart",
       ["a<CR>"] = "textsubjects-container-outer",
@@ -64,7 +69,7 @@ require("nvim-treesitter.configs").setup({
         ["]]"] = "@class.outer",
         ["]m"] = "@function.outer",
         ["]i"] = "@conditional.outer",
-        ["]l"] = "@loop.outer",
+        ["]l"] = "@loop.outer",  -- NOTE: override `:lnext` of vim-unimpaired
       },
       goto_next_end = {
         ["]["] = "@class.outer",
@@ -114,5 +119,5 @@ require("nvim-treesitter.configs").setup({
 -- automatically TS fold every buffer
 local opt = vim.opt
 opt.foldexpr = "nvim_treesitter#foldexpr()"
--- opt.foldmethod = "expr"
--- opt.foldlevel = 999
+opt.foldmethod = "expr"
+opt.foldlevel = 999

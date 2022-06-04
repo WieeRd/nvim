@@ -9,7 +9,7 @@ opt.swapfile = false
 
 opt.termguicolors = true
 opt.clipboard = "unnamedplus"
-opt.mouse = ""
+opt.mouse = "a"
 
 opt.hidden = true
 opt.updatetime = 200
@@ -46,3 +46,7 @@ opt.shiftwidth = 0
 -- autoindent
 opt.autoindent = true
 opt.cindent = true
+
+-- spell
+opt.spelllang = "en"
+opt.spelloptions = "camel"

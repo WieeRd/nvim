@@ -94,6 +94,9 @@ use { "RRethy/nvim-treesitter-endwise", ft = { "ruby", "lua", "vim", "sh" } }
 -- view & interact with treesitter syntax tree
 use { "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" }
 
+-- treesitter based auto indentation
+use "yioneko/nvim-yati"
+
 
 ------------------------------------------
 -- [[ Editing: Keybinds for the lazy ]] --
