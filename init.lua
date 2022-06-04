@@ -31,7 +31,7 @@ vim.api.nvim_create_user_command(
 local g = vim.g
 g.tokyonight_style = "night"
 g.tokyonight_italic_keywords = false
-g.tokyonight_dark_float = false
+g.tokyonight_dark_float = true
 g.tokyonight_lualine_bold = true
 vim.cmd("colorscheme tokyonight")
 
