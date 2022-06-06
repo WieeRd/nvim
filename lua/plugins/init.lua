@@ -216,17 +216,19 @@ use {
 
 use {
   "hrsh7th/nvim-cmp",
+  event = "InsertEnter",
   config = [[require("plugins.cmp")]],
   requires = {
-    "onsails/lspkind.nvim",
-    "hrsh7th/cmp-nvim-lua",
-    -- "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-cmdline",
-    "f3fora/cmp-spell",
-    "saadparwaiz1/cmp_luasnip",
-    -- "lukas-reineke/cmp-under-comparator",
+    -- provide icons for completion items
+    { "onsails/lspkind.nvim", config = [[require("lspkind").init()]] }, 
+    -- completion sources
+    { "hrsh7th/cmp-nvim-lsp", after = "nvim-cmp" },
+    { "hrsh7th/cmp-nvim-lua", after = "nvim-cmp" },
+    { "hrsh7th/cmp-buffer", after = "nvim-cmp" },
+    { "hrsh7th/cmp-path", after = "nvim-cmp" },
+    { "hrsh7th/cmp-cmdline", after = "nvim-cmp" },
+    { "f3fora/cmp-spell", after = "nvim-cmp" },
+    { "saadparwaiz1/cmp_luasnip", after = "nvim-cmp" },
   }
 }
 
