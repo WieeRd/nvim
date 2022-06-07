@@ -216,7 +216,7 @@ use {
 
 use {
   "hrsh7th/nvim-cmp",
-  event = "InsertEnter",
+  event = { "InsertEnter", "CmdlineEnter" },
   config = [[require("plugins.cmp")]],
   requires = {
     -- provide icons for completion items

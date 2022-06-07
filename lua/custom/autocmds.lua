@@ -1,16 +1,17 @@
 local vim = vim
-local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup("CustomAutocmds", { clear = true })
 
--- TODO: add augroup to clear autocmds when reloading config
--- TODO: 'let g:' style options for each colorscheme
--- TODO: cycle style when applying same colorscheme
+local function autocmd(event, opts)
+  opts.group = opts.group or augroup
+  return vim.api.nvim_create_autocmd(event, opts) 
+end
 
 
 -- [[ Custom Event: "User InGitRepo" ]]
 -- dispatch custom event when cwd is inside git repo
-
--- Original VimL code from:
+-- original vimscript code from:
 -- https://github.com/wbthomason/packer.nvim/discussions/534
+
 local function check_git_repo()
   local cmd = "git rev-parse --is-inside-work-tree"
   if vim.fn.system(cmd) == "true\n" then
@@ -36,23 +37,23 @@ local last_entered = nil
 
 local function tab_leave()
   -- since TabLeave is invoked before TabClosed,
-  -- `last_left` actually contains the closed tab
+  -- `last_left` contains the closed tab's handle
   -- by the time `tab_closed()` is called.
   last_left = vim.api.nvim_get_current_tabpage()
 end
 
 local function tab_enter()
   -- that is why the real last accessed tab
-  -- has to be recorded on TabEnter
+  -- has to be backed up on TabEnter
   last_accessed = last_left
   last_entered = vim.api.nvim_get_current_tabpage()
 end
 
 local function tab_closed()
   if (
-    -- only if current tabpage is being closed
+    -- current tabpage is being closed
     last_left == last_entered
-    -- only if last accessed page is still available
+    -- last accessed page is still available
     and vim.api.nvim_tabpage_is_valid(last_accessed)
   ) then
     vim.api.nvim_set_current_tabpage(last_accessed)
@@ -71,7 +72,7 @@ autocmd("TabClosed", { callback = tab_closed })
 local function colorscheme(info)
   vim.cmd("runtime! after/colors/" .. info.match .. ".vim")
 
-  -- used by smart float bg below
+  -- used by smart float background below
   local float = vim.api.nvim_get_hl_by_name("FloatBorder", true)
   local normal = vim.api.nvim_get_hl_by_name("Normal", true)
   vim.api.nvim_set_hl(0, "FloatBorderLine", {
@@ -87,25 +88,41 @@ autocmd("ColorScheme", { callback = colorscheme })
 -- only borderless floating windows will get darker background
 -- (no more ugly highlights sticking out of border line)
 
-local borderless = { none = true, solid = true, shadow = true }
-local nvim_open_win = vim.api.nvim_open_win
+local borderless = {
+  none = true,
+  solid = true,
+  shadow = true,
+}
+
+-- back up original api function (safe to run multiple times)
+if not _G._nvim_open_win then
+  _G._nvim_open_win = vim.api.nvim_open_win
+end
 
 -- overriding api function instead of autocmd since
--- it is possible to suppress "Win*", "Buf*" events
+-- 'WinNew' can be suppressed ('noautocmd' option)
 vim.api.nvim_open_win = function(buf, enter, config)
-  local win = nvim_open_win(buf, enter, config)
+  local win = _G._nvim_open_win(buf, enter, config)
 
-  -- only floating windows have "relative" option
-  if not config.relative then
+  if not config.border then
     return win
   end
 
-  -- sync float background with `hl-Normal`
-  if not borderless[config.border] then
-    local winhl = vim.api.nvim_win_get_option(win, "winhl")
-    winhl = "NormalFloat:Normal,FloatBorder:FloatBorderLine," .. winhl
-    vim.api.nvim_win_set_option(win, "winhl", winhl)
+  if borderless[config.border] then
+    return win
   end
+
+  local winhl = vim.api.nvim_win_get_option(win, "winhl")
+  if winhl:find("NormalFloat") or winhl:find("FloatBorder") then
+    return win
+  end
+
+  winhl = "NormalFloat:Normal,FloatBorder:FloatBorderLine," .. winhl
+  vim.api.nvim_win_set_option(win, "winhl", winhl)
 
   return win
 end
+
+
+-- TODO: 'let g:' style options for each colorscheme
+-- TODO: cycle style when applying same colorscheme

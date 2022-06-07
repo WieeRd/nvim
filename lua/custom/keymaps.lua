@@ -1,7 +1,4 @@
 -- [[ keymaps: ':map' stuff ]] --
--- TODO: add 'desc' field to mappings
--- TODO: toggle boolean value (true, false)
--- NOTE: i_Ctrl-k is very useful for entering <> keycodes
 local map = vim.keymap.set
 
 -- set <Leader> to <Space>
@@ -23,7 +20,7 @@ map('n', "<C-s>", function()
   )
 end)
 
--- frequently used commands
+-- Frequently used commands
 map('n', "<Leader>w", "<Cmd>silent write<CR>")
 map('n', "<Leader>q", "<Cmd>quit<CR>")
 map('n', "<Leader>x", "<Cmd>xall<CR>")
@@ -41,6 +38,8 @@ map({ 'n', 'o' }, "<M-l>", "<C-w>>")
 -- Tab navigation
 map({ 'n', 'o' }, "]t", "gt")
 map({ 'n', 'o' }, "[t", "gT")
+map({ 'n', 'o' }, "<Right>", "gt")
+map({ 'n', 'o' }, "<Left>", "gT")
 
 map('n', "]T", "<Cmd>tabmove +1<CR>")
 map('n', "[T", "<Cmd>tabmove -1<CR>")
@@ -60,3 +59,8 @@ map({ 'n', 'v' }, "<Down>", "<C-e>")
 
 -- Using FZF as temporary fuzzy finder
 map('n', "<C-p>", "<Cmd>FZF<CR>")
+
+
+-- TODO: add 'desc' field to mappings
+-- TODO: toggle boolean value (true, false)
+-- TODO: unimpaired.vim bindings in Lua

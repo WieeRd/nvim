@@ -1,3 +1,4 @@
+local vim = vim
 local gs = require("gitsigns")
 
 gs.setup({
