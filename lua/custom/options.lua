@@ -17,7 +17,7 @@ opt.shortmess:append("c")
 
 -- UI
 opt.laststatus = 2
-opt.signcolumn = "auto"
+opt.signcolumn = "no"  -- "auto"
 opt.foldcolumn = "0"  -- "auto:9"
 opt.number = true
 opt.relativenumber = true

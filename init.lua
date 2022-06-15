@@ -1,7 +1,7 @@
 local vim = vim
 
 -- disable shada while sourcing config
-vim.opt.shadafile = "NONE" 
+vim.opt.shadafile = "NONE"
 
 -- ultimately aiming for portable config
 if not vim.env.dotvim then

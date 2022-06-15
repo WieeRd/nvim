@@ -3,7 +3,7 @@ local augroup = vim.api.nvim_create_augroup("CustomAutocmds", { clear = true })
 
 local function autocmd(event, opts)
   opts.group = opts.group or augroup
-  return vim.api.nvim_create_autocmd(event, opts) 
+  return vim.api.nvim_create_autocmd(event, opts)
 end
 
 
@@ -74,10 +74,10 @@ local function colorscheme(info)
 
   -- used by smart float background below
   local float = vim.api.nvim_get_hl_by_name("FloatBorder", true)
-  local normal = vim.api.nvim_get_hl_by_name("Normal", true)
+  -- local normal = vim.api.nvim_get_hl_by_name("Normal", true)
   vim.api.nvim_set_hl(0, "FloatBorderLine", {
     fg = float.foreground,
-    bg = normal.background,
+    -- bg = normal.background,
   })
 end
 
@@ -99,17 +99,23 @@ if not _G._nvim_open_win then
   _G._nvim_open_win = vim.api.nvim_open_win
 end
 
+-- TODO: should be disabled when using GUIs like Neovide
 -- overriding api function instead of autocmd since
 -- 'WinNew' can be suppressed ('noautocmd' option)
 vim.api.nvim_open_win = function(buf, enter, config)
   local win = _G._nvim_open_win(buf, enter, config)
+  local border = config.border or "none"
 
-  if not config.border then
+  if borderless[border] then
     return win
   end
 
-  if borderless[config.border] then
-    return win
+  if type(border) == "table" then
+    for i=1,#border do
+      if type(border[i]) == "table" then
+        return win
+      end
+    end
   end
 
   local winhl = vim.api.nvim_win_get_option(win, "winhl")
