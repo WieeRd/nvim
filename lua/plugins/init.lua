@@ -207,6 +207,23 @@ use {
 }
 
 
+-----------------------
+-- [[ LSP client ]] --
+-----------------------
+
+-- configure built-in LSP client
+use {
+  "neovim/nvim-lspconfig",
+  -- event = "BufReadPre",
+  config = [[require("plugins.lspconfig")]],
+  requires = {
+    "williamboman/nvim-lsp-installer",
+    "hrsh7th/cmp-nvim-lsp",
+    "folke/lua-dev.nvim",
+  },
+}
+
+
 ----------------------
 -- [[ Completion ]] --
 ----------------------
@@ -220,7 +237,7 @@ use {
   config = [[require("plugins.cmp")]],
   requires = {
     -- provide icons for completion items
-    { "onsails/lspkind.nvim", config = [[require("lspkind").init()]] }, 
+    { "onsails/lspkind.nvim", config = [[require("lspkind").init()]] },
     -- completion sources
     { "hrsh7th/cmp-nvim-lsp", after = "nvim-cmp" },
     { "hrsh7th/cmp-nvim-lua", after = "nvim-cmp" },

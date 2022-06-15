@@ -4,16 +4,16 @@ local cmp = require("cmp")
 
 
 -- check if there is a non-blank char before the cursor
-local function has_words_before()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-
-  if col == 0 then
-    return false
-  end
-
-  local text = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[0]
-  return text:sub(col, col):match("%s") == nil
-end
+-- local function has_words_before()
+--   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+--
+--   if col == 0 then
+--     return false
+--   end
+--
+--   local text = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[0]
+--   return text:sub(col, col):match("%s") == nil
+-- end
 
 
 -- open completion menu or execute fn(opt) if it's already open
@@ -42,7 +42,7 @@ cmp.setup({
   --   expand = function(args)
   --     require("luasnip").lsp_expand(args.body)
   --   end,
-  -- }, 
+  -- },
 
   view = {
     entries = {
@@ -51,12 +51,12 @@ cmp.setup({
       -- "top_down", "bottom_up", "near_cursor"
       -- selection_order = "near_cursor",
     }
-  },                                                             
+  },
 
   window = {
     -- window borders look cool, but distracting
-    -- completion = cmp.config.window.bordered(),
-    -- documentation = cmp.config.window.bordered(),
+    -- completion = cmp.config.window.bordered({ col_offset = -1 }),
+    documentation = cmp.config.window.bordered(),
   },
 
   mapping = {
@@ -84,8 +84,8 @@ cmp.setup({
     -- primary completion sources
     {
       -- { name = "luasnip" },
-      -- { name = "nvim_lsp" },
-      { name = "nvim_lua" },
+      { name = "nvim_lsp" },
+      -- { name = "nvim_lua" },
       { name = "path" },
     },
 
@@ -183,6 +183,13 @@ local cmdline_mapping = {
   -- preserving <C-n>, <C-p> for browsing command history
   ["<Tab>"] = { c = complete_or_fn(cmp.select_next_item) },
   ["<S-Tab>"] = { c = complete_or_fn(cmp.select_prev_item) },
+}
+
+local cmdline_window = {
+  completion = {
+    border = "rounded",  -- TODO: sync bottom chars with statusline
+    winhighlight = "",
+  }
 }
 
 -- `:` cmdline setup
