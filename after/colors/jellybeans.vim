@@ -1,1 +1,1 @@
-highlight WinSeparator guifg=NONE
+highlight! link WinSeparator Comment

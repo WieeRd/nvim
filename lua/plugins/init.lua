@@ -311,21 +311,21 @@ use { "junegunn/limelight.vim", cmd = "Limelight" }
 -- [[ Colorscheme collection ]] --
 ------------------------------------------
 
--- generate missing LSP highlight groups
-use "folke/lsp-colors.nvim"
-
 -- required by themes created with lush
 use { "rktjmp/lush.nvim", opt = true }
 
 -- WieeRd's favorite throughout the years
-use "nanotech/jellybeans.vim"  -- 2019
-use { "dracula/vim", as = "dracula" }  -- 2020
-use "sainnhe/sonokai"  -- 2021
-use "folke/tokyonight.nvim"  -- 2022
-use "vim-scripts/greenvision"  -- 2077
+use { "nanotech/jellybeans.vim", opt = true }      -- 2019
+use { "dracula/vim", as = "dracula", opt = true }  -- 2020
+use { "sainnhe/sonokai", opt = true }              -- 2021
+use { "folke/tokyonight.nvim", opt = false }       -- 2022*
+
+-- WieeRd's favorite out the years
+use { "rebelot/kanagawa.nvim", opt = true }        -- 1831
+use { "vim-scripts/greenvision", opt = true }      -- 2077
 
 -- trying out other themes for fun
-use { "marko-cerovac/material.nvim", opt = true }  -- require("material.functions").toggle_style()
+use { "marko-cerovac/material.nvim", opt = true }
 use { "olimorris/onedarkpro.nvim", opt = true }
 use { "metalelf0/jellybeans-nvim", opt = true, wants = "lush.nvim" }
 

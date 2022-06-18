@@ -70,6 +70,7 @@ autocmd("TabClosed", { callback = tab_closed })
 -- can be used to override highlight groups of each colorscheme
 
 local function colorscheme(info)
+  vim.cmd("runtime! after/colors/common.vim")
   vim.cmd("runtime! after/colors/" .. info.match .. ".vim")
 
   -- used by smart float background below
