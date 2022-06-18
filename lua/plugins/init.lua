@@ -223,6 +223,13 @@ use {
   },
 }
 
+-- highlight references of the symbol under the cursor
+use {
+  "RRethy/vim-illuminate",
+  module = "illuminate",
+  config = [[vim.cmd("IlluminationDisable")]],
+}
+
 
 ----------------------
 -- [[ Completion ]] --
@@ -240,7 +247,6 @@ use {
     { "onsails/lspkind.nvim", config = [[require("lspkind").init()]] },
     -- completion sources
     { "hrsh7th/cmp-nvim-lsp", after = "nvim-cmp" },
-    { "hrsh7th/cmp-nvim-lua", after = "nvim-cmp" },
     { "hrsh7th/cmp-buffer", after = "nvim-cmp" },
     { "hrsh7th/cmp-path", after = "nvim-cmp" },
     { "hrsh7th/cmp-cmdline", after = "nvim-cmp" },
