@@ -3,32 +3,20 @@ require("nvim-treesitter.configs").setup({
     "bash",
     "comment",
     "lua",
-    "vim",
   },
 
   highlight = {
     enable = true,
-    disable = { "help" },  -- vimdoc highlight is very broken atm
+    disable = { "help", "vim" },
     additional_vim_regex_highlighting = false,
   },
 
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<Tab>",
-      scope_incremental = "<Nop>",  -- 'grow scope'
-      node_incremental = "<Tab>",  -- 'grow node'
-      node_decremental = "<S-Tab>",
-    },
-  },
+  -- builtin indent module have some flaws
+  indent = { enable = false },
+  -- using yati instead while it gets fixed
+  yati = { enable = true },
 
-  indent = {
-    enable = false,  -- Python's TS autoindent is broken atm
-    disable = { "python" },
-  },
-  -- TODO: C++ class indention is broken as well wtf
-  yati = { enable = true },  -- using yati instead while it gets fixed
-
+  -- TODO: send PR with queries for python & lua
   textsubjects = {
     enable = true,
     prev_selection = "<BS>",
@@ -53,10 +41,8 @@ require("nvim-treesitter.configs").setup({
         ["al"] = "@loop.outer",
         ["il"] = "@loop.inner",
 
-        -- will be removed when C/C++ support for textsubjects is merged (#19)
         ["as"] = "@statement.outer",
-        -- TODO: delete comment EOL (#128)
-        ["a/"] = "@comment.outer",
+        ["a/"] = "@comment.outer",  -- TODO: mapping for deleting comment EOL (#128)
       },
     },
     move = {
@@ -66,25 +52,25 @@ require("nvim-treesitter.configs").setup({
         ["]]"] = "@class.outer",
         ["]m"] = "@function.outer",
         ["]i"] = "@conditional.outer",
-        ["]l"] = "@loop.outer",  -- NOTE: override `:lnext` of vim-unimpaired
+        ["]w"] = "@loop.outer",
       },
       goto_next_end = {
         ["]["] = "@class.outer",
         ["]M"] = "@function.outer",
         ["]I"] = "@conditional.outer",
-        ["]L"] = "@loop.outer",
+        ["]W"] = "@loop.outer",
       },
       goto_previous_start = {
         ["[["] = "@class.outer",
         ["[m"] = "@function.outer",
         ["[i"] = "@conditional.outer",
-        ["[l"] = "@loop.outer",
+        ["[w"] = "@loop.outer",
       },
       goto_previous_end = {
         ["[]"] = "@class.outer",
         ["[M"] = "@function.outer",
         ["[I"] = "@conditional.outer",
-        ["[L"] = "@loop.outer",
+        ["[W"] = "@loop.outer",
       },
     },
   },
@@ -108,13 +94,10 @@ require("nvim-treesitter.configs").setup({
 })
 
 
-
--- TODO: folds doesn't seem to get updated when buffer is edited
--- vim.cmd("set foldmethod=manual | set foldmethod=expr")
--- vim.keymap.set('n', "zc", "fold current context")
-
--- automatically TS fold every buffer
+-- enable treesitter based folding by default
+-- TODO: folds get out of sync sometimes when the buffer is edited
 local opt = vim.opt
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldmethod = "expr"
 opt.foldlevel = 999
+opt.sessionoptions:remove("folds")

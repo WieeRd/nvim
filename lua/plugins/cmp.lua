@@ -85,7 +85,6 @@ cmp.setup({
     {
       -- { name = "luasnip" },
       { name = "nvim_lsp" },
-      -- { name = "nvim_lua" },
       { name = "path" },
     },
 
@@ -107,7 +106,9 @@ cmp.setup({
 
   formatting = {
     format = lspkind.cmp_format({
-      mode = "symbol",  -- "text", "text_symbol", "symbol_text", "symbol"
+      -- mode: "text", "symbol", "text_symbol", "symbol_text"
+      -- will be replaced with "symbol" when I get used to icons
+      mode = "symbol_text",
       maxwidth = 50,
       menu = {
         buffer = "[BUF]",
@@ -177,7 +178,6 @@ cmp.setup({
 
 -- cmdline completion have some problems atm
 -- BUG: extreme lag when using `:Man` command
--- BUG: menu does not disappear when opening command-line window
 
 local cmdline_mapping = {
   -- preserving <C-n>, <C-p> for browsing command history
@@ -185,12 +185,13 @@ local cmdline_mapping = {
   ["<S-Tab>"] = { c = complete_or_fn(cmp.select_prev_item) },
 }
 
-local cmdline_window = {
-  completion = {
-    border = "rounded",  -- TODO: sync bottom chars with statusline
-    winhighlight = "",
-  }
-}
+-- TODO: sync bottom chars with statusline
+-- local cmdline_window = {
+--   completion = {
+--     border = "rounded",
+--     winhighlight = "",
+--   }
+-- }
 
 -- `:` cmdline setup
 cmp.setup.cmdline(':', {
@@ -211,4 +212,11 @@ cmp.setup.cmdline('?', {
   window = { completion = cmp.config.window.bordered() },
   mapping = cmdline_mapping,
   sources = { { name = "buffer", max_item_count = 5 } }
+})
+
+-- completion menu does not disappear when opening cmdline window with <C-f>
+vim.api.nvim_create_autocmd("CmdwinEnter", {
+  -- `callback = cmp.close` doesn't work, but this does. I do not understand.
+  callback = function() cmp.close() end,
+  group = vim.api.nvim_create_augroup("CmpCmdlineFix", { clear = true }),
 })

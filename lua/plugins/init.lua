@@ -200,7 +200,7 @@ use {
   cmd = { "DiffviewOpen", "DiffviewFileHistory" },
   keys = "<Leader>gd",
   config = function()
-    local map = _G.vim.keymap.set 
+    local map = _G.vim.keymap.set
     map('n', "<Leader>gdo", "<Cmd>DiffviewOpen<CR>")
     map('n', "<Leader>gdf", "<Cmd>DiffviewFileHistory<CR>")
   end,

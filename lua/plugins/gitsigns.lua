@@ -48,7 +48,7 @@ local function prev_hunk()
   if vim.wo.diff then return "[c" end
   vim.schedule(function() gs.prev_hunk() end)
   return "<Ignore>"
-end 
+end
 
 local function line_info(blame_opts)
   local acts = gs.get_actions()
@@ -62,7 +62,7 @@ local function line_info(blame_opts)
   end
 
   func(blame_opts)
-  return true 
+  return true
 end
 
 -- hunk motion

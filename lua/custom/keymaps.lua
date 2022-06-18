@@ -27,8 +27,8 @@ map('n', "<Leader>W", "<Cmd>silent wall<CR>")
 map('n', "<Leader>q", "<Cmd>quit<CR>")
 map('n', "<Leader>Q", "<Cmd>quit!<CR>")  -- ZQ
 
-map('n', "<Leader>e", "<Cmd>exit<CR>")  -- ZZ
-map('n', "<Leader>E", "<Cmd>xall<CR>")
+-- map('n', "<Leader>e", "<Cmd>exit<CR>")  -- ZZ
+-- map('n', "<Leader>E", "<Cmd>xall<CR>")
 
 -- Delete without worrying about yanked content
 map('n', "yp", [["0p]])  -- paste from yank register
