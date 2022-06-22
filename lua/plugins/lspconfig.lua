@@ -72,43 +72,88 @@ local default_config = {
   end,
 }
 
--- override global default config
+
+-- configs for each server
+local custom_config = {}
+
+-- lua lsp config
+custom_config["sumneko_lua"] = require("lua-dev").setup({
+  library = {
+    types = true,  -- API docs
+    vimruntime = true,  -- builtin scripts
+    plugins = true,  -- start/opt plugins
+  },
+  lspconfig = {
+    settings = {
+      Lua = {
+        completion = {
+          showWord = "Disable",
+        }
+      }
+    }
+  }
+})
+
+-- python lsp config
+custom_config["pyright"] = {
+  handlers = {
+    ["textDocument/hover"] = vim.lsp.with(
+      -- https://www.reddit.com/r/neovim/comments/tx40m2/is_it_possible_to_improve_lsp_hover_look/
+      -- This strips out &nbsp; and some ending escaped backslashes out of hover
+      -- strings because the pyright LSP is... odd with how it creates hover strings.
+      function(_, result, ctx, config)
+        local original = vim.lsp.handlers["textDocument/hover"]
+
+        local replace = {
+          ["&nbsp;"] = " ",
+          ["\\\n"] = "\n",
+          -- ["\\(.)"] = "%1",
+        }
+
+        local function substitute(s)
+          for pat, repl in pairs(replace) do
+            s = string.gsub(s, pat, repl)
+          end
+          return s
+        end
+
+        if not (result and result.contents) then
+          return original(_, result, ctx, config)
+        elseif type(result.contents) == "string" then
+          result.contents = substitute(result.contents)
+          return original(_, result, ctx, config)
+        else
+          local s = result.contents["value"] or ""
+          result.contents.value = substitute(s)
+          return original(_, result, ctx, config)
+        end
+      end,
+      {}
+    ),
+  },
+}
+
+
+-- set global default config
 for k,v in pairs(default_config) do
   lspconfig.util.default_config[k] = v
 end
 
-
--- configs for each server
-local custom_config = {
-  ["sumneko_lua"] = require("lua-dev").setup({
-    library = {
-      types = true,  -- API docs
-      vimruntime = true,  -- builtin scripts
-      plugins = true,  -- start/opt plugins
-    },
-    lspconfig = {
-      settings = {
-        Lua = {
-          completion = {
-            showWord = "Disable",
-          }
-        }
-      }
-    }
-  }),
-}
-
--- setup each installed server
+-- setup installed servers
 local servers = installer.get_installed_servers()
 for _, lsp in ipairs(servers) do
   local config = custom_config[lsp.name] or {}
   lspconfig[lsp.name].setup(config)
 end
 
-
 -- appearance
 vim.diagnostic.config({
   virtual_text = {
-    prefix = " ●", -- Could be '●', '▎', 'x', '■'
-  }
+    prefix = " ●",  -- ● ■
+    format = function(diagnostic)
+      local icon = { "E", "W", "I", "H" }
+      return string.format("%s: %s", icon[diagnostic.severity], diagnostic.message)
+    end,
+  },
+  signs = false,
 })
