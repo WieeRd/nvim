@@ -69,6 +69,11 @@ local default_config = {
     illuminate.on_attach(client)
     map('n', "]r", bind(illuminate.next_reference, { wrap = true }))
     map('n', "[r", bind(illuminate.next_reference, { wrap = true, reverse = true }))
+
+    -- view code outline
+    -- XXX: this works even though I set aerial as 'opt' plugin. HOW???
+    -- Why can I `require` lua modules of 'opt' plugins that are not loaded
+    require("aerial").on_attach(client, bufnr)
   end,
 }
 

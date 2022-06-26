@@ -230,6 +230,26 @@ use {
   config = [[vim.cmd("IlluminationDisable")]],
 }
 
+-- show function signature while typing
+use {
+  "ray-x/lsp_signature.nvim",
+  config = function()
+    require("lsp_signature").setup({
+      hint_enable = true,
+      hint_prefix = "● ",
+      cursorhold_update = false,
+    })
+  end
+}
+
+-- view code outline (tree of symbols)
+use {
+  -- "stevearc/aerial.nvim",
+  "~/Code/aerial.nvim",
+  keys = "<Leader>a",
+  config = [[require("plugins.aerial")]],
+}
+
 
 ----------------------
 -- [[ Completion ]] --
@@ -256,7 +276,7 @@ use {
 }
 
 -- pair programming with AI because I don't have any friends
-use { "github/copilot.vim", cmd = "Copilot" }  -- TODO: copilot as omnifunc
+use { "github/copilot.vim", cmd = "Copilot", disable = true }
 
 
 ------------------------------------------
