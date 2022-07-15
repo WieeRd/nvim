@@ -31,8 +31,8 @@ map('n', "<Leader>Q", "<Cmd>quit!<CR>")  -- ZQ
 -- map('n', "<Leader>E", "<Cmd>xall<CR>")
 
 -- Delete without worrying about yanked content
-map('n', "yp", [["0p]])  -- paste from yank register
-map('n', "yd", [["0d]])  -- delete into yank register
+map({ 'n', 'x' }, "yp", [["0p]])  -- paste from yank register
+map({ 'n', 'x' }, "yd", [["0d]])  -- delete into yank register
 
 -- Resize window with Alt + hjkl
 map({ 'n', 'o' }, "<M-j>", "<C-w>-")

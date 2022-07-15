@@ -78,7 +78,6 @@ require("aerial").setup({
   post_jump_cmd = "normal! zz",
 
   -- When true, aerial will automatically close after jumping to a symbol
-  -- TODO: don't close on "preview"
   close_on_select = true,
 
   -- Show box drawing characters for the tree hierarchy

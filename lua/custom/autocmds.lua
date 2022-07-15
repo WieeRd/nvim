@@ -75,11 +75,7 @@ local function colorscheme(info)
 
   -- used by smart float background below
   local float = vim.api.nvim_get_hl_by_name("FloatBorder", true)
-  -- local normal = vim.api.nvim_get_hl_by_name("Normal", true)
-  vim.api.nvim_set_hl(0, "FloatBorderLine", {
-    fg = float.foreground,
-    -- bg = normal.background,
-  })
+  vim.api.nvim_set_hl(0, "FloatBorderLine", { fg = float.foreground })
 end
 
 autocmd("ColorScheme", { callback = colorscheme })
@@ -133,3 +129,4 @@ end
 
 -- TODO: 'let g:' style options for each colorscheme
 -- TODO: cycle style when applying same colorscheme
+-- TODO: 'TermOpen' - terminal buffer options (nonumber, winhl)

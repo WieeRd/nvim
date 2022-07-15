@@ -28,9 +28,12 @@ local function complete_or_fn(fn, opt)
 end
 
 
+-- list of buffers displayed in current tabpage
 local function visible_buffers()
   local bufs = {}
-  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+  local windows = vim.api.nvim_tabpage_list_wins(0)
+  -- local windows = vim.api.nvim_list_wins()
+  for _, win in ipairs(windows) do
     bufs[vim.api.nvim_win_get_buf(win)] = true
   end
   return vim.tbl_keys(bufs)

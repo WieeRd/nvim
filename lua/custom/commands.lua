@@ -1,7 +1,7 @@
-local vim = vim
-command = vim.api.nvim_create_user_command
+local command = vim.api.nvim_create_user_command
 
-command("Q", "mks! <Bar> wqa", {})
+-- TODO: a proper session management plugin would be nice
+command("Q", "mks! <Bar> xall", {})
 command("E", "so Session.vim", {})
 
 -- TODO: `:Clean` delete hidden & unmodified buffers

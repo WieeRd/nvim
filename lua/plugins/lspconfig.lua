@@ -4,7 +4,7 @@ local lspconfig = require("lspconfig")
 
 
 installer.setup({
-  ensure_installed = { "sumneko_lua" },
+  ensure_installed = {},
   automatic_installation = false,
   ui = {
     check_outdated_servers_on_open = false,
@@ -71,78 +71,64 @@ local default_config = {
     map('n', "[r", bind(illuminate.next_reference, { wrap = true, reverse = true }))
 
     -- view code outline
-    -- XXX: this works even though I set aerial as 'opt' plugin. HOW???
-    -- Why can I `require` lua modules of 'opt' plugins that are not loaded
-    require("aerial").on_attach(client, bufnr)
+    local aerial = require("aerial")
+    aerial.on_attach(client, bufnr)
   end,
-}
 
-
--- configs for each server
-local custom_config = {}
-
--- lua lsp config
-custom_config["sumneko_lua"] = require("lua-dev").setup({
-  library = {
-    types = true,  -- API docs
-    vimruntime = true,  -- builtin scripts
-    plugins = true,  -- start/opt plugins
-  },
-  lspconfig = {
-    settings = {
-      Lua = {
-        completion = {
-          showWord = "Disable",
-        }
-      }
-    }
-  }
-})
-
--- python lsp config
-custom_config["pyright"] = {
   handlers = {
     ["textDocument/hover"] = vim.lsp.with(
-      -- https://www.reddit.com/r/neovim/comments/tx40m2/is_it_possible_to_improve_lsp_hover_look/
-      -- This strips out &nbsp; and some ending escaped backslashes out of hover
-      -- strings because the pyright LSP is... odd with how it creates hover strings.
-      function(_, result, ctx, config)
-        local original = vim.lsp.handlers["textDocument/hover"]
-
-        local replace = {
-          ["&nbsp;"] = " ",
-          ["\\\n"] = "\n",
-          -- ["\\(.)"] = "%1",
-        }
-
-        local function substitute(s)
-          for pat, repl in pairs(replace) do
-            s = string.gsub(s, pat, repl)
-          end
-          return s
-        end
-
-        if not (result and result.contents) then
-          return original(_, result, ctx, config)
-        elseif type(result.contents) == "string" then
-          result.contents = substitute(result.contents)
-          return original(_, result, ctx, config)
-        else
-          local s = result.contents["value"] or ""
-          result.contents.value = substitute(s)
-          return original(_, result, ctx, config)
-        end
-      end,
-      {}
-    ),
-  },
+      vim.lsp.handlers["textDocument/hover"],
+      { border = "solid" }
+    )
+  }
 }
-
 
 -- set global default config
 for k,v in pairs(default_config) do
+  ---@diagnostic disable-next-line: assign-type-mismatch
   lspconfig.util.default_config[k] = v
 end
+
+
+-- configs for each server
+local custom_config = {
+  -- Lua: setup for neovim config & plugin development
+  ["sumneko_lua"] = require("lua-dev").setup({
+    library = {
+      types = true,  -- API docs
+      vimruntime = true,  -- builtin scripts
+      plugins = true,  -- start/opt plugins
+    },
+    lspconfig = {
+      settings = {
+        Lua = {
+          completion = {
+            showWord = "Disable",
+          }
+        }
+      }
+    }
+  }),
+
+  -- Python: fix weird hover doc issues
+  ["pyright"] = {
+    handlers = {
+      ["textDocument/hover"] = function(_, result, ctx, config)
+        -- local original = vim.lsp.handlers["textDocument/hover"]
+        local original = default_config.handlers["textDocument/hover"]
+
+        -- remove backslashes before newline (hard linebreaks)
+        if result and result.contents and result.contents.value then
+          local s = result.contents.value
+          result.contents.value = string.gsub(s, "\\\n", "\n")
+          return original(_, result, ctx, config)
+        end
+
+        return original(_, result, ctx, config)
+      end,
+    },
+  }
+}
 
 -- setup installed servers
 local servers = installer.get_installed_servers()
@@ -151,14 +137,23 @@ for _, lsp in ipairs(servers) do
   lspconfig[lsp.name].setup(config)
 end
 
--- appearance
+
+-- diagnostic appearance
 vim.diagnostic.config({
+  signs = false,
+  underline = true,
+
+  float = {
+    border = "solid",
+    source = false,
+  },
+
   virtual_text = {
+    -- severity = vim.diagnostic.severity.WARN,
     prefix = " ●",  -- ● ■
     format = function(diagnostic)
       local icon = { "E", "W", "I", "H" }
       return string.format("%s: %s", icon[diagnostic.severity], diagnostic.message)
     end,
   },
-  signs = false,
 })

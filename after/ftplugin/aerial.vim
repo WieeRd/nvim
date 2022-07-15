@@ -1,3 +1,2 @@
 setlocal cursorline
-setlocal winhl=Normal:NormalFloat
-" TODO: set WinSeparator to Normal without fg
+setlocal winhl=Normal:NormalFloat,WinSeparator:EndOfBuffer
