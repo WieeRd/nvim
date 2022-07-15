@@ -17,14 +17,22 @@ opt.shortmess:append("c")
 
 -- UI
 opt.laststatus = 2
-opt.signcolumn = "no"  -- "auto"
-opt.foldcolumn = "0"  -- "auto:9"
+opt.cursorline = false
+
+opt.signcolumn = "auto"
+opt.foldcolumn = "0"
+
 opt.number = true
 opt.relativenumber = true
-opt.wrap = false
-opt.cursorline = false
+
 opt.scrolloff = 7
 opt.sidescrolloff = 5
+
+opt.wrap = false
+opt.list = false
+
+opt.listchars = { eol = "↲", tab = "» ", trail = "•" }
+opt.fillchars = { diff = " ", eob = " ", fold = " " }
 
 -- completion menu
 opt.completeopt = { "menu", "menuone", "noselect" }

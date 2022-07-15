@@ -1,4 +1,3 @@
-local vim = vim
 vim.cmd("packadd packer.nvim")
 
 local packer = require("packer")
@@ -160,7 +159,6 @@ use {
     { 'x', "g/" },
   },
   config = function()
-    local vim = _G.vim
     local hop = require("hop")
     hop.setup()
     vim.keymap.set({ 'n', 'x' }, "<Leader>j", hop.hint_words)  -- 'jump'
@@ -192,18 +190,49 @@ use {
 }
 
 -- commit log browser (interactable `git log`)
-use { "junegunn/gv.vim", cmd = "GV" }
+use { "junegunn/gv.vim", event = "User InGitRepo" }
 
 -- view all modified files
 use {
   "sindrets/diffview.nvim",
-  cmd = { "DiffviewOpen", "DiffviewFileHistory" },
-  keys = "<Leader>gd",
-  config = function()
-    local map = _G.vim.keymap.set
-    map('n', "<Leader>gdo", "<Cmd>DiffviewOpen<CR>")
-    map('n', "<Leader>gdf", "<Cmd>DiffviewFileHistory<CR>")
-  end,
+  event = "User InGitRepo",
+  config = [[require("plugins.diffview")]],
+  requires = "nvim-lua/plenary.nvim",
+}
+
+
+-------------------------
+-- [[ UI Components ]] --
+-------------------------
+
+-- fancy notification
+use {
+  "rcarriga/nvim-notify",
+  config = [[vim.notify = require("notify")]],
+  disable = true,
+}
+
+-- fancy statusline
+use {
+  "nvim-lualine/lualine.nvim",
+  config = [[require("lualine").setup()]],
+  requires = { "SmiteshP/nvim-gps" },
+  disable = true,
+}
+
+-- fancy statusline
+use {
+  "feline-nvim/feline.nvim",
+  config = [[require("feline").setup()]],
+  disable = true,
+}
+
+-- fancy tabline
+use {
+  "nanozuki/tabby.nvim",
+  event = "TabNew",
+  config = [[require("plugins.tabby")]],
+  disable = true,
 }
 
 
@@ -244,8 +273,10 @@ use {
 
 -- view code outline (tree of symbols)
 use {
-  -- "stevearc/aerial.nvim",
-  "~/Code/aerial.nvim",
+  -- TODO: better symbol tree folding
+  -- "~/Code/aerial.nvim",
+  "stevearc/aerial.nvim",
+  module = "aerial",
   keys = "<Leader>a",
   config = [[require("plugins.aerial")]],
 }
@@ -276,7 +307,7 @@ use {
 }
 
 -- pair programming with AI because I don't have any friends
-use { "github/copilot.vim", cmd = "Copilot", disable = true }
+use { "github/copilot.vim", cmd = "Copilot" }
 
 
 ------------------------------------------

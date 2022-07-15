@@ -1,17 +1,16 @@
-local vim = vim
 local gs = require("gitsigns")
 
 gs.setup({
-  signcolumn = false,  -- Toggle with `:Gitsigns toggle_signs`
-  numhl      = false,  -- Toggle with `:Gitsigns toggle_numhl`
-  linehl     = false,  -- Toggle with `:Gitsigns toggle_linehl`
-  word_diff  = false,  -- Toggle with `:Gitsigns toggle_word_diff`
+  signcolumn = false,  -- :Gitsigns toggle_signs
+  numhl      = false,  -- :Gitsigns toggle_numhl
+  linehl     = false,  -- :Gitsigns toggle_linehl
+  word_diff  = false,  -- :Gitsigns toggle_word_diff
   watch_gitdir = {
     interval = 1000,
     follow_files = true
   },
   attach_to_untracked = true,
-  current_line_blame = false,  -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame = false,  -- :Gitsigns toggle_current_line_blame
   current_line_blame_opts = {
     virt_text = true,
     virt_text_pos = "eol",  -- "eol" | "overlay" | "right_align"
@@ -74,27 +73,23 @@ map({ 'o', 'x' }, "ih", gs.select_hunk)
 map({ 'o', 'x' }, "ah", gs.select_hunk)
 
 -- hunk actions
-map({ 'n', 'x' }, "ghr", ":Gitsigns reset_hunk<CR>")
-map({ 'n', 'x' }, "ghs", ":Gitsigns stage_hunk<CR>")
-map({ 'n', 'x' }, "ghu", ":Gitsigns undo_stage_hunk<CR>")
+map({ 'n', 'x' }, "<Leader>gr", ":Gitsigns reset_hunk<CR>")
+map({ 'n', 'x' }, "<Leader>gs", ":Gitsigns stage_hunk<CR>")
+map({ 'n', 'x' }, "<Leader>gu", ":Gitsigns undo_stage_hunk<CR>")
 
 -- buffer actions
-map('n', "<Leader>gr", gs.reset_buffer)  -- :Git restore %
-map('n', "<Leader>gs", gs.stage_buffer)  -- :Git add %
-map('n', "<Leader>gu", gs.reset_buffer_index)  -- :Git reset %
+map('n', "<Leader>gR", gs.reset_buffer)  -- :Git restore %
+map('n', "<Leader>gS", gs.stage_buffer)  -- :Git add %
+map('n', "<Leader>gU", gs.reset_buffer_index)  -- :Git reset %
 
 -- line info: hunk or blame preview
 map('n', "<Leader>gp", function() line_info({ full = true }) end)
 
 -- toggle diff highlight
-map('n', "<Leader>gh", function()
-  gs.toggle_linehl()
-  gs.toggle_numhl()
-end)
-map('n', "<Leader>gl", gs.toggle_linehl)
+map('n', "<Leader>gh", gs.toggle_linehl)
 map('n', "<Leader>g+", gs.toggle_signs)
 map('n', "<Leader>g0", gs.toggle_numhl)
-map('n', "<leader>g-", gs.toggle_deleted)
+map('n', "<Leader>g-", gs.toggle_deleted)
 
 -- live blame current line
 map('n', "<Leader>gc", gs.toggle_current_line_blame)
