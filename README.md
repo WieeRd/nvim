@@ -2,7 +2,7 @@
 
 I'm too lazy to use a mouse.
 
-## TODO:
+### TODO:
 
 - 'Light' branch - Minimal config to use over SSH
 - Plugin Idea: Open 'author/plugin' in browser (`xdg-open`)

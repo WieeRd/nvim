@@ -6,6 +6,8 @@ local function autocmd(event, opts)
   return vim.api.nvim_create_autocmd(event, opts)
 end
 
+local doautocmd = vim.api.nvim_exec_autocmds
+
 
 -- [[ Custom Event: "User InGitRepo" ]]
 -- dispatch custom event when cwd is inside git repo
@@ -16,7 +18,7 @@ local function check_git_repo()
   local cmd = "git rev-parse --is-inside-work-tree"
   if vim.fn.system(cmd) == "true\n" then
     -- BUG: loading fugitive.vim at VimEnter somehow clears startup screen
-    vim.api.nvim_exec_autocmds("User", { pattern = "InGitRepo" })
+    doautocmd("User", { pattern = "InGitRepo" })
     return true  -- remove autocmd after lazy loading git plugins
   end
 end
@@ -73,7 +75,7 @@ local function colorscheme(info)
   vim.cmd("runtime! after/colors/common.vim")
   vim.cmd("runtime! after/colors/" .. info.match .. ".vim")
 
-  -- used by smart float background below
+  -- custom hl group used by smart float background below
   local float = vim.api.nvim_get_hl_by_name("FloatBorder", true)
   vim.api.nvim_set_hl(0, "FloatBorderLine", { fg = float.foreground })
 end
@@ -85,23 +87,22 @@ autocmd("ColorScheme", { callback = colorscheme })
 -- only borderless floating windows will get darker background
 -- (no more ugly highlights sticking out of border line)
 
-local borderless = {
-  none = true,
-  solid = true,
-  shadow = true,
-}
-
--- back up original api function (safe to run multiple times)
+-- back up original api function
 if not _G._nvim_open_win then
   _G._nvim_open_win = vim.api.nvim_open_win
 end
 
--- TODO: should be disabled when using GUIs like Neovide
--- overriding api function instead of autocmd since
--- 'WinNew' can be suppressed ('noautocmd' option)
-vim.api.nvim_open_win = function(buf, enter, config)
+-- overriding api function instead of using autocmd
+-- because 'WinNew' can be suppressed by 'noautocmd'
+local function nvim_open_win(buf, enter, config)
   local win = _G._nvim_open_win(buf, enter, config)
   local border = config.border or "none"
+
+  local borderless = {
+    none = true,
+    solid = true,
+    shadow = true,
+  }
 
   if borderless[border] then
     return win
@@ -126,7 +127,27 @@ vim.api.nvim_open_win = function(buf, enter, config)
   return win
 end
 
+-- most GUI clients provide nice borders 
+if vim.fn.has("gui_running") == 0 then
+  vim.api.nvim_open_win = nvim_open_win
+end
 
--- TODO: 'let g:' style options for each colorscheme
+
+-- [[ Terminal Buffer Options ]]
+-- wish they had 'terminal' filetype
+-- so that I can just use ftplugin
+
+local function term_open()
+  -- doautocmd("FileType", { pattern = "terminal" })
+  local lopt = vim.opt_local
+  lopt.winhl = "Normal:NormalFloat"
+  lopt.scrolloff = 0
+  lopt.number = false
+  lopt.relativenumber = false
+end
+
+autocmd("TermOpen", { callback = term_open })
+
+
+-- TODO: 'let g:{name}_style' style options for each colorscheme
 -- TODO: cycle style when applying same colorscheme
--- TODO: 'TermOpen' - terminal buffer options (nonumber, winhl)
