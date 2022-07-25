@@ -69,3 +69,5 @@ map('n', "<C-p>", "<Cmd>FZF<CR>")
 -- TODO: add 'desc' field to mappings
 -- TODO: toggle boolean value (true, false)
 -- TODO: unimpaired.vim bindings in Lua
+-- TODO: useless gs as `:sort`
+-- TODO: 'whole file' textobject

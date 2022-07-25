@@ -139,6 +139,9 @@ end
 
 
 -- diagnostic appearance
+-- TODO: custom highlight per diagnostic type (replace 'sign' handler)
+-- https://github.com/Kasama/nvim-custom-diagnostic-highlight
+-- `:h diagnostic-handlers-example`
 vim.diagnostic.config({
   signs = false,
   underline = true,
@@ -149,7 +152,7 @@ vim.diagnostic.config({
   },
 
   virtual_text = {
-    -- severity = vim.diagnostic.severity.WARN,
+    severity = vim.diagnostic.severity.WARN,
     prefix = " ●",  -- ● ■
     format = function(diagnostic)
       local icon = { "E", "W", "I", "H" }

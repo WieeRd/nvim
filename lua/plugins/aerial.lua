@@ -82,6 +82,19 @@ require("aerial").setup({
 
   -- Show box drawing characters for the tree hierarchy
   show_guides = true,
+
+  -- Customize the characters used when show_guides = true
+  guides = {
+    -- When the child item has a sibling below it
+    mid_item = "│ ",
+    -- When the child item is the last in the list
+    -- last_item = "└─",
+    last_item = "│ ",
+    -- When there are nested child guides to the right
+    nested_top = "│ ",
+    -- Raw indentation
+    whitespace = "  ",
+  },
 })
 
 -- https://github.com/stevearc/aerial.nvim/issues/98
