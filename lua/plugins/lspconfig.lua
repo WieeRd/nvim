@@ -1,6 +1,20 @@
 local vim = vim
 local installer = require("nvim-lsp-installer")
 local lspconfig = require("lspconfig")
+local neodev = require("neodev")
+
+
+neodev.setup({
+  library = {
+    enabled = true,
+    runtime = true,
+    types = true,
+    plugins = true,
+  },
+  setup_jsonls = true,
+  override = function(root_dir, options) end,
+  lspconfig = true,
+})
 
 
 installer.setup({
@@ -20,9 +34,7 @@ installer.setup({
 
 -- defaults that are applied to all servers
 local default_config = {
-  capabilities = require("cmp_nvim_lsp").update_capabilities(
-    vim.lsp.protocol.make_client_capabilities()
-  ),
+  capabilities = require("cmp_nvim_lsp").default_capabilities(),
 
   on_attach = function(client, bufnr)
     -- buffer local mapping
@@ -63,16 +75,6 @@ local default_config = {
     -- docs
     map('n', "K", vim.lsp.buf.hover)
     map('n', "gs", vim.lsp.buf.signature_help)
-
-    -- highlight references
-    local illuminate = require("illuminate")
-    illuminate.on_attach(client)
-    map('n', "]r", bind(illuminate.next_reference, { wrap = true }))
-    map('n', "[r", bind(illuminate.next_reference, { wrap = true, reverse = true }))
-
-    -- view code outline
-    local aerial = require("aerial")
-    aerial.on_attach(client, bufnr)
   end,
 
   handlers = {
@@ -93,24 +95,21 @@ end
 -- configs for each server
 local custom_config = {
   -- Lua: setup for neovim config & plugin development
-  ["sumneko_lua"] = require("lua-dev").setup({
-    library = {
-      types = true,  -- API docs
-      vimruntime = true,  -- builtin scripts
-      plugins = true,  -- start/opt plugins
-    },
-    lspconfig = {
-      settings = {
-        Lua = {
-          completion = {
-            showWord = "Disable",
-          }
+  ["sumneko_lua"] = {
+    settings = {
+      Lua = {
+        completion = {
+          showWord = "Disable",
+        },
+        diagnostics = {
+          disable = { "redefined-local" },
         }
       }
     }
-  }),
+  },
 
   -- Python: fix weird hover doc issues
+  -- TODO: check if this got fixed
   ["pyright"] = {
     handlers = {
       ["textDocument/hover"] = function(_, result, ctx, config)
@@ -146,6 +145,7 @@ vim.diagnostic.config({
   signs = false,
   underline = true,
 
+  -- TODO: diagnostic count (e.g. [1/4])
   float = {
     border = "solid",
     source = false,

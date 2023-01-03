@@ -8,13 +8,14 @@ I'm too lazy to use a mouse.
 
 - 'Light' branch - Minimal config to use over SSH
 - Add `README.md` to each directory with descriptions
-- Stop ricing linux and focus on actual projects you idiot
+- Group plugin configs into each category
+- Stop ricing Linux and focus on actual projects you idiot
 
 ### Config
 
 - `custom/keymaps`
 	+ Add mapping descriptions
-	+ Toggle boolean value (`true` <-> `false`)
+	+ Toggle boolean value (`true` ↔ `false`)
 	+ 'whole buffer' text object
 - `custom/options`
 	+ Refactor using a single table and for loop
@@ -58,3 +59,4 @@ Future myself will have to guess what I meant from the names :P
 - `lazymaps.nvim`
 - `colorwheel.nvim`
 - `glowberry.nvim`
+- `barebone.nvim`

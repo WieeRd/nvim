@@ -1,10 +1,6 @@
 -- [[ globals: ':let g:var' stuff ]] --
 local g = vim.g
 
--- use filetype.lua instead of filetype.vim
-g.do_filetype_lua = 1
-g.did_load_filetypes = 0
-
 -- disable unused builtin plugins
 g.loaded_gzip = 1
 g.loaded_zip = 1

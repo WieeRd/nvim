@@ -41,11 +41,11 @@ end
 
 
 cmp.setup({
-  -- snippet = {
-  --   expand = function(args)
-  --     require("luasnip").lsp_expand(args.body)
-  --   end,
-  -- },
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body)
+    end,
+  },
 
   view = {
     entries = {
@@ -72,21 +72,19 @@ cmp.setup({
     ["<C-n>"] = complete_or_fn(cmp.select_next_item),
     ["<C-p>"] = complete_or_fn(cmp.select_prev_item),
     ["<C-Space>"] = complete_or_fn(cmp.confirm, { select = true }),
+
+    -- revert to original text
     ["<C-a>"] = cmp.mapping.abort(),
 
     -- why is +4 invalid in lua I want to line up columns :(
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-
-    -- TODO: snippet mappings
-    -- ["<C-h>"] =
-    -- ["<C-l>"] =
   },
 
   sources = cmp.config.sources(
     -- primary completion sources
     {
-      -- { name = "luasnip" },
+      { name = "luasnip" },
       { name = "nvim_lsp" },
       { name = "path" },
     },
@@ -196,26 +194,27 @@ local cmdline_mapping = {
 --   }
 -- }
 
--- `:` cmdline setup
+-- command completion
 cmp.setup.cmdline(':', {
   window = { completion = cmp.config.window.bordered() },
   mapping = cmdline_mapping,
-  sources = { { name = "cmdline", keyword_length = 2 } }
+  sources = {
+    { name = "cmdline", keyword_length = 2 },
+    { name = "path", keyword_length = 2 },
+  }
 })
 
--- `/` cmdline setup
-cmp.setup.cmdline('/', {
+-- search completion 
+local search_config = {
   window = { completion = cmp.config.window.bordered() },
   mapping = cmdline_mapping,
-  sources = { { name = "buffer", max_item_count = 5 } }
-})
+  sources = {
+    { name = "buffer", max_item_count = 5 },
+  }
+}
 
--- `?` cmdline setup
-cmp.setup.cmdline('?', {
-  window = { completion = cmp.config.window.bordered() },
-  mapping = cmdline_mapping,
-  sources = { { name = "buffer", max_item_count = 5 } }
-})
+cmp.setup.cmdline('/', search_config)
+cmp.setup.cmdline('?', search_config)
 
 -- completion menu does not disappear when opening cmdline window with <C-f>
 vim.api.nvim_create_autocmd("CmdwinEnter", {

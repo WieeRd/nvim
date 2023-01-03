@@ -1,7 +1,7 @@
 local vim = vim
 
 -- disable shada while sourcing config
-vim.opt.shadafile = "NONE"
+vim.o.shadafile = "NONE"
 
 -- ultimately aiming for portable config
 if not vim.env.dotvim then
@@ -28,11 +28,6 @@ vim.api.nvim_create_user_command(
   {}
 )
 
-local g = vim.g
-g.tokyonight_style = "night"
-g.tokyonight_italic_keywords = false
-g.tokyonight_dark_float = true
-g.tokyonight_lualine_bold = true
-vim.cmd("colorscheme tokyonight")
+vim.cmd.colorscheme("kanagawa")
 
-vim.opt.shadafile = ""
+vim.o.shadafile = ""

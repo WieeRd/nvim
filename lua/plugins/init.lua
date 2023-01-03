@@ -82,6 +82,7 @@ use {
 
 -- context based text object
 -- TODO: PR for better Python & Lua support
+-- NOTE: LSP "textDocument/selectionRange" request
 use "RRethy/nvim-treesitter-textsubjects"
 
 -- motions & text objects for class, function, statement.
@@ -118,6 +119,7 @@ use {
 use "wellle/targets.vim"
 
 -- manipulate surrounding pair
+-- TODO: use "kylechui/nvim-surround"
 use { "tpope/vim-surround", requires = "tpope/vim-repeat" }
 
 -- handy bracket[] mappings
@@ -139,6 +141,7 @@ use {
 }
 
 -- split/join multi-line statement
+-- TODO: treesitter based alternative
 use "AndrewRadev/splitjoin.vim"
 
 -- align code to a given character
@@ -246,17 +249,30 @@ use {
   -- event = "BufReadPre",
   config = [[require("plugins.lspconfig")]],
   requires = {
+    -- TODO: mason
     "williamboman/nvim-lsp-installer",
     "hrsh7th/cmp-nvim-lsp",
-    "folke/lua-dev.nvim",
+    "folke/neodev.nvim",
+    -- "p00f/clangd_extensions.nvim",
+    -- "barreiroleo/ltex_extra.nvim",
   },
 }
 
 -- highlight references of the symbol under the cursor
 use {
   "RRethy/vim-illuminate",
-  module = "illuminate",
-  config = [[vim.cmd("IlluminationDisable")]],
+  config = function()
+    local illuminate = require("illuminate")
+    local map = vim.keymap.set
+
+    illuminate.configure({
+      providers = { "lsp", "treesitter" },
+      delay = 10,
+    })
+
+    map('n', "]r", illuminate.goto_next_reference)
+    map('n', "[r", illuminate.goto_prev_reference)
+  end
 }
 
 -- show function signature while typing
@@ -276,7 +292,6 @@ use {
   -- TODO: better symbol tree folding
   -- "~/Code/aerial.nvim",
   "stevearc/aerial.nvim",
-  module = "aerial",
   keys = "<Leader>a",
   config = [[require("plugins.aerial")]],
 }
@@ -286,8 +301,16 @@ use {
 -- [[ Completion ]] --
 ----------------------
 
--- use { "L3MON4D3/LuaSnip" }
--- use { "danymat/neogen" }
+-- TODO: WIP
+use {
+  "L3MON4D3/LuaSnip",
+  tag = "v1.*",
+  config = [[require("plugins.luasnip")]],
+  requires = {
+    { "rafamadriz/friendly-snippets" },
+    { "danymat/neogen" },
+  }
+}
 
 use {
   "hrsh7th/nvim-cmp",
@@ -307,7 +330,7 @@ use {
 }
 
 -- pair programming with AI because I don't have any friends
-use { "github/copilot.vim", cmd = "Copilot" }
+use { "github/copilot.vim", cmd = "Copilot", disable = true }
 
 
 ------------------------------------------
@@ -327,6 +350,7 @@ use {
 
 -- default folded line looks like SHIT
 -- use "anuvyklack/pretty-fold.nvim"  -- https://github.com/AdamWagner/stackline/issues/42
+-- use "kevinhwang91/nvim-ufo"
 
 -- search info at the end of each line with virtual text
 -- use "kevinhwang91/nvim-hlslens"
@@ -334,10 +358,12 @@ use {
 -- preview jump destination when using `:[number]` command
 -- use "nacro90/numb.nvim"
 
--- highlight other uses of the word under the cursor
--- use "RRethy/vim-illuminate"  -- TODO: lsp integration
+-- preview selection range when using `:[range]` command
+-- use "winston0410/range-highlight.nvim"
 
-use { "norcalli/nvim-colorizer.lua", config = [[require("colorizer").setup()]] }
+-- highlight color codes (like #000000)
+use { "norcalli/nvim-colorizer.lua", cmd = "ColorizerToggle" }
+-- use { "norcalli/nvim-colorizer.lua", config = [[require("colorizer").setup()]] }
 
 -- smooth physics based scrolling motion
 use "psliwka/vim-smoothie"
@@ -369,10 +395,11 @@ use { "rktjmp/lush.nvim", opt = true }
 use { "nanotech/jellybeans.vim", opt = true }      -- 2019
 use { "dracula/vim", as = "dracula", opt = true }  -- 2020
 use { "sainnhe/sonokai", opt = true }              -- 2021
-use { "folke/tokyonight.nvim", opt = false }       -- 2022*
+use { "folke/tokyonight.nvim", opt = true }        -- 2022
+use { "rebelot/kanagawa.nvim", opt = false }       -- 2023*
 
 -- WieeRd's favorite out the years
-use { "rebelot/kanagawa.nvim", opt = true }        -- 1831
+use { "B4mbus/oxocarbon-lua.nvim", opt = true }    -- 2042
 use { "vim-scripts/greenvision", opt = true }      -- 2077
 
 -- trying out other themes for fun
@@ -404,3 +431,30 @@ use "antoinemadec/FixCursorHold.nvim"
 
 -- fixes 'gx' keybind (open in external app)
 use { "felipec/vim-sanegx", keys = "gx" }
+
+-- online pair programming
+use {
+  "jbyuki/instant.nvim",
+  config = function()
+    vim.g.instant_username = "WieeRd"
+  end,
+}
+
+-- python formatter
+use { "psf/black", ft = "python" }
+
+-- preview markdown as TUI
+use { "ellisonleao/glow.nvim", branch = "main" }
+
+-- directory explorer
+use {
+  "X3eRo0/dired.nvim",
+  -- requires = "MunifTanjim/nui.nvim",
+  config = function()
+    require("dired").setup {
+      path_separator = "/",
+      show_hidden = true,
+    }
+  end,
+  disable = true,
+}

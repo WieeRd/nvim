@@ -31,6 +31,7 @@ require("nvim-treesitter.configs").setup({
     select = {
       enable = true,
       lookahead = true,
+      include_surrounding_whitespace = true,
       keymaps = {
         ["ac"] = "@class.outer",
         ["ic"] = "@class.inner",
@@ -41,7 +42,7 @@ require("nvim-treesitter.configs").setup({
         ["al"] = "@loop.outer",
         ["il"] = "@loop.inner",
 
-        ["as"] = "@statement.outer",
+        -- ["as"] = "@statement.outer",  -- TODO: that's a sentence text object use something else
         ["a/"] = "@comment.outer",  -- TODO: mapping for deleting comment EOL (#128)
       },
     },
@@ -73,6 +74,7 @@ require("nvim-treesitter.configs").setup({
         ["[W"] = "@loop.outer",
       },
     },
+    -- TODO: swap
   },
 
   endwise = { enable = true },
@@ -96,8 +98,8 @@ require("nvim-treesitter.configs").setup({
 
 -- enable treesitter based folding by default
 -- TODO: folds get out of sync sometimes when the buffer is edited
-local opt = vim.opt
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldmethod = "expr"
-opt.foldlevel = 999
-opt.sessionoptions:remove("folds")
+local o = vim.o
+o.foldexpr = "nvim_treesitter#foldexpr()"
+o.foldmethod = "expr"
+o.foldlevel = 999
+vim.opt.sessionoptions:remove("folds")

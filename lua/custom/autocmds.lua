@@ -139,11 +139,11 @@ end
 
 local function term_open()
   -- doautocmd("FileType", { pattern = "terminal" })
-  local lopt = vim.opt_local
-  lopt.winhl = "Normal:NormalFloat"
-  lopt.scrolloff = 0
-  lopt.number = false
-  lopt.relativenumber = false
+  local wo = vim.wo
+  wo.winhl = "Normal:NormalFloat"
+  wo.scrolloff = 0
+  wo.number = false
+  wo.relativenumber = false
 end
 
 autocmd("TermOpen", { callback = term_open })

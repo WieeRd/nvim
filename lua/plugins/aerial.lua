@@ -10,13 +10,11 @@ require("aerial").setup({
   --   auto    - aerial window will stay open as long as there is a visible
   --             buffer to attach to
   --   global  - same as 'persist', and will always show symbols for the current buffer
-  close_behavior = "auto",
+  -- TODO: migrate :h aerial-close-behavior
+  -- close_behavior = "auto",
 
   -- Enable default keybindings for the aerial buffer
   default_bindings = true,
-
-  -- Enum: prefer_right, prefer_left, right, left, float
-  default_direction = "left",
 
   -- :help SymbolKind
   -- `false` will show all symbols
@@ -59,8 +57,15 @@ require("aerial").setup({
   -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
   -- min_width and max_width can be a list of mixed types.
   -- max_width = {40, 0.2} means "the lesser of 40 columns or 20% of total"
-  min_width = 25,
-  max_width = 30,
+  layout = {
+    min_width = 25,
+    max_width = 30,
+    -- Enum: prefer_right, prefer_left, right, left, float
+    default_direction = "left",
+    -- Set to true to only open aerial at the far right/left of the editor
+    -- Default behavior opens aerial relative to current window
+    placement_editor_edge = false,
+  },
 
   -- Called when aerial attaches to a buffer.
   -- Takes a single `bufnr` argument.
@@ -69,10 +74,6 @@ require("aerial").setup({
   -- Called when aerial first sets symbols on a buffer.
   -- Takes a single `bufnr` argument.
   on_first_symbols = nil,
-
-  -- Set to true to only open aerial at the far right/left of the editor
-  -- Default behavior opens aerial relative to current window
-  placement_editor_edge = false,
 
   -- Run this command after jumping to a symbol (false will disable)
   post_jump_cmd = "normal! zz",
