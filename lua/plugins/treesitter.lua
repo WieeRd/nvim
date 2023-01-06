@@ -7,7 +7,16 @@ require("nvim-treesitter.configs").setup({
 
   highlight = {
     enable = true,
-    disable = { "help", "vim" },
+    disable = function(lang, buf)
+      -- fixes broken highlights inside cmdline window
+      -- https://github.com/nvim-treesitter/nvim-treesitter/issues/3961
+      if lang == "vim" then
+        local bufname = vim.api.nvim_buf_get_name(buf)
+        return string.match(bufname, "%[Command Line%]")
+      else
+        return false
+      end
+    end,
     additional_vim_regex_highlighting = false,
   },
 
@@ -41,9 +50,8 @@ require("nvim-treesitter.configs").setup({
         ["ii"] = "@conditional.inner",
         ["al"] = "@loop.outer",
         ["il"] = "@loop.inner",
-
         -- ["as"] = "@statement.outer",  -- TODO: that's a sentence text object use something else
-        ["a/"] = "@comment.outer",  -- TODO: mapping for deleting comment EOL (#128)
+        -- ["a/"] = "@comment.outer",  -- TODO: mapping for deleting comment EOL (#128)
       },
     },
     move = {
@@ -102,4 +110,3 @@ local o = vim.o
 o.foldexpr = "nvim_treesitter#foldexpr()"
 o.foldmethod = "expr"
 o.foldlevel = 999
-vim.opt.sessionoptions:remove("folds")
