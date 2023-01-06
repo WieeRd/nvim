@@ -149,5 +149,14 @@ end
 autocmd("TermOpen", { callback = term_open })
 
 
--- TODO: 'let g:{name}_style' style options for each colorscheme
--- TODO: cycle style when applying same colorscheme
+-- [[ Highlight Yanked Area ]]
+autocmd("TextYankPost", {
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = "CursorLine",
+      timeout = 150,
+      on_macro = false,
+      on_visual = false,
+    })
+  end,
+})
