@@ -14,7 +14,9 @@ o.mouse = "a"
 
 o.hidden = true
 o.updatetime = 200
+
 opt.shortmess:append("c")
+opt.sessionoptions:remove("buffers")
 
 -- UI
 o.laststatus = 2
@@ -51,8 +53,6 @@ o.smartcase = true
 o.expandtab = false
 o.tabstop = 4
 o.shiftwidth = 0
-
--- autoindent
 o.autoindent = true
 o.cindent = true
 

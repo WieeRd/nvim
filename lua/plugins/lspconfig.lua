@@ -152,11 +152,13 @@ vim.diagnostic.config({
   },
 
   virtual_text = {
-    severity = vim.diagnostic.severity.WARN,
+    severity = { min = vim.diagnostic.severity.WARN },
     prefix = " ●",  -- ● ■
     format = function(diagnostic)
       local icon = { "E", "W", "I", "H" }
-      return string.format("%s: %s", icon[diagnostic.severity], diagnostic.message)
+      -- truncate multi-line diagnostics
+      local message = string.match(diagnostic.message, "([^\n]*)\n?")
+      return string.format("%s: %s ", icon[diagnostic.severity], message)
     end,
   },
 })

@@ -406,6 +406,7 @@ use { "vim-scripts/greenvision", opt = true }      -- 2077
 use { "marko-cerovac/material.nvim", opt = true }
 use { "olimorris/onedarkpro.nvim", opt = true }
 use { "metalelf0/jellybeans-nvim", opt = true, wants = "lush.nvim" }
+use { "Yazeed1s/minimal.nvim", opt = true }
 
 
 ------------------------------
