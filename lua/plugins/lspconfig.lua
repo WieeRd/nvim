@@ -126,6 +126,20 @@ local custom_config = {
         return original(_, result, ctx, config)
       end,
     },
+  },
+
+  ["ltex"] = {
+    filetypes = {
+      "bib",
+      -- "gitcommit",
+      "markdown",
+      "org",
+      "plaintex",
+      "rst",
+      "rnoweb",
+      "tex",
+      "text",
+    }
   }
 }
 
