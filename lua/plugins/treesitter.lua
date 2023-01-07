@@ -2,8 +2,12 @@ require("nvim-treesitter.configs").setup({
   ensure_installed = {
     "bash",
     "comment",
+    "git_rebase",
+    "gitcommit",
+    "help",
     "lua",
   },
+  auto_install = true,
 
   highlight = {
     enable = true,
@@ -40,7 +44,6 @@ require("nvim-treesitter.configs").setup({
     select = {
       enable = true,
       lookahead = true,
-      include_surrounding_whitespace = true,
       keymaps = {
         ["ac"] = "@class.outer",
         ["ic"] = "@class.inner",
@@ -53,7 +56,9 @@ require("nvim-treesitter.configs").setup({
         -- ["as"] = "@statement.outer",  -- TODO: that's a sentence text object use something else
         -- ["a/"] = "@comment.outer",  -- TODO: mapping for deleting comment EOL (#128)
       },
+      include_surrounding_whitespace = true,
     },
+
     move = {
       enable = true,
       set_jumps = true,
@@ -82,7 +87,16 @@ require("nvim-treesitter.configs").setup({
         ["[W"] = "@loop.outer",
       },
     },
-    -- TODO: swap
+
+    swap = {
+      enable = true,
+      swap_next = {
+        ["],"] = "@parameter.inner",
+      },
+      swap_previous = {
+        ["[,"] = "@parameter.inner",
+      },
+    }
   },
 
   endwise = { enable = true },
