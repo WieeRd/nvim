@@ -1,2 +1,2 @@
 " setlocal list
-IndentBlanklineDisable
+silent! IndentBlanklineDisable

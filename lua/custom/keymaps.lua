@@ -56,12 +56,4 @@ map("n", "<Leader>0", "<Cmd>tabonly<CR>")
 map({ "n", "v" }, "<Up>", "<C-y>")
 map({ "n", "v" }, "<Down>", "<C-e>")
 
--- Using FZF as temporary fuzzy finder
-map("n", "<C-p>", "<Cmd>FZF<CR>")
-
-
--- TODO: add 'desc' field to mappings
--- TODO: toggle boolean value (true, false)
--- TODO: unimpaired.vim bindings in Lua
--- TODO: useless gs as `:sort`
 -- TODO: 'whole file' textobject
