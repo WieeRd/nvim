@@ -1,33 +1,18 @@
 local vim = vim
 
--- disable shada while sourcing config
+-- disable ShaDa while sourcing config
 vim.o.shadafile = "NONE"
 
--- ultimately aiming for portable config
-if not vim.env.dotvim then
-  -- always '~/.config/nvim'
-  -- vim.env.dotvim = fn.stdpath("config")
 
-  -- where init.lua is located
-  vim.env.dotvim = vim.fn.expand("<sfile>:h:p")
-end
-
-pcall(require, "impatient")
+-- load custom settings
 require("custom.globals")
 require("custom.options")
 require("custom.keymaps")
 require("custom.commands")
 require("custom.autocmds")
 
-vim.api.nvim_create_user_command(
-  "PackerSync",
-  function()
-    require("plugins")
-    vim.cmd("PackerSync")
-  end,
-  {}
-)
+-- load plugin settings
+require("plugins")
 
-vim.cmd.colorscheme("kanagawa")
-
+-- re-enable ShaDa
 vim.o.shadafile = ""
