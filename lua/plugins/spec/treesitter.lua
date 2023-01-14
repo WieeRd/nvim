@@ -3,6 +3,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    event = "BufReadPre",
     dependencies = {
       -- TS based auto indenting
       "yioneko/nvim-yati",
