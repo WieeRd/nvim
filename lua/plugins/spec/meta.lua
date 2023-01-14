@@ -9,5 +9,5 @@ return {
   "nvim-lua/plenary.nvim",
 
   -- profile startup time
-  { "dstein64/vim-startuptime", cmd = "StartupTime" }
+  { "dstein64/vim-startuptime", cmd = "StartupTime" },
 }

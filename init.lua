@@ -14,5 +14,8 @@ require("custom.autocmds")
 -- load plugin settings
 require("plugins")
 
+-- set colorscheme
+vim.cmd.colorscheme("kanagawa")
+
 -- re-enable ShaDa
 vim.o.shadafile = ""
