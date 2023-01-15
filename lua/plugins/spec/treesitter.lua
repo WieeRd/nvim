@@ -122,10 +122,7 @@ return {
         },
 
         endwise = { enable = true },
-
-        playground = {
-          enable = true
-        },
+        playground = { enable = true },
 
         matchup = {
           enable = true,

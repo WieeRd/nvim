@@ -3,7 +3,6 @@ local vim = vim
 -- disable ShaDa while sourcing config
 vim.o.shadafile = "NONE"
 
-
 -- load custom settings
 require("custom.globals")
 require("custom.options")
