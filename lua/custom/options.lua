@@ -59,12 +59,3 @@ o.cindent = true
 -- spell
 o.spelllang = "en"
 o.spelloptions = "camel"
-
--- foldtext
-o.foldtext = "v:lua.foldtext()"
-function foldtext()
-  local fstart = vim.fn.getline(vim.v.foldstart)
-  local fend = string.match(vim.fn.getline(vim.v.foldend), "^%s*(.+)%s*$")
-  local range = tostring(vim.v.foldend - vim.v.foldstart + 1)
-  return string.format("%s ... %s  [%sL]", fstart, fend, range)
-end

@@ -136,11 +136,20 @@ return {
         },
       })
 
-      -- enable treesitter based folding by default
-      local o = vim.o
-      o.foldexpr = "nvim_treesitter#foldexpr()"
-      o.foldmethod = "expr"
-      o.foldlevel = 999
+      -- -- enable treesitter based folding
+      -- local o = vim.o
+      -- o.foldexpr = "nvim_treesitter#foldexpr()"
+      -- o.foldmethod = "expr"
+      -- o.foldlevel = 99
+      -- o.foldlevelstart = 99
+      -- o.foldtext = "v:lua.getfoldtext()"
+      -- _G.getfoldtext = function()
+      --   local fstart = vim.fn.getline(vim.v.foldstart)
+      --   local fend = string.match(vim.fn.getline(vim.v.foldend), "^%s*(.+)%s*$")
+      --   local range = tostring(vim.v.foldend - vim.v.foldstart + 1)
+      --   return string.format("%s ... %s  [%sL]", fstart, fend, range)
+      -- end
+
     end
   },
 }

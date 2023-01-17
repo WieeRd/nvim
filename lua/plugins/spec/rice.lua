@@ -25,11 +25,40 @@ return {
     end
   },
 
+  -- fancy folding powered by LSP/TS
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async",
+    config = function()
+      local ufo = require("ufo")
+      -- TODO: custom virtual text handler
+      ufo.setup()
+
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
+
+      local map = vim.keymap.set
+      map("n", "zR", ufo.openAllFolds)
+      map("n", "zM", ufo.closeAllFolds)
+      map("n", "z[", ufo.goPreviousClosedFold)
+      map("n", "z]", ufo.goNextClosedFold)
+    end
+  },
+
+  -- TODO: statusline & tabline
+  {
+    -- "nvim-lualine/lualine.nvim",
+    -- "feline-nvim/feline.nvim",
+    -- "glepnir/galaxyline.nvim",
+    -- "tjdevries/express_line.nvim",
+  },
+
+
   -- distraction free mode
   {
     -- "folke/zen-mode.nvim",
     "WieeRd/zen-mode.nvim",  -- until #78 gets merged
-    cmd = "ZenMode",
     keys = "<Leader>z",
     dependencies = "folke/twilight.nvim",
     config = function()
@@ -75,14 +104,6 @@ return {
       map("n", "<Leader>zf", function() zen.toggle(focus) end)
       map("n", "<Leader>zt", "<Cmd>Twilight<CR>")
     end
-  },
-
-  -- TODO: statusline & tabline
-  {
-    -- "nvim-lualine/lualine.nvim",
-    -- "feline-nvim/feline.nvim",
-    -- "glepnir/galaxyline.nvim",
-    -- "tjdevries/express_line.nvim",
   },
 
   -- WieeRd's favorite theme throughout the years
