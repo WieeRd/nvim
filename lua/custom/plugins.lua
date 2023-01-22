@@ -21,4 +21,4 @@ end
 
 -- lazy.nvim config
 vim.opt.runtimepath:prepend(lazypath)
-require("lazy").setup("plugins.spec", {})
+require("lazy").setup("plugins")

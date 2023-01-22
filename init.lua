@@ -9,9 +9,7 @@ require("custom.options")
 require("custom.keymaps")
 require("custom.commands")
 require("custom.autocmds")
-
--- load plugin settings
-require("plugins")
+require("custom.plugins")
 
 -- set colorscheme
 vim.cmd.colorscheme("kanagawa")
