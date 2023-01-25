@@ -1,7 +1,7 @@
 -- [[ keymaps: ':map' stuff ]] --
 local map = vim.keymap.set
 
--- set <Leader> to <Space>
+-- <Space> as a <Leader> key
 vim.g.mapleader = " "
 map({ "n", "x" }, " ", "")
 
@@ -17,22 +17,20 @@ map("n", "<Leader>W", "<Cmd>silent wall<CR>")
 map("n", "<Leader>q", "<Cmd>quit<CR>")
 map("n", "<Leader>Q", "<Cmd>quit!<CR>")
 
--- Open cmdwin with `:lua =` prefilled
+-- Open cmdline window with `:lua =` prefilled
 map("n", "<Leader>:", ":lua =<C-f>a")
 
--- Open search with magic flags prefilled
--- map("n", "/", "/\\V")  -- very nomagic
--- map("n", "?", "/\\v")  -- very magic
+-- I hate magic
+map("n", "/", "/\\V")  -- very nomagic
+map("n", "?", "?\\V")  -- very nomagic
+
+-- I like very magic
+map("n", "g/", "/\\v")  -- very magic
+map("n", "g?", "?\\v")  -- very magic
 
 -- Delete without worrying about yanked content
-map({ "n", "x" }, "yp", [["0p]])  -- paste from yank register
-map({ "n", "x" }, "yd", [["0d]])  -- delete into yank register
-
--- Resize window with Alt + hjkl
-map({ "n", "o" }, "<M-j>", "<C-w>-")
-map({ "n", "o" }, "<M-k>", "<C-w>+")
-map({ "n", "o" }, "<M-h>", "<C-w><")
-map({ "n", "o" }, "<M-l>", "<C-w>>")
+map({ "n", "v" }, "yp", [["0p]])  -- paste from yank register
+map({ "n", "v" }, "yd", [["0d]])  -- delete into yank register
 
 -- Tab navigation
 map({ "n", "o" }, "]t", "gt")
@@ -56,4 +54,10 @@ map("n", "<Leader>0", "<Cmd>tabonly<CR>")
 map({ "n", "v" }, "<Up>", "<C-y>")
 map({ "n", "v" }, "<Down>", "<C-e>")
 
--- TODO: 'whole file' textobject
+-- 'entire buffer' text object
+map({ "o", "v" }, "ae", function()
+  vim.cmd("norm! m'vV")
+  vim.cmd("keepjumps 0")
+  vim.cmd("norm! o")
+  vim.cmd("keepjumps $")
+end)
