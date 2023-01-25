@@ -1,10 +1,13 @@
+local config = require(... .. ".conf")
+local function get_config(plugin, opts)
+  return config[plugin.name](plugin, opts)
+end
+
 return {
   -- portable package manager for neovim
   {
     "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup()
-    end,
+    config = get_config,
   },
 
   -- setup LSP clients
@@ -12,10 +15,10 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason-lspconfig.nvim",
-      -- "hrsh7th/cmp-nvim-lsp",
       "folke/neodev.nvim",
+      "barreiroleo/ltex_extra.nvim",
     },
-    config = require("plugins.mason.lspconfig"),
+    config = get_config,
   },
 
   -- TODO: setup DAP clients
