@@ -3,7 +3,10 @@ local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 -- bootstrap lazy.nvim
 if not vim.loop.fs_stat(lazypath) then
-  local answer = vim.fn.input("Would you like to setup plugins? [y/N] ")
+  local answer = vim.fn.input({
+    prompt = "Would you like to setup plugins? [y/N] ",
+  })
+
   if answer == "y" then
     vim.notify("\nWorking on updates 42%\nDo not turn off your Neovim.\nThis will take a while.")
     vim.fn.system({
@@ -19,6 +22,6 @@ if not vim.loop.fs_stat(lazypath) then
   end
 end
 
--- lazy.nvim config
+-- configure lazy.nvim
 vim.opt.runtimepath:prepend(lazypath)
 require("lazy").setup("plugins")

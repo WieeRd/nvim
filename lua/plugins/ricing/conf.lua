@@ -81,7 +81,7 @@ config["zen-mode.nvim"] = function()
       }
     },
     on_open = function(win)
-      vim.wo.scrolloff = vim.fn.float2nr(vim.fn.winheight(win)*0.4)
+      vim.wo[win].scrolloff = vim.fn.float2nr(vim.fn.winheight(win)*0.4)
       vim.cmd("silent! IndentBlanklineDisable")
     end,
     on_close = function(win)
