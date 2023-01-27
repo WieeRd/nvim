@@ -7,7 +7,7 @@ config["nvim-autopairs"] = function()
   npairs.setup({
     -- wrap things in insert mode
     fast_wrap = {
-      map = "<C-s>",
+      map = "<A-e>",
       keys = "asdfghjkl;",
     },
     -- use treesitter to check closing pair
