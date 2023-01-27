@@ -30,6 +30,7 @@ config["nvim-lspconfig"] = function()
   local global_config = {
     capabilities = {
       textDocument = {
+        -- for `cmp-nvim-lsp`
         completion = {
           dynamicRegistration = false,
           completionItem = {
@@ -70,6 +71,7 @@ config["nvim-lspconfig"] = function()
             }
           }
         },
+        -- for `nvim-ufo`
         foldingRange = {
           dynamicRegistration = false,
           lineFoldingOnly = true
@@ -95,6 +97,8 @@ config["nvim-lspconfig"] = function()
       map("n", "]d", dg.goto_next)
       map("n", "[D", bind(dg.goto_prev, { severity = dg.severity.ERROR }))
       map("n", "]D", bind(dg.goto_next, { severity = dg.severity.ERROR }))
+
+      -- NOTE: 'list all' stuffs will be replaced with trouble.nvim
 
       -- list all diagnostics
       map("n", "<Leader>ld", dg.setloclist)  -- current buffer

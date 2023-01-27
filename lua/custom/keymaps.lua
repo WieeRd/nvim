@@ -61,3 +61,6 @@ map({ "o", "v" }, "ae", function()
   vim.cmd("norm! o")
   vim.cmd("keepjumps $")
 end)
+
+-- `.` as 'inner word' text object
+map({ "o", "v" }, ".", "iw")

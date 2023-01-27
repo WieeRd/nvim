@@ -156,7 +156,7 @@ autocmd("TextYankPost", {
       higroup = "CursorLine",
       timeout = 150,
       on_macro = false,
-      on_visual = false,
+      on_visual = true,
     })
   end,
 })
