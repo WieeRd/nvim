@@ -8,7 +8,10 @@ if not vim.loop.fs_stat(lazypath) then
   })
 
   if answer == "y" then
-    vim.notify("\nWorking on updates 42%\nDo not turn off your Neovim.\nThis will take a while.")
+    vim.notify(
+      "\nWorking on updates 42%\nDo not turn off your Neovim.\nThis will take a while.",
+      vim.log.levels.WARN
+    )
     vim.fn.system({
       "git",
       "clone",
@@ -17,11 +20,59 @@ if not vim.loop.fs_stat(lazypath) then
       lazypath,
     })
   else
-    vim.notify("Continuing without plugins.")
-    return
+    vim.notify(
+      "Continuing without plugins.",
+      vim.log.levels.WARN
+    )
+    return false
   end
 end
 
 -- configure lazy.nvim
 vim.opt.runtimepath:prepend(lazypath)
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", {
+  git = {
+    log = { "-10", "--since=7 days ago" },
+  },
+
+  dev = {
+    path = "~/Code",
+    patterns = { --[[ "WieeRd" ]] },
+  },
+
+  install = {
+    missing = true,
+    colorscheme = { "habamax" },
+  },
+
+  ui = {
+    custom_keys = {
+      ["<localleader>l"] = false,
+      ["<localleader>t"] = false,
+    },
+  },
+
+  change_detection = {
+    enabled = true,
+    notify = false,
+  },
+
+  performance = {
+    rtp = {
+      reset = true,
+      paths = {},
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
+  },
+})
+
+return true
