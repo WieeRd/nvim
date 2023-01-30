@@ -16,3 +16,11 @@ end
 
 -- re-enable ShaDa
 vim.o.shadafile = ""
+
+-- TODO:
+-- require("wieerd").setup({
+--   mapleader = " ",
+--   colorscheme = "kanagawa",
+--   fallback_colorscheme = "habamax",
+--   enable_plugins = true,
+-- })

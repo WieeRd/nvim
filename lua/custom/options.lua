@@ -11,7 +11,7 @@ o.updatetime = 200
 
 o.termguicolors = true
 o.clipboard = "unnamedplus"
-o.mouse = "nvr"
+o.mouse = "nv"
 
 opt.sessionoptions = {
   "blank",

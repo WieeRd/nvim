@@ -53,10 +53,10 @@ return {
   { "folke/tokyonight.nvim", lazy = true },          -- 2022
   { "rebelot/kanagawa.nvim", lazy = false },         -- 2023*
 
-  -- trying out other themes
-  -- "B4mbus/oxocarbon-lua.nvim",
-  -- "vim-scripts/greenvision",
-  -- "marko-cerovac/material.nvim",
-  -- "olimorris/onedarkpro.nvim",
-  -- "Yazeed1s/minimal.nvim",
+  -- next year candidates
+  -- { "nyoom-engineering/oxocarbon.nvim", lazy = true },
+  -- { "Yazeed1s/minimal.nvim", lazy = true },
+  -- { "marko-cerovac/material.nvim", lazy = true },
+  -- { "olimorris/onedarkpro.nvim", lazy = true },
+  -- { "vim-scripts/greenvision", lazy = true },
 }
