@@ -4,12 +4,12 @@ local function get_config(plugin, opts)
 end
 
 return {
-  -- versatile fuzzy finder
+  -- find stuffs
   {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
     cmd = "Telescope",
-    keys = { "<Leader>f", "<C-p>" },
+    keys = { "<C-p>", "<Leader>f" },
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       {
@@ -27,13 +27,6 @@ return {
     config = get_config,
   },
 
-  -- TUI file explorer
-  {
-    "luukvbaal/nnn.nvim",
-    keys = "<C-n>",
-    config = get_config,
-  },
-
   -- list stuffs
   {
     "folke/trouble.nvim",
@@ -41,6 +34,13 @@ return {
     dependencies = {
       "folke/todo-comments.nvim"
     },
+    config = get_config,
+  },
+
+  -- TUI file explorer
+  {
+    "luukvbaal/nnn.nvim",
+    keys = { "<C-n>", "g<C-n>" },
     config = get_config,
   },
 

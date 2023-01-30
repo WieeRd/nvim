@@ -2,7 +2,7 @@ local config = {}
 
 config["telescope.nvim"] = function()
   local telescope = require("telescope")
-  -- local actions = require("telescope.actions")
+  local actions = require("telescope.actions")
   local builtin = require("telescope.builtin")
   local themes = require("telescope.themes")
 
@@ -34,6 +34,14 @@ config["telescope.nvim"] = function()
 
       border = true,
       -- borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+
+      mappings = {
+        -- i = {},
+        n = {
+          -- close with Ctrl+C regardless of the mode
+          ["<C-c>"] = actions.close,
+        },
+      }
     },
 
     -- configure each builtin pickers
@@ -60,12 +68,12 @@ config["telescope.nvim"] = function()
   end)
 
   -- see all available pickers
-  map("n", "<Leader>f ", builtin.builtin)
+  map("n", "<Leader>f/", builtin.builtin)
 
   -- basic stuffs
   map("n", "<Leader>ff", builtin.find_files)
   map("n", "<Leader>fb", builtin.buffers)
-  map("n", "<Leader>f/", builtin.live_grep)
+  map("n", "<Leader>fg", builtin.live_grep)
   map("n", "<Leader>fy", builtin.registers)
 
   -- LSP stuffs
@@ -82,10 +90,61 @@ config["telescope.nvim"] = function()
   map("n", "<Leader>fm", builtin.man_pages)
 end
 
-config["nnn.nvim"] = function()
+config["trouble.nvim"] = function()
 end
 
-config["trouble.nvim"] = function()
+config["nnn.nvim"] = function()
+  local nnn = require("nnn")
+  local builtin = require("nnn").builtin
+
+  nnn.setup({
+    -- explorer = {
+    --   cmd = "nnn",       -- command overrride (-F1 flag is implied, -a flag is invalid!)
+    --   width = 30,        -- width of the vertical split
+    --   side = "topleft",  -- or "botright", location of the explorer window
+    --   session = "",      -- or "global" / "local" / "shared"
+    --   tabs = true,       -- seperate nnn instance per tab
+    --   fullscreen = true, -- whether to fullscreen explorer window when current tab is empty
+    -- },
+
+    picker = {
+      cmd = "nnn",
+      style = {
+        -- can be absolute(n>1) or ratio(n<1)
+        width = 120,
+        height = 35,
+        border = "solid"
+      },
+      session = "",      -- or "global" / "local" / "shared"
+      fullscreen = false, -- whether to fullscreen picker window when current tab is empty
+    },
+
+    mappings = {
+      { "<C-t>", builtin.open_in_tab },       -- open file(s) in tab
+      { "<C-s>", builtin.open_in_split },     -- open file(s) in split
+      { "<C-v>", builtin.open_in_vsplit },    -- open file(s) in vertical split
+      -- { "<C-p>", builtin.open_in_preview },   -- open file in preview split keeping nnn focused
+      -- { "<C-y>", builtin.copy_to_clipboard }, -- copy file(s) to clipboard
+      -- { "<C-w>", builtin.cd_to_path },        -- cd to file directory
+      -- { "<C-e>", builtin.populate_cmdline },  -- populate cmdline (:) with file(s)
+    },
+
+    windownav = {        -- window movement mappings to navigate out of nnn
+      -- left = "<C-w>h",
+      -- right = "<C-w>l",
+      -- next = "<C-w>w",
+      -- prev = "<C-w>W",
+    },
+
+    buflisted = false,   -- whether or not nnn buffers show up in the bufferlist
+    quitcd = nil,        -- or "cd" / tcd" / "lcd", command to run on quitcd file if found
+    offset = false,      -- whether or not to write position offset to tmpfile(for use in preview-tui)
+  })
+
+  local map = vim.keymap.set
+  map("n", "<C-n>", "<Cmd>NnnPicker %:h<CR>")
+  map("n", "g<C-n>", "<Cmd>NnnPicker .<CR>")
+  -- TODO: do I need NnnExplorer?
 end
 
 config["aerial.nvim"] = function()

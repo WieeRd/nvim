@@ -17,3 +17,8 @@ highlight! link IlluminatedWordText LspReferenceText
 
 " gitsigns.nvim: virtual text blame highlight
 highlight default link GitSignsCurrentLineBlame CursorLine
+
+" nnn.nvim
+highlight default link NnnBorder FloatBorder
+highlight default link NnnNormal NormalFloat
+highlight default link NnnNormalNC NormalFloat
