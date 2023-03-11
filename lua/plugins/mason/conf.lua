@@ -137,6 +137,7 @@ config["nvim-lspconfig"] = function()
 
   -- set global config
   for k,v in pairs(global_config) do
+    ---@diagnostic disable-next-line: assign-type-mismatch
     lspconfig.util.default_config[k] = v
   end
 
@@ -148,7 +149,7 @@ config["nvim-lspconfig"] = function()
     end,
 
     -- Lua: setup for neovim config & plugin development
-    ["sumneko_lua"] = function()
+    ["lua_ls"] = function()
       require("neodev").setup({
         library = {
           enabled = true,
@@ -161,7 +162,7 @@ config["nvim-lspconfig"] = function()
         lspconfig = true,
       })
 
-      lspconfig["sumneko_lua"].setup({
+      lspconfig["lua_ls"].setup({
         settings = {
           Lua = {
             completion = {
