@@ -91,6 +91,22 @@ config["telescope.nvim"] = function()
 end
 
 config["trouble.nvim"] = function()
+  local trouble = require("trouble")
+
+  trouble.setup({
+    position = "bottom",
+    height = 10,
+    width = 50,
+    icons = true,
+    padding = false, -- add an extra new line on top of the list
+  })
+
+  local map = vim.keymap.set
+  map("n", "<Leader>xx", "<Cmd>TroubleToggle<CR>")
+  map("n", "<Leader>xd", "<Cmd>TroubleToggle workspace_diagnostics<CR>")
+  map("n", "<Leader>xc", "<Cmd>TroubleToggle quickfix<CR>")
+  map("n", "<Leader>xl", "<Cmd>TroubleToggle loclist<CR>")
+  map("n", "<Leader>xr", "<Cmd>TroubleToggle lsp_references<CR>")
 end
 
 config["nnn.nvim"] = function()
