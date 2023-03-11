@@ -40,6 +40,9 @@ o.sidescrolloff = 5
 o.wrap = false
 o.list = false
 
+o.showcmd = false
+o.showmode = false
+
 opt.listchars = { eol = "↲", tab = "» ", trail = "•" }
 opt.fillchars = { diff = " ", eob = " ", fold = " " }
 

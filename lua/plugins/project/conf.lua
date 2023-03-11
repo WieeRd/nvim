@@ -146,6 +146,8 @@ config["diffview.nvim"] = function()
   map('n', "<Leader>gl", "<Cmd>DiffviewFileHistory %<CR>")  -- current file
   map('x', "<Leader>gl", "<Cmd>'<,'>DiffviewFileHistory<CR>")  -- selected range
   map('n', "<Leader>gL", "<Cmd>DiffviewFileHistory<CR>")  -- project wide
+
+  -- TODO: `:h diffview-merge-tool`
 end
 
 return config
