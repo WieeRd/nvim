@@ -5,6 +5,7 @@ config["telescope.nvim"] = function()
   local actions = require("telescope.actions")
   local builtin = require("telescope.builtin")
   local themes = require("telescope.themes")
+  local trouble = require("trouble.providers.telescope")
 
   telescope.setup({
     -- global default
@@ -36,8 +37,15 @@ config["telescope.nvim"] = function()
       -- borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
 
       mappings = {
-        -- i = {},
+        i = {
+          -- TODO: better keymap
+          -- open search results in trouble
+          ["<C-x>"] = trouble.open_with_trouble,
+        },
         n = {
+          -- open search results in trouble
+          ["<C-x>"] = trouble.open_with_trouble,
+
           -- close with Ctrl+C regardless of the mode
           ["<C-c>"] = actions.close,
         },
@@ -46,7 +54,9 @@ config["telescope.nvim"] = function()
 
     -- configure each builtin pickers
     pickers = {
-
+      ["lsp_document_symbols"] = {
+        themes.get_dropdown()
+      }
     },
 
     -- configure each extension
@@ -68,13 +78,20 @@ config["telescope.nvim"] = function()
   end)
 
   -- see all available pickers
-  map("n", "<Leader>f/", builtin.builtin)
+  map("n", "<Leader>f?", builtin.builtin)
 
-  -- basic stuffs
+  -- find files
   map("n", "<Leader>ff", builtin.find_files)
   map("n", "<Leader>fb", builtin.buffers)
+
+  -- searching
+  map("n", "<Leader>f/", builtin.current_buffer_fuzzy_find)
   map("n", "<Leader>fg", builtin.live_grep)
+
+  -- others
   map("n", "<Leader>fy", builtin.registers)
+  map("n", "<Leader>fc", builtin.quickfix)
+  map("n", "<Leader>fl", builtin.loclist)
 
   -- LSP stuffs
   map("n", "<Leader>fd", function() builtin.diagnostics({ bufnr = 0 }) end)
@@ -98,15 +115,49 @@ config["trouble.nvim"] = function()
     height = 10,
     width = 50,
     icons = true,
-    padding = false, -- add an extra new line on top of the list
+    padding = false,
+  })
+
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "Trouble",
+    group = vim.api.nvim_create_augroup("TroubleConfig", { clear = true }),
+    callback = function(_)
+      vim.wo.cursorline = true
+    end
   })
 
   local map = vim.keymap.set
   map("n", "<Leader>xx", "<Cmd>TroubleToggle<CR>")
-  map("n", "<Leader>xd", "<Cmd>TroubleToggle workspace_diagnostics<CR>")
+  map("n", "<Leader>xd", "<Cmd>TroubleToggle document_diagnostics<CR>")
+  map("n", "<Leader>xD", "<Cmd>TroubleToggle workspace_diagnostics<CR>")
   map("n", "<Leader>xc", "<Cmd>TroubleToggle quickfix<CR>")
   map("n", "<Leader>xl", "<Cmd>TroubleToggle loclist<CR>")
   map("n", "<Leader>xr", "<Cmd>TroubleToggle lsp_references<CR>")
+
+  map("n", "]x", function()
+    trouble.next({ skip_groups = true, jump = true })
+  end)
+  map("n", "[x", function()
+    trouble.previous({ skip_groups = true, jump = true })
+  end)
+end
+
+config["todo-comments.nvim"] = function()
+  local todo = require("todo-comments")
+
+  todo.setup({
+    signs = false,
+    highlight = {
+      multiline = false,
+    },
+  })
+
+  local map = vim.keymap.set
+  map("n", "<Leader>xt", "<Cmd>TodoTrouble<CR>")
+  map("n", "<Leader>ft", "<Cmd>TodoTelescope<CR>")
+
+  map("n", "]t", todo.jump_next)
+  map("n", "[t", todo.jump_prev)
 end
 
 config["nnn.nvim"] = function()
@@ -227,6 +278,13 @@ config["aerial.nvim"] = function()
   })
 
   vim.keymap.set("n", "<Leader>a", aerial.toggle)
+end
+
+config["toggleterm.nvim"] = function()
+  require("toggleterm").setup()
+
+  local map = vim.keymap.set
+  map("n", "<S-Tab>", "<Cmd>ToggleTerm<CR>")
 end
 
 return config

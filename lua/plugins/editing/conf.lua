@@ -78,6 +78,11 @@ config["Comment.nvim"] = function()
   })
 end
 
+config["vim-unimpaired"] = function()
+  vim.keymap.del("n", "[xx")
+  vim.keymap.del("n", "]xx")
+end
+
 config["treesj"] = function()
   require("treesj").setup({ use_default_keymaps = false })
 end

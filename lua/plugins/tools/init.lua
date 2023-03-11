@@ -11,7 +11,9 @@ return {
     cmd = "Telescope",
     keys = { "<C-p>", "<Leader>f" },
     dependencies = {
+      -- fzf as fuzzy sort engine
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      -- use telescope as a select ui
       {
         "nvim-telescope/telescope-ui-select.nvim",
         init = function()
@@ -23,6 +25,8 @@ return {
           end
         end
       },
+      -- view search results in a list
+      { "folke/trouble.nvim" }
     },
     config = get_config,
   },
@@ -31,8 +35,16 @@ return {
   {
     "folke/trouble.nvim",
     keys = "<Leader>x",
+    config = get_config,
+  },
+
+  -- find & list 'TODO' comments
+  {
+    "folke/todo-comments.nvim",
+    keys = { "<Leader>ft", "<Leader>xt" },
     dependencies = {
-      "folke/todo-comments.nvim"
+      "folke/trouble.nvim",
+      "nvim-telescope/telescope.nvim",
     },
     config = get_config,
   },
@@ -49,5 +61,12 @@ return {
     "stevearc/aerial.nvim",
     keys = "<Leader>a",
     config = get_config,
-  }
+  },
+
+  -- manage terminal windows
+  {
+    "akinsho/toggleterm.nvim",
+    -- keys = "<S-Tab>",
+    config = get_config,
+  },
 }

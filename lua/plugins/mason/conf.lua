@@ -98,16 +98,12 @@ config["nvim-lspconfig"] = function()
       map("n", "[D", bind(dg.goto_prev, { severity = dg.severity.ERROR }))
       map("n", "]D", bind(dg.goto_next, { severity = dg.severity.ERROR }))
 
-      -- NOTE: 'list all' stuffs will be replaced with trouble.nvim
-
-      -- list all diagnostics
-      map("n", "<Leader>ld", dg.setloclist)  -- current buffer
-      map("n", "<Leader>lD", dg.setqflist)  -- project wide
+      -- NOTE: 'list all' stuffs (diagnostics, references)
+      --       has been replaced with trouble.nvim
 
       -- goto definition
       map("n", "gd", vim.lsp.buf.definition)
       map("n", "gD", vim.lsp.buf.type_definition)
-      map("n", "gr", vim.lsp.buf.references)
 
       -- call hierarchy
       map("n", "<Leader>li", vim.lsp.buf.incoming_calls)

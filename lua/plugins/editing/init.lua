@@ -46,6 +46,7 @@ return {
   {
     "tpope/vim-unimpaired",
     dependencies = "tpope/vim-repeat",
+    config = get_config,
   },
 
   -- split/join multi-line statement
