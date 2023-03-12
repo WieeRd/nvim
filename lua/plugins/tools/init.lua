@@ -38,10 +38,10 @@ return {
     config = get_config,
   },
 
-  -- find & list 'TODO' comments
+  -- find & highlight 'TODO' comments
   {
     "folke/todo-comments.nvim",
-    keys = { "<Leader>ft", "<Leader>xt" },
+    -- keys = { "<Leader>ft", "<Leader>xt" },
     dependencies = {
       "folke/trouble.nvim",
       "nvim-telescope/telescope.nvim",
@@ -66,7 +66,7 @@ return {
   -- manage terminal windows
   {
     "akinsho/toggleterm.nvim",
-    -- keys = "<S-Tab>",
+    keys = "<S-Tab>",
     config = get_config,
   },
 }

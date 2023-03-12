@@ -34,19 +34,16 @@ config["telescope.nvim"] = function()
       path_display = { "truncate" },
 
       border = true,
-      -- borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
 
       mappings = {
         i = {
-          -- TODO: better keymap
-          -- open search results in trouble
           ["<C-x>"] = trouble.open_with_trouble,
+          ["<C-s>"] = actions.select_horizontal,
+          ["<C-c>"] = actions.close,
         },
         n = {
-          -- open search results in trouble
           ["<C-x>"] = trouble.open_with_trouble,
-
-          -- close with Ctrl+C regardless of the mode
+          ["<C-s>"] = actions.select_horizontal,
           ["<C-c>"] = actions.close,
         },
       }
@@ -54,16 +51,12 @@ config["telescope.nvim"] = function()
 
     -- configure each builtin pickers
     pickers = {
-      ["lsp_document_symbols"] = {
-        themes.get_dropdown()
-      }
+      ["lsp_document_symbols"] = themes.get_dropdown(),
     },
 
     -- configure each extension
     extensions = {
-      ["ui-select"] = {
-        themes.get_dropdown()
-      },
+      ["ui-select"] = themes.get_dropdown(),
     },
   })
 
@@ -97,10 +90,7 @@ config["telescope.nvim"] = function()
   map("n", "<Leader>fd", function() builtin.diagnostics({ bufnr = 0 }) end)
   map("n", "<Leader>fD", builtin.diagnostics)
   map("n", "<Leader>fr", builtin.lsp_references)
-  map("n", "<Leader>fs", function()
-    -- TODO: fall back to `builtin.treesitter`
-    builtin.lsp_document_symbols(themes.get_dropdown())
-  end)
+  map("n", "<Leader>fs", builtin.lsp_document_symbols)
 
   -- RTFM, I must
   map("n", "<Leader>fh", builtin.help_tags)
@@ -112,10 +102,11 @@ config["trouble.nvim"] = function()
 
   trouble.setup({
     position = "bottom",
-    height = 10,
+    height = 16,
     width = 50,
     icons = true,
     padding = false,
+    auto_preview = false,
   })
 
   vim.api.nvim_create_autocmd("FileType", {
@@ -165,6 +156,7 @@ config["nnn.nvim"] = function()
   local builtin = require("nnn").builtin
 
   nnn.setup({
+    -- TODO: do I need NnnExplorer?
     -- explorer = {
     --   cmd = "nnn",       -- command overrride (-F1 flag is implied, -a flag is invalid!)
     --   width = 30,        -- width of the vertical split
@@ -186,6 +178,7 @@ config["nnn.nvim"] = function()
       fullscreen = false, -- whether to fullscreen picker window when current tab is empty
     },
 
+    -- TODO: learn NNN keymaps & come up with mappings without conflict
     mappings = {
       { "<C-t>", builtin.open_in_tab },       -- open file(s) in tab
       { "<C-s>", builtin.open_in_split },     -- open file(s) in split
@@ -211,7 +204,6 @@ config["nnn.nvim"] = function()
   local map = vim.keymap.set
   map("n", "<C-n>", "<Cmd>NnnPicker %:h<CR>")
   map("n", "g<C-n>", "<Cmd>NnnPicker .<CR>")
-  -- TODO: do I need NnnExplorer?
 end
 
 config["aerial.nvim"] = function()
@@ -281,10 +273,45 @@ config["aerial.nvim"] = function()
 end
 
 config["toggleterm.nvim"] = function()
-  require("toggleterm").setup()
+  require("toggleterm").setup({
+    size = function(term)
+      if term.direction == "horizontal" then
+        return 16
+      elseif term.direction == "vertical" then
+        return vim.o.columns * 0.4
+      end
+    end,
 
-  local map = vim.keymap.set
-  map("n", "<S-Tab>", "<Cmd>ToggleTerm<CR>")
+    open_mapping = "<S-Tab>",
+
+    -- on_create = fun(t: Terminal), -- function to run when the terminal is first created
+    -- on_open = fun(t: Terminal), -- function to run when the terminal opens
+    -- on_close = fun(t: Terminal), -- function to run when the terminal closes
+    -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
+    -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
+    -- on_exit = fun(t: Terminal, job: number, exit_code: number, name: string) -- function to run when terminal process exits
+
+    on_open = function(term)
+      if term.direction == "float" then
+        vim.wo.winhl = ""
+      end
+    end,
+
+    direction = "float", -- 'vertical' | 'horizontal' | 'tab' | 'float',
+    close_on_exit = true, -- close the terminal window when the process exits
+    auto_scroll = true, -- automatically scroll to the bottom on terminal output
+
+    float_opts = {
+      border = "solid",
+      width = function(_)
+        return math.min(120, vim.o.columns - 6)
+      end,
+      height = function(_)
+        return math.min(35, math.floor(vim.o.lines * 0.7))
+      end,
+      winblend = nil,
+    },
+  })
 end
 
 return config
