@@ -75,34 +75,34 @@ config["gitsigns.nvim"] = function()
   end
 
   -- hunk motion
-  map({ 'n', 'x' }, "]c", next_hunk, { expr = true })
-  map({ 'n', 'x' }, "[c", prev_hunk, { expr = true })
+  map({ "n", "v" }, "]c", next_hunk, { expr = true })
+  map({ "n", "v" }, "[c", prev_hunk, { expr = true })
 
   -- hunk text object
-  map({ 'o', 'x' }, "ih", gs.select_hunk)
-  map({ 'o', 'x' }, "ah", gs.select_hunk)
+  map({ "o", "v" }, "ih", gs.select_hunk)
+  map({ "o", "v" }, "ah", gs.select_hunk)
 
   -- hunk actions
-  map({ 'n', 'x' }, "<Leader>gr", ":Gitsigns reset_hunk<CR>")
-  map({ 'n', 'x' }, "<Leader>gs", ":Gitsigns stage_hunk<CR>")
-  map({ 'n', 'x' }, "<Leader>gu", ":Gitsigns undo_stage_hunk<CR>")
+  map({ "n", "v" }, "<Leader>gr", ":Gitsigns reset_hunk<CR>")
+  map({ "n", "v" }, "<Leader>gs", ":Gitsigns stage_hunk<CR>")
+  map({ "n", "v" }, "<Leader>gu", ":Gitsigns undo_stage_hunk<CR>")
 
   -- buffer actions
-  map('n', "<Leader>gR", gs.reset_buffer)  -- :Git restore %
-  map('n', "<Leader>gS", gs.stage_buffer)  -- :Git add %
-  map('n', "<Leader>gU", gs.reset_buffer_index)  -- :Git reset %
+  map("n", "<Leader>gR", gs.reset_buffer)  -- :Git restore %
+  map("n", "<Leader>gS", gs.stage_buffer)  -- :Git add %
+  map("n", "<Leader>gU", gs.reset_buffer_index)  -- :Git reset %
 
   -- line info: hunk or blame preview
-  map('n', "<Leader>gp", function() line_info({ full = true }) end)
+  map("n", "<Leader>gp", function() line_info({ full = true }) end)
 
   -- toggle diff highlight
-  map('n', "<Leader>gh", gs.toggle_linehl)
-  map('n', "<Leader>g+", gs.toggle_signs)
-  map('n', "<Leader>g0", gs.toggle_numhl)
-  map('n', "<Leader>g-", gs.toggle_deleted)
+  map("n", "<Leader>gh", gs.toggle_linehl)
+  map("n", "<Leader>g+", gs.toggle_signs)
+  map("n", "<Leader>g0", gs.toggle_numhl)
+  map("n", "<Leader>g-", gs.toggle_deleted)
 
   -- live blame current line
-  map('n', "<Leader>gc", gs.toggle_current_line_blame)
+  map("n", "<Leader>gc", gs.toggle_current_line_blame)
 end
 
 config["diffview.nvim"] = function()
@@ -139,13 +139,13 @@ config["diffview.nvim"] = function()
   local map = vim.keymap.set
 
   -- git diff
-  map('n', "<Leader>gd", "<Cmd>DiffviewOpen -uno<CR>")  -- only tracked files
-  map('n', "<Leader>gD", "<Cmd>DiffviewOpen<CR>")  -- include untracked files
+  map("n", "<Leader>gd", "<Cmd>DiffviewOpen -uno<CR>")  -- only tracked files
+  map("n", "<Leader>gD", "<Cmd>DiffviewOpen<CR>")  -- include untracked files
 
   -- git log
-  map('n', "<Leader>gl", "<Cmd>DiffviewFileHistory %<CR>")  -- current file
-  map('x', "<Leader>gl", "<Cmd>'<,'>DiffviewFileHistory<CR>")  -- selected range
-  map('n', "<Leader>gL", "<Cmd>DiffviewFileHistory<CR>")  -- project wide
+  map("n", "<Leader>gl", "<Cmd>DiffviewFileHistory %<CR>")  -- current file
+  map("x", "<Leader>gl", "<Cmd>'<,'>DiffviewFileHistory<CR>")  -- selected range
+  map("n", "<Leader>gL", "<Cmd>DiffviewFileHistory<CR>")  -- project wide
 
   -- TODO: `:h diffview-merge-tool`
 end
