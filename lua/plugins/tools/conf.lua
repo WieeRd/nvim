@@ -276,20 +276,19 @@ config["toggleterm.nvim"] = function()
   require("toggleterm").setup({
     size = function(term)
       if term.direction == "horizontal" then
-        return 16
+        return math.max(math.min(16, vim.o.lines * 0.25), 5)
       elseif term.direction == "vertical" then
-        return vim.o.columns * 0.4
+        return math.min(80, math.floor(vim.o.columns * 0.5))
       end
     end,
 
     open_mapping = "<S-Tab>",
+    start_in_insert = true,
+    insert_mappings = true,
+    terminal_mappings = true,
 
-    -- on_create = fun(t: Terminal), -- function to run when the terminal is first created
-    -- on_open = fun(t: Terminal), -- function to run when the terminal opens
-    -- on_close = fun(t: Terminal), -- function to run when the terminal closes
-    -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
-    -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
-    -- on_exit = fun(t: Terminal, job: number, exit_code: number, name: string) -- function to run when terminal process exits
+    persist_size = false,
+    persist_mode = false,
 
     on_open = function(term)
       if term.direction == "float" then
@@ -297,9 +296,9 @@ config["toggleterm.nvim"] = function()
       end
     end,
 
-    direction = "float", -- 'vertical' | 'horizontal' | 'tab' | 'float',
-    close_on_exit = true, -- close the terminal window when the process exits
-    auto_scroll = true, -- automatically scroll to the bottom on terminal output
+    direction = "float",
+    close_on_exit = true,
+    auto_scroll = true,
 
     float_opts = {
       border = "solid",
@@ -312,6 +311,12 @@ config["toggleterm.nvim"] = function()
       winblend = nil,
     },
   })
+
+  local map = vim.keymap.set
+  map("n", "<Leader>ts", "<Cmd>execute v:count . 'ToggleTerm direction=horizontal'<CR>")
+  map("n", "<Leader>tv", "<Cmd>execute v:count . 'ToggleTerm direction=vertical'<CR>")
+  map("n", "<Leader>tt", "<Cmd>execute v:count . 'ToggleTerm direction=tab'<CR>")
+  map("n", "<Leader>tf", "<Cmd>execute v:count . 'ToggleTerm direction=float'<CR>")
 end
 
 return config
