@@ -30,19 +30,22 @@ return {
     config = get_config,
   },
 
-  -- TODO: statusline & tabline
-  {
-    -- "nvim-lualine/lualine.nvim",
-    -- "feline-nvim/feline.nvim",
-    -- "glepnir/galaxyline.nvim",
-    -- "tjdevries/express_line.nvim",
-  },
-
   -- distraction free mode
   {
     "folke/zen-mode.nvim",
     keys = "<Leader>z",
     dependencies = "folke/twilight.nvim",
+    config = get_config,
+  },
+
+  -- TODO: WIP: statusline & tabline
+  {
+    -- "nvim-lualine/lualine.nvim",
+    "rebelot/heirline.nvim",
+    event = "UIEnter",
+    dependencies = {
+      "SmiteshP/nvim-navic",
+    },
     config = get_config,
   },
 

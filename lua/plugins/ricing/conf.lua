@@ -95,6 +95,10 @@ config["zen-mode.nvim"] = function()
   map("n", "<Leader>zt", "<Cmd>Twilight<CR>")
 end
 
+config["heirline.nvim"] = function()
+  require("plugins.ricing.statusline")
+end
+
 config["kanagawa.nvim"] = function()
   require("kanagawa").setup({
     colors = {
