@@ -95,8 +95,8 @@ config["nvim-lspconfig"] = function()
       local dg = vim.diagnostic
       map("n", "[d", dg.goto_prev)
       map("n", "]d", dg.goto_next)
-      map("n", "[D", bind(dg.goto_prev, { severity = dg.severity.ERROR }))
-      map("n", "]D", bind(dg.goto_next, { severity = dg.severity.ERROR }))
+      map("n", "[D", bind(dg.goto_prev, { severity = dg.severity.WARN }))
+      map("n", "]D", bind(dg.goto_next, { severity = dg.severity.WARN }))
 
       -- NOTE: 'list all' stuffs (diagnostics, references)
       --       has been replaced with trouble.nvim
@@ -176,6 +176,7 @@ config["nvim-lspconfig"] = function()
     end,
 
     -- LTeX: disable gitcommit & enable plaintext
+    -- TODO: move extra setup to LspAttach
     ["ltex"] = function()
       lspconfig["ltex"].setup({
         filetypes = {

@@ -32,6 +32,9 @@ map("n", "g?", "?\\v")  -- very magic
 map({ "n", "v" }, "yp", [["0p]])  -- paste from yank register
 map({ "n", "v" }, "yd", [["0d]])  -- delete into yank register
 
+-- Windows navigation
+-- map("n", "<Leader>w", "<C-w>", { remap = true })
+
 -- Tab navigation
 map({ "n", "o" }, "]t", "gt")
 map({ "n", "o" }, "[t", "gT")
@@ -62,5 +65,6 @@ map({ "o", "v" }, "ae", function()
   vim.cmd("keepjumps $")
 end)
 
--- `.` as 'inner word' text object
+-- `.` and `,` as word text objects
 map({ "o", "v" }, ".", "iw")
+map({ "o", "v" }, ",", "aW")

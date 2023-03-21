@@ -70,24 +70,14 @@ config["nvim-cmp"] = function()
       ["<C-p>"] = complete_or_fn(cmp.select_prev_item),
       ["<C-Space>"] = complete_or_fn(cmp.confirm, { select = true }),
 
-      -- snippet keybinds
-      ["<C-h>"] = function(_)
-        if luasnip.jumpable(-1) then
-          luasnip.jump(-1)
-        end
-      end,
-      ["<C-l>"] = function(_)
-        if luasnip.expand_or_jumpable() then
-          luasnip.expand_or_jump()
-        end
-      end,
-
       -- revert to original text
       ["<C-a>"] = cmp.mapping.abort(),
 
       -- why is +4 invalid in Lua I want to line up columns :(
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+
+      -- NOTE: snippet keymaps are defined in LuaSnip config below
     },
 
     sources = cmp.config.sources(
@@ -193,15 +183,29 @@ config["nvim-cmp"] = function()
 end
 
 config["LuaSnip"] = function()
-  -- NOTE: keybinds are defined in nvim-cmp config
-	require("luasnip").config.set_config({
+  local luasnip = require("luasnip")
+  local map = vim.keymap.set
+
+	luasnip.config.set_config({
 		history = true,
 		delete_check_events = "TextChanged,InsertLeave",
 	})
 
-	require("luasnip.loaders.from_lua").lazy_load()
-	require("luasnip.loaders.from_vscode").lazy_load()
-	require("luasnip.loaders.from_snipmate").lazy_load()
+  map({ "i", "s" }, "<C-h>", function()
+    if luasnip.jumpable(-1) then
+      luasnip.jump(-1)
+    end
+  end)
+
+  map({ "i", "s" }, "<C-l>", function()
+    if luasnip.expand_or_jumpable() then
+      luasnip.expand_or_jump()
+    end
+  end)
+
+  require("luasnip.loaders.from_lua").lazy_load()
+  require("luasnip.loaders.from_vscode").lazy_load()
+  require("luasnip.loaders.from_snipmate").lazy_load()
 end
 
 config["neogen"] = function()

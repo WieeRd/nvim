@@ -10,6 +10,7 @@ local function extract_colors()
   local get_hl = utils.get_highlight
 
   -- NOTE: using color names from `:h gui-colors`
+  -- TODO: use actual usage as color name
   -- Red		  LightRed	    DarkRed
   -- Green	  LightGreen	  DarkGreen	  SeaGreen
   -- Blue	    LightBlue	    DarkBlue	  SlateBlue
@@ -60,77 +61,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 
----| {mode} |
-local ModeIndicator = {
-  static = {
-    mode_names = {
-      n = "N",  -- normal
-      i = "I",  -- insert
-      R = "R",  -- replace
-      c = "C",  -- command
-      t = "T",  -- terminal
-
-      -- visual
-      v = "v",
-      V = "V",
-      ["\22"] = "B",  -- ^V
-
-      -- select
-      s = "S",
-      S = "S",
-      ["\19"] = "S",  -- ^S
-
-      r = "?",  -- confirm/more prompt
-      ["!"] = "!",   -- executing command
-    },
-    mode_colors = {
-      N = "LightRed",
-      I = "Green",
-      R = "Green",
-      C = "Orange",
-      T = "Purple",
-
-      v = "Cyan",
-      V = "Cyan",
-      B = "Cyan",
-
-      S = "Purple",
-      ["?"] = "Orange",
-      ["!"] = "Orange",
-    },
-  },
-
-  condition = conditions.is_active,
-
-  init = function(self)
-    self.mode = vim.fn.mode(0)
-    self.name = self.mode_names[self.mode]
-    self.color = self.mode_colors[self.name]
-  end,
-
-  provider = function(self)
-    return " " .. self.name .. " "
-  end,
-
-  hl = function(self)
-    return {
-      -- fg = "Black",
-      -- bg = self.color,
-      fg = self.color,
-      bg = "DarkGray",
-      bold = true,
-    }
-  end,
-
-  update = "ModeChanged",
-}
-
 ---| {icon} path/filename.ext [+]  |
 local FileInfo = {
-  init = function(self)
-    self.filename = vim.api.nvim_buf_get_name(0)
-  end,
-
   -- FileIcon
   {
     init = function(self)
@@ -150,13 +82,19 @@ local FileInfo = {
 
   -- FileName
   {
-    provider = function(self)
-      local filename = vim.fn.fnamemodify(self.filename, ":.")
-      if filename == "" then return "[No Name]" end
+    provider = function()
+      local filename = vim.api.nvim_buf_get_name(0)
+      filename = vim.fn.fnamemodify(filename, ":.")
+
+      if filename == "" then
+        return "[No Name]"
+      end
+
       -- TODO: adjust using flexible component
       if not conditions.width_percent_below(#filename, 0.25) then
         filename = vim.fn.pathshorten(filename)
       end
+
       return filename
     end,
     hl = function()
@@ -184,13 +122,10 @@ local FileInfo = {
       hl = { fg = "Orange" },
     },
   },
-
-  -- space padding
-  { provider = " " },
 }
 
----| > ﴯ foo >  bar |
-local AerialLocation = {
+---|  ﴯ foo   bar |
+local AerialInfo = {
   static = {
     loose_hierarchy = {
       help = true,
@@ -212,8 +147,7 @@ local AerialLocation = {
       local child = {
         -- separator
         {
-          -- provider = "> ",
-          provider = " ",
+          provider = "  ",
           hl = { fg = "Purple" }
         },
         -- symbol kind icon
@@ -224,7 +158,7 @@ local AerialLocation = {
           end
         },
         -- symbol name
-        { provider = (" %s "):format(symbol.name) }
+        { provider = (" %s"):format(symbol.name) }
       }
       children[i] = child
     end
@@ -232,7 +166,7 @@ local AerialLocation = {
     return self:new(children):eval()
   end,
 
-  update = "CursorMoved",
+  update = { "CursorMoved", "BufEnter" },
 }
 
 ---| E:1 W:2 I:3 H:4 |  1  2  3  4 |
@@ -263,57 +197,7 @@ local Diagnostics = {
   update = { "DiagnosticChanged", "BufEnter" },
 }
 
-local Git = {
-  condition = conditions.is_git_repo,
-
-  init = function(self)
-    self.status_dict = vim.b["gitsigns_status_dict"]
-    self.has_changes = self.status_dict.added + self.status_dict.removed + self.status_dict.changed
-  end,
-
-  hl = { fg = "Yellow" },
-
-  {
-    provider = function(self)
-      return " " .. self.status_dict.head
-    end,
-    hl = { bold = true }
-  },
-  {
-    condition = function(self)
-      return self.has_changes
-    end,
-    provider = "("
-  },
-  {
-    provider = function(self)
-      local count = self.status_dict.added or 0
-      return count > 0 and ("+" .. count)
-    end,
-    hl = { fg = "Added" },
-  },
-  {
-    provider = function(self)
-      local count = self.status_dict.removed or 0
-      return count > 0 and ("-" .. count)
-    end,
-    hl = { fg = "Deleted" },
-  },
-  {
-    provider = function(self)
-      local count = self.status_dict.changed or 0
-      return count > 0 and ("~" .. count)
-    end,
-    hl = { fg = "Changed" },
-  },
-  {
-    condition = function(self)
-      return self.has_changes
-    end,
-    provider = ")"
-  },
-}
-
+---| unix | dos | mac |
 local FileFormat = {
   provider = function()
     return (" %s "):format(vim.bo.fileformat)
@@ -344,22 +228,14 @@ local ScrollBar ={
     local curr_line = vim.api.nvim_win_get_cursor(0)[1]
     local lines = vim.api.nvim_buf_line_count(0)
     local i = math.floor((curr_line - 1) / lines * #self.sbar) + 1
-    return string.rep(self.sbar[i], 2)
+    return self.sbar[i]:rep(2)
   end,
 
-  hl = {
-    bg = "DarkGray",
-    fg = "Blue",
-  },
+  hl = { fg = "Blue", bg = "DarkGray" },
 }
 
 
-local ALIGN = { provider = "%=" }
-local TRUNC = { provider = "%<" }
--- local SEP = { provider = "│", hl = { fg = "Gray" } }
-
-
----| {mode} | {icon} filename.ext [+] | {c} foo > {f} bar | ... | E:1 W:2 | unix | 4 tab | 128:64 |
+---| {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄|
 local StatusLine = {
   hl = function()
     if conditions.is_active() then
@@ -369,23 +245,16 @@ local StatusLine = {
     end
   end,
 
-  -- components
-  -- ModeIndicator,
   FileInfo,
-  TRUNC,
-  AerialLocation,
-  ALIGN,
+  { provider = "%<" },  -- truncate here if lacking space
+  AerialInfo,
+  { provider = "%=" },  -- alignment section separator
   Diagnostics,
-  -- Git,
   FileFormat,
   IndentStyle,
   Ruler,
   ScrollBar,
 }
-
-
--- || {1}: {icon, ...} || ... | {n} {icon} {filename} | E:1 W:3 |
--- local TabLine = {}
 
 
 heirline.setup({

@@ -71,7 +71,7 @@ config["telescope.nvim"] = function()
   end)
 
   -- see all available pickers
-  map("n", "<Leader>f?", builtin.builtin)
+  map("n", "<Leader>f ", builtin.builtin)
 
   -- find files
   map("n", "<Leader>ff", builtin.find_files)
@@ -79,7 +79,7 @@ config["telescope.nvim"] = function()
 
   -- searching
   map("n", "<Leader>f/", builtin.current_buffer_fuzzy_find)
-  map("n", "<Leader>fg", builtin.live_grep)
+  map("n", "<Leader>f?", builtin.live_grep)
 
   -- others
   map("n", "<Leader>fy", builtin.registers)
@@ -87,10 +87,15 @@ config["telescope.nvim"] = function()
   map("n", "<Leader>fl", builtin.loclist)
 
   -- LSP stuffs
-  map("n", "<Leader>fd", function() builtin.diagnostics({ bufnr = 0 }) end)
-  map("n", "<Leader>fD", builtin.diagnostics)
   map("n", "<Leader>fr", builtin.lsp_references)
   map("n", "<Leader>fs", builtin.lsp_document_symbols)
+  map("n", "<Leader>fd", function()
+    builtin.diagnostics({ bufnr = 0 })
+  end)
+  map("n", "<Leader>fD", function()
+    builtin.diagnostics({ root_dir = true })
+  end)
+  -- TODO: { severity_limit = vim.diagnostic.severity.WARN }
 
   -- RTFM, I must
   map("n", "<Leader>fh", builtin.help_tags)
@@ -147,8 +152,8 @@ config["todo-comments.nvim"] = function()
   map("n", "<Leader>xt", "<Cmd>TodoTrouble<CR>")
   map("n", "<Leader>ft", "<Cmd>TodoTelescope<CR>")
 
-  map("n", "]t", todo.jump_next)
-  map("n", "[t", todo.jump_prev)
+  -- map("n", "]t", todo.jump_next)
+  -- map("n", "[t", todo.jump_prev)
 end
 
 config["nnn.nvim"] = function()
