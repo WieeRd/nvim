@@ -4,48 +4,22 @@ local conditions = require("heirline.conditions")
 local utils = require("heirline.utils")
 
 
----generate color palette based on current colorscheme
+---extract color palette from current colorscheme
 ---@return table<string, number>
 local function extract_colors()
-  local get_hl = utils.get_highlight
-
-  -- NOTE: using color names from `:h gui-colors`
-  -- TODO: use actual usage as color name
-  -- Red		  LightRed	    DarkRed
-  -- Green	  LightGreen	  DarkGreen	  SeaGreen
-  -- Blue	    LightBlue	    DarkBlue	  SlateBlue
-  -- Cyan	    LightCyan	    DarkCyan
-  -- Magenta	LightMagenta	DarkMagenta
-  -- Yellow	  LightYellow	  Brown		    DarkYellow
-  -- Gray	    LightGray	    DarkGray
-  -- Black	  White
-  -- Orange	  Purple		    Violet
+  local hl = utils.get_highlight
 
   return {
-    White = get_hl("Normal").fg,
-    Black = get_hl("NormalFloat").bg,
+    -- FileInfo
+    FileModified = hl("String").fg,
+    FileReadOnly = hl("Constant").fg,
 
-    Red = get_hl("DiagnosticError").fg,
-    LightRed = get_hl("Macro").fg,
-    DarkRed = get_hl("DiffDelete").bg,
-    Green = get_hl("String").fg,
-    Blue = get_hl("Function").fg,
-    Cyan = get_hl("Special").fg,
-    Yellow = get_hl("Identifier").fg,
-    Gray = get_hl("NonText").fg,
-    LightGray = get_hl("Comment").fg,
-    DarkGray = get_hl("CursorLine").bg,
-    Orange = get_hl("Constant").fg,
-    Purple = get_hl("Statement").fg,
+    -- AerialInfo
+    AerialSeparator = hl("Statement").fg,
 
-    Error = get_hl("DiagnosticError").fg,
-    Warn = get_hl("DiagnosticWarn").fg,
-    Info = get_hl("DiagnosticInfo").fg,
-    Hint = get_hl("DiagnosticHint").fg,
-
-    Added = get_hl("diffAdded").fg,
-    Deleted = get_hl("diffDeleted").fg,
-    Changed = get_hl("diffChanged").fg,
+    -- ScrollBar
+    ScrollBarFG = hl("Function").fg,
+    ScrollBarBG = hl("CursorLine").bg,
   }
 end
 
@@ -99,7 +73,7 @@ local FileInfo = {
     end,
     hl = function()
       return {
-        fg = vim.bo.modified and "Green" or nil,
+        fg = vim.bo.modified and "FileModified" or nil,
         bold = conditions.is_active(),
       }
     end,
@@ -112,14 +86,14 @@ local FileInfo = {
         return vim.bo.modified
       end,
       provider = " [+]",
-      hl = { fg = "Green", bold = true },
+      hl = { fg = "FileModified", bold = true },
     },
     {
       condition = function()
         return (not vim.bo.modifiable) or vim.bo.readonly
       end,
       provider = " ",
-      hl = { fg = "Orange" },
+      hl = { fg = "FileReadOnly" },
     },
   },
 }
@@ -144,11 +118,11 @@ local AerialInfo = {
     local children = {}
 
     for i, symbol in ipairs(self.symbols) do
-      local child = {
+      children[i] = {
         -- separator
         {
           provider = "  ",
-          hl = { fg = "Purple" }
+          hl = { fg = "AerialSeparator" }
         },
         -- symbol kind icon
         {
@@ -160,7 +134,6 @@ local AerialInfo = {
         -- symbol name
         { provider = (" %s"):format(symbol.name) }
       }
-      children[i] = child
     end
 
     return self:new(children):eval()
@@ -231,7 +204,7 @@ local ScrollBar ={
     return self.sbar[i]:rep(2)
   end,
 
-  hl = { fg = "Blue", bg = "DarkGray" },
+  hl = { fg = "ScrollBarFG", bg = "ScrollBarBG" },
 }
 
 
