@@ -38,13 +38,12 @@ return {
     config = get_config,
   },
 
-  -- TODO: WIP: statusline & tabline
+  -- custom statusline & tabline
   {
-    -- "nvim-lualine/lualine.nvim",
     "rebelot/heirline.nvim",
     event = "UIEnter",
     dependencies = {
-      "SmiteshP/nvim-navic",
+      "stevearc/aerial.nvim",
     },
     config = get_config,
   },
@@ -61,5 +60,7 @@ return {
   -- { "Yazeed1s/minimal.nvim", lazy = true },
   -- { "marko-cerovac/material.nvim", lazy = true },
   -- { "olimorris/onedarkpro.nvim", lazy = true },
+  -- { "navarasu/onedark.nvim", lazy = true },
+  -- { "tiagovla/tokyodark.nvim", lazy = true }
   -- { "vim-scripts/greenvision", lazy = true },
 }

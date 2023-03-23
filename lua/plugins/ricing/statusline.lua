@@ -35,6 +35,16 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 
+---hide the component when lacking space
+---lower priority will be hidden first
+---@param component StatusLine
+---@param priority Optional<integer>
+---@return StatusLine
+local function flexible(component, priority)
+  return { flexible = priority or 1, component, {} }
+end
+
+
 ---| {icon} path/filename.ext [+]  |
 local FileInfo = {
   -- FileIcon
@@ -64,7 +74,6 @@ local FileInfo = {
         return "[No Name]"
       end
 
-      -- TODO: adjust using flexible component
       if not conditions.width_percent_below(#filename, 0.25) then
         filename = vim.fn.pathshorten(filename)
       end
@@ -144,12 +153,12 @@ local AerialInfo = {
 
 ---| E:1 W:2 I:3 H:4 |  1  2  3  4 |
 local Diagnostics = {
-  condition = conditions.has_diagnostics,
-
   static = {
     -- icons = { "E:", "W:", "I:", "H:" },
     icons = {  " ", " ", " ", " ", },
   },
+
+  condition = conditions.has_diagnostics,
 
   init = function(self)
     for i=1,4 do
@@ -178,7 +187,9 @@ local FileFormat = {
 }
 
 ---| 64:128 |
-local Ruler = { provider = " %2l:%2c " }
+local Ruler = {
+  provider = " %2l:%2c ",
+}
 
 ---| tab:4 | space:2 |
 local IndentStyle = {
@@ -209,6 +220,33 @@ local ScrollBar ={
 
 
 ---| {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄|
+local DefaultStatusLine = {
+  FileInfo,
+  { provider = "%<" },  -- truncation starts here when lacking space
+  flexible(AerialInfo, 1),
+  { provider = "%=" },  -- align components above/below to left/right
+  flexible(Diagnostics, 3),
+  flexible(FileFormat, 2),
+  flexible(IndentStyle, 2),
+  flexible(Ruler, 5),
+  flexible(ScrollBar, 4),
+}
+
+-- TODO: special case statusline
+local SpecialStatusLine = {
+  condition = function()
+    return vim.bo.buftype ~= ""
+  end,
+
+  provider = "%=[WORK IN PROCESS]%=",
+  hl = "TODO",
+
+  -- help page
+  -- terminal buffers
+  -- builtin special window (e.g. quickfix)
+  -- plugin special window (e.g. sidebars)
+}
+
 local StatusLine = {
   hl = function()
     if conditions.is_active() then
@@ -218,15 +256,10 @@ local StatusLine = {
     end
   end,
 
-  FileInfo,
-  { provider = "%<" },  -- truncate here if lacking space
-  AerialInfo,
-  { provider = "%=" },  -- alignment section separator
-  Diagnostics,
-  FileFormat,
-  IndentStyle,
-  Ruler,
-  ScrollBar,
+  fallthrough = false,
+
+  SpecialStatusLine,
+  DefaultStatusLine,
 }
 
 
