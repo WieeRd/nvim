@@ -204,6 +204,7 @@ config["nnn.nvim"] = function()
     buflisted = false,   -- whether or not nnn buffers show up in the bufferlist
     quitcd = nil,        -- or "cd" / tcd" / "lcd", command to run on quitcd file if found
     offset = false,      -- whether or not to write position offset to tmpfile(for use in preview-tui)
+    replace_netrw = "picker",
   })
 
   local map = vim.keymap.set

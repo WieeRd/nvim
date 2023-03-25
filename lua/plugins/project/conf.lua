@@ -132,6 +132,8 @@ config["diffview.nvim"] = function()
     hooks = {  -- See ':h diffview-config-hooks'
       diff_buf_read = function(bufnr)
         vim.wo.relativenumber = false
+        vim.wo.cursorline = true
+        vim.wo.foldcolumn = "0"
       end
     },
   })

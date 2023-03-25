@@ -59,7 +59,8 @@ return {
   -- code outline (tree view of symbols)
   {
     "stevearc/aerial.nvim",
-    keys = "<Leader>a",
+    -- required by statusline (heirline), no point in lazy-loading
+    -- keys = "<Leader>a",
     config = get_config,
   },
 
