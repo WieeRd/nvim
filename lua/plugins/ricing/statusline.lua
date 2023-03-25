@@ -41,6 +41,14 @@ local function flexible(component, priority)
 end
 
 
+---separation point between alignment sections.
+---each section will be separated by an equal number of spaces.
+local ALIGN = { provider = "%=" }
+
+---truncation starts here when there isn't enough space
+local TRUNCATE = { provider = "%<" }
+
+
 ---| {icon} path/filename.ext [+]  |
 local FileInfo = {
   -- FileIcon | {icon} |
@@ -225,9 +233,9 @@ local ScrollBar ={
 ---| {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄ |
 local FileStatusLine = {
   FileInfo,
-  { provider = "%<" },  -- truncation starts here when lacking space
+  TRUNCATE,
   flexible(AerialInfo, 1),
-  { provider = "%=" },  -- align components above/below to left/right
+  ALIGN,
   flexible(Diagnostics, 3),
   flexible(FileFormat, 2),
   flexible(IndentStyle, 2),
@@ -270,9 +278,9 @@ local RTFMStatusLine = {
     end,
   },
 
-  { provider = "%<" },
+  TRUNCATE,
   AerialInfo,
-  { provider = "%=" },
+  ALIGN,
   Ruler,
   ScrollBar,
 }
@@ -327,7 +335,8 @@ local TermStatusLine = {
     }
   },
 
-  { provider = "%=" },
+  TRUNCATE,
+  ALIGN,
 }
 
 ---| the 'root' component that deals with all the conditional statuslines |
