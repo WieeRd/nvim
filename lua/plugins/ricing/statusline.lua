@@ -20,25 +20,16 @@ local function extract_colors()
     -- ScrollBar
     ScrollBarFG = hl("Function").fg,
     ScrollBarBG = hl("CursorLine").bg,
+
+    -- RTFMStatusLine
+    DocIcon = hl("Special").fg,
   }
 end
-
--- update color palette on colorscheme change
-vim.api.nvim_create_autocmd("ColorScheme", {
-  callback = function()
-    local colors = extract_colors()
-    utils.on_colorscheme(colors)
-  end,
-  group = vim.api.nvim_create_augroup("Heirline", {
-    clear = true,
-  })
-})
-
 
 ---hide the component when lacking space
 ---lower priority will be hidden first
 ---@param component StatusLine
----@param priority Optional<integer>
+---@param priority? integer
 ---@return StatusLine
 local function flexible(component, priority)
   return { flexible = priority or 1, component, {} }
@@ -47,7 +38,7 @@ end
 
 ---| {icon} path/filename.ext [+]  |
 local FileInfo = {
-  -- FileIcon
+  -- FileIcon | {icon} |
   {
     init = function(self)
       local devicons = require("nvim-web-devicons")
@@ -56,19 +47,22 @@ local FileInfo = {
         { default = true }
       )
     end,
+
     provider = function(self)
       return (" %s "):format(self.icon)
     end,
+
     hl = function(self)
       return self.highlight
-    end
+    end,
   },
 
-  -- FileName
+  -- FileName | path/filename.ext | p/a/t/h/filename.ext |
   {
     provider = function()
       local filename = vim.api.nvim_buf_get_name(0)
-      filename = vim.fn.fnamemodify(filename, ":.")
+      filename = vim.fn.fnamemodify(filename, ":~")  -- relative to $HOME
+      filename = vim.fn.fnamemodify(filename, ":.")  -- relative to cwd
 
       if filename == "" then
         return "[No Name]"
@@ -80,6 +74,7 @@ local FileInfo = {
 
       return filename
     end,
+
     hl = function()
       return {
         fg = vim.bo.modified and "FileModified" or nil,
@@ -88,7 +83,7 @@ local FileInfo = {
     end,
   },
 
-  -- FileFlags
+  -- FileFlags | [+]  |
   {
     {
       condition = function()
@@ -110,8 +105,11 @@ local FileInfo = {
 ---|  ﴯ foo   bar |
 local AerialInfo = {
   static = {
+    -- filetypes where `exact=false` works better
+    -- see `:h aerial.get_location`
     loose_hierarchy = {
       help = true,
+      man = true,
       markdown = true,
     }
   },
@@ -137,18 +135,18 @@ local AerialInfo = {
         {
           provider = symbol.icon,
           hl = function()
-            return "CmpItemKind" .. symbol.kind
+            return "Aerial" .. symbol.kind .. "Icon"
           end
         },
         -- symbol name
-        { provider = (" %s"):format(symbol.name) }
+        { provider = " " .. symbol.name }
       }
     end
 
     return self:new(children):eval()
   end,
 
-  update = { "CursorMoved", "BufEnter" },
+  update = { "CursorMoved" },
 }
 
 ---| E:1 W:2 I:3 H:4 |  1  2  3  4 |
@@ -219,8 +217,8 @@ local ScrollBar ={
 }
 
 
----| {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄|
-local DefaultStatusLine = {
+---| {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄ |
+local FileStatusLine = {
   FileInfo,
   { provider = "%<" },  -- truncation starts here when lacking space
   flexible(AerialInfo, 1),
@@ -232,19 +230,46 @@ local DefaultStatusLine = {
   flexible(ScrollBar, 4),
 }
 
--- TODO: special case statusline
-local SpecialStatusLine = {
-  condition = function()
-    return vim.bo.buftype ~= ""
+---| :h options.txt   3. Options summary   'statusline' | ... | 128:64 ▄▄ |
+local RTFMStatusLine = {
+  static = {
+    icons = {
+      help = " :h ",
+      man = " $ man ",
+      markdown = " :h ",
+    },
+  },
+
+  condition = function(self)
+    return self.icons[vim.bo.filetype]
   end,
 
-  provider = "%=[WORK IN PROCESS]%=",
-  hl = "TODO",
+  -- doc icon
+  {
+    provider = function(self)
+      return self.icons[vim.bo.filetype]
+    end,
+    hl = function()
+      return { fg = "DocIcon", bold = true }
+    end
+  },
 
-  -- help page
-  -- terminal buffers
-  -- builtin special window (e.g. quickfix)
-  -- plugin special window (e.g. sidebars)
+  -- doc name
+  {
+    provider = function()
+      local bufname = vim.api.nvim_buf_get_name(0)
+      return vim.fn.fnamemodify(bufname, ":t")
+    end,
+    hl = function()
+      return { bold = conditions.is_active() }
+    end,
+  },
+
+  { provider = "%<" },
+  AerialInfo,
+  { provider = "%=" },
+  Ruler,
+  ScrollBar,
 }
 
 local StatusLine = {
@@ -255,14 +280,25 @@ local StatusLine = {
       return "StatusLineNC"
     end
   end,
-
   fallthrough = false,
 
-  SpecialStatusLine,
-  DefaultStatusLine,
+  {
+    condition = function()
+      return vim.bo.buftype ~= ""
+    end,
+
+    RTFMStatusLine,  -- help(:h) & man(:Man) pages
+    -- terminal buffers (:term)
+    -- plugin special windows (e.g. sidebars)
+    -- builtin special windows (e.g. quickfix)
+    { provider = "%=[WORKING IN PROCESS]%=", hl = "TODO" }
+  },
+
+  FileStatusLine,  -- normal file buffers
 }
 
 
+-- finally, setup heirline and register components
 heirline.setup({
   statusline = StatusLine,
   -- tabline = TabLine,
@@ -270,4 +306,15 @@ heirline.setup({
   opts = {
     colors = extract_colors(),
   }
+})
+
+-- update color palette upon colorscheme change
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = function()
+    local colors = extract_colors()
+    utils.on_colorscheme(colors)
+  end,
+  group = vim.api.nvim_create_augroup("Heirline", {
+    clear = true,
+  })
 })

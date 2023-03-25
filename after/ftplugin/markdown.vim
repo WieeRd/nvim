@@ -1,1 +1,3 @@
-setlocal list
+if &buftype != 'help'
+  setlocal list
+endif

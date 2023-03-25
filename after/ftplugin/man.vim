@@ -1,2 +1,2 @@
 setlocal cursorline
-setlocal winhl=Normal:NormalFloat
+" setlocal winhl=Normal:NormalFloat
