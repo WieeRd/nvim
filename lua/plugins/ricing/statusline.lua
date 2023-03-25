@@ -23,6 +23,11 @@ local function extract_colors()
 
     -- RTFMStatusLine
     DocIcon = hl("Special").fg,
+
+    -- TermStatusLine
+    -- TermBG = hl("DiagnosticInfo").fg,
+    -- TermFG = hl("NormalFloat").bg,
+    TermIcon = hl("Special").fg,
   }
 end
 
@@ -272,6 +277,60 @@ local RTFMStatusLine = {
   ScrollBar,
 }
 
+---|  /bin/bash [+] ... |
+local TermStatusLine = {
+  condition = function()
+    return vim.bo.buftype == "terminal"
+  end,
+
+  init = function(self)
+    self.insert_mode = vim.fn.mode(0) == "t"
+  end,
+
+  -- hl = {
+  --   fg = "TermFG",
+  --   bg = "TermBG",
+  --   bold = true,
+  --   force = true,
+  -- },
+
+  -- terminal icon
+  {
+    provider = "  ",
+    hl = { fg = "TermIcon" },
+  },
+
+  -- terminal name
+  {
+    provider = function()
+      local bufname = vim.api.nvim_buf_get_name(0)
+      local termname, _ = bufname:gsub(".*:", "")
+      return termname
+    end,
+    hl = function(self)
+      return {
+        fg = self.insert_mode and "FileModified" or nil,
+        bold = conditions.is_active(),
+      }
+    end
+  },
+
+  -- mode indicator
+  {
+    condition = function(self)
+      return self.insert_mode
+    end,
+    provider = " [+]",
+    hl = {
+      fg = "FileModified",
+      bold = true,
+    }
+  },
+
+  { provider = "%=" },
+}
+
+---| the 'root' component that deals with all the conditional statuslines |
 local StatusLine = {
   hl = function()
     if conditions.is_active() then
@@ -280,21 +339,27 @@ local StatusLine = {
       return "StatusLineNC"
     end
   end,
+
+  -- stop evaluation at the first component whose `condition` returns true.
+  -- this means only one of "~StatusLine" components will be rendered,
+  -- depending on the type of the buffer it belongs to.
   fallthrough = false,
 
   {
     condition = function()
       return vim.bo.buftype ~= ""
     end,
+    fallthrough = false,
 
     RTFMStatusLine,  -- help(:h) & man(:Man) pages
-    -- terminal buffers (:term)
+    TermStatusLine,  -- terminal buffers (:term)
     -- plugin special windows (e.g. sidebars)
     -- builtin special windows (e.g. quickfix)
     { provider = "%=[WORKING IN PROCESS]%=", hl = "TODO" }
   },
 
-  FileStatusLine,  -- normal file buffers
+  -- ordinary file buffers
+  FileStatusLine,
 }
 
 
