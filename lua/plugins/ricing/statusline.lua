@@ -375,17 +375,16 @@ local ScratchStatusLine = {
     return vim.bo.buftype == "nofile"
   end,
 
-  hl = function()
-    return {
-      fg = conditions.is_active() and "ScratchTitle" or nil,
-      bold = true,
-    }
-  end,
-
   provider = function()
-    local title = vim.bo.filetype
-    -- make the first character uppercase
-    title, _ = title:gsub("^%l", string.upper)
+    local title = nil
+
+    if vim.fn.getcmdwintype() ~= "" then
+      -- turns out command line windows are also "nofile" buffers
+      title = "Command Line"
+    else
+      -- filetype but with the first character capitalized
+      title, _ = vim.bo.filetype:gsub("^%l", string.upper)
+    end
 
     -- if current window width is same as screen width
     if vim.api.nvim_win_get_width(0) == vim.o.columns then
@@ -395,7 +394,14 @@ local ScratchStatusLine = {
       -- sidebars like aerial
       return ("[%%=%s%%=]"):format(title)  -- [ ... Title ... ]
     end
-  end
+  end,
+
+  hl = function()
+    return {
+      fg = conditions.is_active() and "ScratchTitle" or nil,
+      bold = true,
+    }
+  end,
 }
 
 ---| ... [Quickfix List] :vim/TODO/g **/*.lua ... |
@@ -446,7 +452,7 @@ local StatusLine = {
   FileStatusLine,  -- ordinary file buffers
   RTFMStatusLine,  -- help (:h) & man (:Man) pages
   TermStatusLine,  -- terminal buffers (:term)
-  ScratchStatusLine,  -- scratch buffers (e.g. sidebars) & quickfix window
+  ScratchStatusLine,  -- scratch buffers (e.g. sidebars) & cmdline window
   QuickfixStatusLine,  -- quickfix & location list windows
 
   -- NOTE: haven't dealt with buftype "acwrite" and "prompt".
