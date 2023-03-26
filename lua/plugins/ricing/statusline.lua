@@ -11,6 +11,7 @@ local function extract_colors()
 
   return {
     -- FileInfo
+    FileProtocol = hl("Special").fg,
     FileModified = hl("String").fg,
     FileReadOnly = hl("Constant").fg,
 
@@ -55,6 +56,46 @@ local TRUNCATE = { provider = "%<" }
 
 ---| {icon} path/filename.ext [+]  |
 local FileInfo = {
+  init = function(self)
+    self.protocol = nil
+    self.filename = vim.api.nvim_buf_get_name(0)
+
+    if self.filename == "" then
+      self.filename = "[No Name]"
+      return
+    end
+
+    -- parse URL-like (e.g. protocol://content) buffer names
+    local protocol, content = self.filename:match("(%w+)://(.-)/?$")
+    if protocol then
+      self.protocol = protocol
+      self.filename = content
+    end
+
+    self.filename = vim.fn.fnamemodify(self.filename, ":~")  -- relative to $HOME
+    self.filename = vim.fn.fnamemodify(self.filename, ":.")  -- relative to cwd
+
+    if not conditions.width_percent_below(#self.filename, 0.25) then
+      self.filename = vim.fn.pathshorten(self.filename)  -- foo/bar/baz.lua -> f/b/baz.lua
+    end
+  end,
+
+  -- FileProtocol | [protocol] |
+  {
+    condition = function(self)
+      return self.protocol
+    end,
+    provider = function(self)
+      return ("[%s]"):format(self.protocol)
+    end,
+    hl = function()
+      return {
+        fg = conditions.is_active() and "FileProtocol" or nil,
+        bold = true,
+      }
+    end
+  },
+
   -- FileIcon | {icon} |
   {
     init = function(self)
@@ -76,31 +117,8 @@ local FileInfo = {
 
   -- FileName | p/a/t/h/filename.ext | [protocol] path/filename.ext |
   {
-    provider = function()
-      local bufname = vim.api.nvim_buf_get_name(0)
-
-      if bufname == "" then
-        return "[No Name]"
-      end
-
-      -- URL-like buffer names
-      local protocol, content = bufname:match("(%w+)://(.-)/?$")
-      if protocol then
-        bufname = content
-      end
-
-      bufname = vim.fn.fnamemodify(bufname, ":~")  -- relative to $HOME
-      bufname = vim.fn.fnamemodify(bufname, ":.")  -- relative to cwd
-
-      if not conditions.width_percent_below(#bufname, 0.25) then
-        bufname =  vim.fn.pathshorten(bufname)  -- foo/bar/baz.lua -> f/b/baz.lua
-      end
-
-      if protocol then
-        return ("[%s] %s"):format(protocol, bufname)
-      else
-        return bufname
-      end
+    provider = function(self)
+      return self.filename
     end,
 
     hl = function()
