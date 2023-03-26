@@ -74,23 +74,33 @@ local FileInfo = {
     end,
   },
 
-  -- FileName | path/filename.ext | p/a/t/h/filename.ext |
+  -- FileName | p/a/t/h/filename.ext | [protocol] path/filename.ext |
   {
     provider = function()
-      local filename = vim.api.nvim_buf_get_name(0)
-      filename = vim.fn.fnamemodify(filename, ":~")  -- relative to $HOME
-      filename = vim.fn.fnamemodify(filename, ":.")  -- relative to cwd
+      local bufname = vim.api.nvim_buf_get_name(0)
 
-      if filename == "" then
+      if bufname == "" then
         return "[No Name]"
       end
 
-      if not conditions.width_percent_below(#filename, 0.25) then
-        -- TODO: make url-like filenames prettier
-        filename = vim.fn.pathshorten(filename)
+      -- URL-like buffer names
+      local protocol, content = bufname:match("(%w+)://(.-)/?$")
+      if protocol then
+        bufname = content
       end
 
-      return filename
+      bufname = vim.fn.fnamemodify(bufname, ":~")  -- relative to $HOME
+      bufname = vim.fn.fnamemodify(bufname, ":.")  -- relative to cwd
+
+      if not conditions.width_percent_below(#bufname, 0.25) then
+        bufname =  vim.fn.pathshorten(bufname)  -- foo/bar/baz.lua -> f/b/baz.lua
+      end
+
+      if protocol then
+        return ("[%s] %s"):format(protocol, bufname)
+      else
+        return bufname
+      end
     end,
 
     hl = function()
@@ -202,11 +212,6 @@ local FileFormat = {
   end
 }
 
----| 64:128 |
-local Ruler = {
-  provider = " %2l:%2c ",
-}
-
 ---| tab:4 | space:2 |
 local IndentStyle = {
   provider = function()
@@ -215,6 +220,11 @@ local IndentStyle = {
       vim.bo.tabstop
     )
   end,
+}
+
+---| 64:128 |
+local Ruler = {
+  provider = " %2l:%2c ",
 }
 
 ---| █ | ▇ | ▆ | ▅ | ▄ | ▃ | ▂ | ▁ |
@@ -237,6 +247,10 @@ local ScrollBar ={
 
 ---| {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄ |
 local FileStatusLine = {
+  condition = function()
+    return vim.bo.buftype == "" or vim.bo.buftype == "nowrite"
+  end,
+
   FileInfo,
   TRUNCATE,
   flexible(AerialInfo, 1),
@@ -411,23 +425,15 @@ local StatusLine = {
   -- depending on the type of the buffer it belongs to.
   fallthrough = false,
 
-  -- special buffers with a non-empty buftype
-  {
-    condition = function()
-      return vim.bo.buftype ~= ""
-    end,
-    fallthrough = false,
-
-    RTFMStatusLine,  -- help (:h) & man (:Man) pages
-    TermStatusLine,  -- terminal buffers (:term)
-    ScratchStatusLine,  -- scratch buffers (e.g. sidebars) & quickfix window
-    QuickfixStatusLine,  -- quickfix & location list windows
-
-    -- TODO: buftype "nowrite", "acwrite", "prompt"
-    { provider = "%=[WORKING IN PROCESS]%=", hl = "TODO" }
-  },
-
   FileStatusLine,  -- ordinary file buffers
+  RTFMStatusLine,  -- help (:h) & man (:Man) pages
+  TermStatusLine,  -- terminal buffers (:term)
+  ScratchStatusLine,  -- scratch buffers (e.g. sidebars) & quickfix window
+  QuickfixStatusLine,  -- quickfix & location list windows
+
+  -- NOTE: haven't dealt with buftype "acwrite" and "prompt".
+  -- but I have yet to encounter any buffers with one of those buftypes
+  { provider = "%=[WORKING IN PROCESS]%=", hl = "TODO" }
 }
 
 
