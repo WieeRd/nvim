@@ -25,9 +25,13 @@ local function extract_colors()
     DocIcon = hl("Special").fg,
 
     -- TermStatusLine
-    -- TermBG = hl("DiagnosticInfo").fg,
-    -- TermFG = hl("NormalFloat").bg,
     TermIcon = hl("Special").fg,
+
+    -- ScratchStatusLine
+    ScratchTitle = hl("Function").fg,
+
+    -- QuickfixStatusLine
+    QuickfixTitle = hl("Function").fg,
   }
 end
 
@@ -82,6 +86,7 @@ local FileInfo = {
       end
 
       if not conditions.width_percent_below(#filename, 0.25) then
+        -- TODO: make url-like filenames prettier
         filename = vim.fn.pathshorten(filename)
       end
 
@@ -253,8 +258,8 @@ local RTFMStatusLine = {
     },
   },
 
-  condition = function(self)
-    return self.icons[vim.bo.filetype]
+  condition = function()
+    return vim.bo.buftype == "help" or vim.bo.filetype == "man"
   end,
 
   -- doc icon
@@ -295,13 +300,6 @@ local TermStatusLine = {
     self.insert_mode = vim.fn.mode(0) == "t"
   end,
 
-  -- hl = {
-  --   fg = "TermFG",
-  --   bg = "TermBG",
-  --   bold = true,
-  --   force = true,
-  -- },
-
   -- terminal icon
   {
     provider = "  ",
@@ -339,6 +337,65 @@ local TermStatusLine = {
   ALIGN,
 }
 
+---| [ ... Title ... ] | ... [ Title ] ... |
+local ScratchStatusLine = {
+  condition = function()
+    return vim.bo.buftype == "nofile"
+  end,
+
+  hl = function()
+    return {
+      fg = conditions.is_active() and "ScratchTitle" or nil,
+      bold = true,
+    }
+  end,
+
+  provider = function()
+    local title = vim.bo.filetype
+    -- make the first character uppercase
+    title, _ = title:gsub("^%l", string.upper)
+
+    -- if current window width is same as screen width
+    if vim.api.nvim_win_get_width(0) == vim.o.columns then
+      -- bottom windows like trouble
+      return ("%%=[%s]%%="):format(title)  -- ... [Title] ...
+    else
+      -- sidebars like aerial
+      return ("[%%=%s%%=]"):format(title)  -- [ ... Title ... ]
+    end
+  end
+}
+
+---| ... [Quickfix List] :vim/TODO/g **/*.lua ... |
+local QuickfixStatusLine = {
+  condition = function ()
+    return vim.bo.buftype == "quickfix"
+  end,
+
+  ALIGN,
+
+  -- [Quickfix List] or [Location List]
+  {
+    provider = "%q ",
+    hl = function()
+      local is_active = conditions.is_active()
+      return {
+        fg = is_active and "QuickfixTitle" or nil,
+        bold = true,
+      }
+    end,
+  },
+
+  -- the command that produced quickfix list
+  {
+    provider = function()
+      return vim.w["quickfix_title"]
+    end,
+  },
+
+  ALIGN,
+}
+
 ---| the 'root' component that deals with all the conditional statuslines |
 local StatusLine = {
   hl = function()
@@ -354,21 +411,23 @@ local StatusLine = {
   -- depending on the type of the buffer it belongs to.
   fallthrough = false,
 
+  -- special buffers with a non-empty buftype
   {
     condition = function()
       return vim.bo.buftype ~= ""
     end,
     fallthrough = false,
 
-    RTFMStatusLine,  -- help(:h) & man(:Man) pages
+    RTFMStatusLine,  -- help (:h) & man (:Man) pages
     TermStatusLine,  -- terminal buffers (:term)
-    -- plugin special windows (e.g. sidebars)
-    -- builtin special windows (e.g. quickfix)
+    ScratchStatusLine,  -- scratch buffers (e.g. sidebars) & quickfix window
+    QuickfixStatusLine,  -- quickfix & location list windows
+
+    -- TODO: buftype "nowrite", "acwrite", "prompt"
     { provider = "%=[WORKING IN PROCESS]%=", hl = "TODO" }
   },
 
-  -- ordinary file buffers
-  FileStatusLine,
+  FileStatusLine,  -- ordinary file buffers
 }
 
 
