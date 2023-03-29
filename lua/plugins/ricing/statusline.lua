@@ -22,17 +22,11 @@ local function extract_colors()
     ScrollBarFG = hl("Function").fg,
     ScrollBarBG = hl("CursorLine").bg,
 
-    -- RTFMStatusLine
-    DocIcon = hl("Special").fg,
+    -- RTFM, Term, Scratch, Quickfix
+    SpecialIcon = hl("Special").fg,
+    SpecialTitle = hl("Function").fg,
 
-    -- TermStatusLine
-    TermIcon = hl("Special").fg,
-
-    -- ScratchStatusLine
-    ScratchTitle = hl("Function").fg,
-
-    -- QuickfixStatusLine
-    QuickfixTitle = hl("Function").fg,
+    -- Tabline
   }
 end
 
@@ -300,7 +294,7 @@ local RTFMStatusLine = {
       return self.icons[vim.bo.filetype]
     end,
     hl = function()
-      return { fg = "DocIcon", bold = true }
+      return { fg = "SpecialIcon", bold = true }
     end
   },
 
@@ -335,7 +329,7 @@ local TermStatusLine = {
   -- terminal icon
   {
     provider = "  ",
-    hl = { fg = "TermIcon" },
+    hl = { fg = "SpecialIcon" },
   },
 
   -- terminal name
@@ -398,7 +392,7 @@ local ScratchStatusLine = {
 
   hl = function()
     return {
-      fg = conditions.is_active() and "ScratchTitle" or nil,
+      fg = conditions.is_active() and "SpecialTitle" or nil,
       bold = true,
     }
   end,
@@ -418,7 +412,7 @@ local QuickfixStatusLine = {
     hl = function()
       local is_active = conditions.is_active()
       return {
-        fg = is_active and "QuickfixTitle" or nil,
+        fg = is_active and "SpecialTitle" or nil,
         bold = true,
       }
     end,
@@ -461,10 +455,75 @@ local StatusLine = {
 }
 
 
+---|  1:         |
+local TabLabel = {
+  init = function(self)
+    local windows = vim.api.nvim_tabpage_list_wins(self.tabpage)
+    local buffers = {}
+    for i, win in pairs(windows) do
+      buffers[i] = vim.api.nvim_win_get_buf(win)
+    end
+    self.buffers = buffers
+  end,
+
+  hl = function(self)
+    if self.is_active then
+      -- return { bg = "TabLabelSel" }
+      return "TablineSel"
+    else
+      -- return { bg = "TabLabel" }
+      return "Tabline"
+    end
+  end,
+
+  -- "%{N}T" : start of tab page N label
+  {
+    provider = function(self)
+      return "%" .. tostring(self.tabnr) .. "T"
+    end,
+  },
+
+  -- label header
+  {
+    provider = function(_)
+      -- return "▎"
+      return "  "
+    end,
+    hl = function(self)
+      return {
+        fg = self.is_active and "SpecialIcon" or nil,
+      }
+    end
+  },
+
+  -- tab number
+  {
+    provider = function(self)
+      return ("%d (%d) "):format(self.tabnr, #self.buffers)
+    end,
+  },
+
+  -- "%T" : close tab label
+  { provider = "%T" },
+}
+
+-- TODO: custom tabline
+local TabLine = {
+  hl = "TablineFill",
+
+  utils.make_tablist(TabLabel),
+  ALIGN,
+  -- current working directory
+  -- git branch
+  -- ALIGN,
+  -- workspace diagnostics
+}
+
+
 -- finally, setup heirline and register components
 heirline.setup({
   statusline = StatusLine,
-  -- tabline = TabLine,
+  tabline = TabLine,
   -- winbar = WinBar,
   opts = {
     colors = extract_colors(),
