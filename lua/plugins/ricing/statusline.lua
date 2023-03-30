@@ -27,6 +27,7 @@ local function extract_colors()
     SpecialTitle = hl("Function").fg,
 
     -- Tabline
+    GitBranch = hl("Constant").fg,
   }
 end
 
@@ -66,9 +67,10 @@ local FileInfo = {
       self.filename = content
     end
 
-    self.filename = vim.fn.fnamemodify(self.filename, ":~")  -- relative to $HOME
-    self.filename = vim.fn.fnamemodify(self.filename, ":.")  -- relative to cwd
+    self.filename = vim.fn.fnamemodify(self.filename, ":~")  -- modify relative to $HOME
+    self.filename = vim.fn.fnamemodify(self.filename, ":.")  -- modify relative to cwd
 
+    -- if it takes up 25% of the screen, use shortened form
     if not conditions.width_percent_below(#self.filename, 0.25) then
       self.filename = vim.fn.pathshorten(self.filename)  -- foo/bar/baz.lua -> f/b/baz.lua
     end
@@ -455,8 +457,8 @@ local StatusLine = {
 }
 
 
----|  1:         |
-local TabLabel = {
+--- TODO: |  1:         | ...
+local TabList = utils.make_tablist({
   init = function(self)
     local windows = vim.api.nvim_tabpage_list_wins(self.tabpage)
     local buffers = {}
@@ -505,17 +507,63 @@ local TabLabel = {
 
   -- "%T" : close tab label
   { provider = "%T" },
+})
+
+---|  master |
+local GitBranch = {
+  -- branch icon
+  {
+    provider = "  ",
+    hl = { fg = "GitBranch" },
+  },
+
+  -- branch name
+  {
+    provider = function()
+      return vim.g["gitsigns_head"]
+    end,
+    hl = { bold = true },
+  }
+}
+
+---|  ~/.config/nvim |
+local WorkDir = {
+  -- directory icon
+  {
+    provider = "  ",
+    hl = "Directory",
+  },
+
+  -- working directory
+  {
+    provider = function()
+      local cwd = vim.fn.getcwd(0, 0)
+      cwd = vim.fn.fnamemodify(cwd, ":~")  -- modify relative to $HOME
+
+      -- if it takes up 25% of the screen, use shortened form
+      if not conditions.width_percent_below(#cwd, 0.25) then
+        cwd = vim.fn.pathshorten(cwd)  -- ~/foo/bar/ -> ~/f/b/
+      end
+
+      return cwd
+    end,
+    hl = { bold = true },
+  },
 }
 
 -- TODO: custom tabline
 local TabLine = {
-  hl = "TablineFill",
+  hl = "StatusLine",
 
-  utils.make_tablist(TabLabel),
+  TabList,
   ALIGN,
-  -- current working directory
+  GitBranch,
+  WorkDir,
+  ALIGN,
+
+  -- tab buffers
+  -- working directory
   -- git branch
-  -- ALIGN,
   -- workspace diagnostics
 }
 
