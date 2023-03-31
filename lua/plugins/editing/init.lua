@@ -73,8 +73,21 @@ return {
   {
     "phaazon/hop.nvim",
     keys = {
-      { "<Leader>j", "<Cmd>HopWord<CR>", mode = { "n", "v" } },
+      { "<Leader>j", "<Cmd>HopWordAC<CR>", mode = { "n", "v" } },
+      { "<Leader>k", "<Cmd>HopWordBC<CR>", mode = { "n", "v" } },
     },
     config = get_config,
+  },
+
+  -- select treesitter syntax node
+  {
+    "mfussenegger/nvim-treehopper",
+    keys = {
+      {
+        "<Leader>s",
+        "<Cmd>lua require('tsht').nodes()<CR>",
+        mode = { "n", "v", "o" },
+      },
+    }
   },
 }
