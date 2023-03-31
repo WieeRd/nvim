@@ -69,6 +69,7 @@ local FileInfo = {
 
     self.filename = vim.fn.fnamemodify(self.filename, ":~")  -- modify relative to $HOME
     self.filename = vim.fn.fnamemodify(self.filename, ":.")  -- modify relative to cwd
+    -- NOTE: relative to local cwd?
 
     -- if it takes up 25% of the screen, use shortened form
     if not conditions.width_percent_below(#self.filename, 0.25) then
@@ -194,19 +195,19 @@ local AerialInfo = {
 ---| E:1 W:2 I:3 H:4 |  1  2  3  4 |
 local Diagnostics = {
   static = {
+    -- NOTE: parent component must define this method
+    get_diagnostic_count = nil,
     -- icons = { "E:", "W:", "I:", "H:" },
     icons = {  " ", " ", " ", " ", },
   },
 
-  condition = conditions.has_diagnostics,
-
   init = function(self)
-    for i=1,4 do
-      local count = #vim.diagnostic.get(0, { severity = i })
+    for severity=1,4 do
+      local count = self.get_diagnostic_count(severity)
       if count > 0 then
-        self[i].provider = ("%s%d "):format(self.icons[i], count)
+        self[severity].provider = ("%s%d "):format(self.icons[severity], count)
       else
-        self[i].provider = ""
+        self[severity].provider = ""
       end
     end
   end,
@@ -215,8 +216,56 @@ local Diagnostics = {
   { hl = "DiagnosticSignWarn" },
   { hl = "DiagnosticSignInfo" },
   { hl = "DiagnosticSignHint" },
+}
 
-  update = { "DiagnosticChanged", "BufEnter" },
+---| Diagnostics: only from current buffer |
+local BufferDiagnostics = {
+  static = {
+    get_diagnostic_count = function(severity)
+      return #vim.diagnostic.get(0, { severity = severity })
+    end,
+  },
+
+  update = {
+    "BufEnter",
+    "DiagnosticChanged",
+  },
+
+  Diagnostics,
+}
+
+---| Diagnostics: only from current workspace |
+local WorkspaceDiagnostics = {
+  static = {
+    get_diagnostic_count = function(severity)
+      local cwd = vim.loop.cwd()
+      local diagnostics = vim.diagnostic.get(nil, { severity = severity })
+
+      local diag_per_buffer = {}  -- number of diagnostics in each buffer
+      for _, d in pairs(diagnostics) do
+        diag_per_buffer[d.bufnr] = (diag_per_buffer[d.bufnr] or 0) + 1
+      end
+
+      local filtered_count = 0  -- only count diagnostics from buffers under cwd
+      for bufnr, count in pairs(diag_per_buffer) do
+        local bufname = vim.api.nvim_buf_get_name(bufnr)
+        if bufname:sub(1, #cwd) == cwd then  -- if path is prefixed with cwd
+          filtered_count = filtered_count + count
+        end
+      end
+
+      return filtered_count
+    end,
+  },
+
+  update = {
+    "DiagnosticChanged",
+    callback = function()
+      vim.cmd("redrawtabline")
+    end,
+  },
+
+  Diagnostics,
 }
 
 ---| unix | dos | mac |
@@ -269,7 +318,7 @@ local FileStatusLine = {
   TRUNCATE,
   flexible(AerialInfo, 1),
   ALIGN,
-  flexible(Diagnostics, 3),
+  flexible(BufferDiagnostics, 3),
   flexible(FileFormat, 2),
   flexible(IndentStyle, 2),
   flexible(Ruler, 5),
@@ -520,7 +569,7 @@ local GitBranch = {
   -- branch name
   {
     provider = function()
-      return vim.g["gitsigns_head"]
+      return vim.b["gitsigns_head"] or vim.g["gitsigns_head"]
     end,
     hl = { bold = true },
   }
@@ -537,11 +586,11 @@ local WorkDir = {
   -- working directory
   {
     provider = function()
-      local cwd = vim.fn.getcwd(0, 0)
+      local cwd = vim.loop.cwd()  -- vim.fn.getcwd(0, 0)
       cwd = vim.fn.fnamemodify(cwd, ":~")  -- modify relative to $HOME
 
-      -- if it takes up 25% of the screen, use shortened form
-      if not conditions.width_percent_below(#cwd, 0.25) then
+      -- if it takes up 50% of the screen, use shortened form
+      if not conditions.width_percent_below(#cwd, 0.50) then
         cwd = vim.fn.pathshorten(cwd)  -- ~/foo/bar/ -> ~/f/b/
       end
 
@@ -560,6 +609,7 @@ local TabLine = {
   GitBranch,
   WorkDir,
   ALIGN,
+  WorkspaceDiagnostics,
 
   -- tab buffers
   -- working directory
