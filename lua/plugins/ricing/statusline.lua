@@ -22,12 +22,24 @@ local function extract_colors()
     ScrollBarFG = hl("Function").fg,
     ScrollBarBG = hl("CursorLine").bg,
 
-    -- RTFM, Term, Scratch, Quickfix
+    -- Git
+    GitBranch = hl("Constant").fg,
+
+    -- Special StatusLine (RTFM, Term, Scratch, Quickfix)
     SpecialIcon = hl("Special").fg,
     SpecialTitle = hl("Function").fg,
 
     -- TabLine
-    GitBranch = hl("Constant").fg,
+    TabLabelSel = hl("Normal").bg,
+    TabLabel = hl("StatusLine").bg,
+
+    TabPrefixSel = hl("Special").fg,
+    TabPrefix = hl("Comment").fg,
+
+    TabCloseSel = hl("Macro").fg,
+    TabClose = hl("Comment").fg,
+
+    TabPostfix = hl("Comment").fg,
   }
 end
 
@@ -53,12 +65,12 @@ local function min_width(width, component)
   }
 end
 
----separation point between alignment sections.
----each section will be separated by an equal number of spaces.
+---alignment section separator
 local ALIGN = { provider = "%=" }
-
 ---truncation starts here when there isn't enough space
 local TRUNCATE = { provider = "%<" }
+---literally just a single space what do you expect
+local SPACE = { provider = " " }
 
 
 ---| {icon} path/filename.ext [+]  |
@@ -320,6 +332,48 @@ local ScrollBar ={
   hl = { fg = "ScrollBarFG", bg = "ScrollBarBG" },
 }
 
+---|  master |
+local GitBranch = {
+  -- branch icon
+  {
+    provider = "  ",
+    hl = { fg = "GitBranch" },
+  },
+
+  -- branch name
+  {
+    provider = function()
+      return vim.b["gitsigns_head"] or vim.g["gitsigns_head"]
+    end,
+    hl = { bold = true },
+  }
+}
+
+---|  ~/.config/nvim |
+local WorkDir = {
+  -- directory icon
+  {
+    provider = "  ",
+    hl = "Directory",
+  },
+
+  -- working directory
+  {
+    provider = function()
+      local cwd = vim.loop.cwd()  -- vim.fn.getcwd(0, 0)
+      cwd = vim.fn.fnamemodify(cwd, ":~")  -- modify relative to $HOME
+
+      -- if it takes up more than 50% of the screen, use shortened form
+      if not conditions.width_percent_below(#cwd, 0.50) then
+        cwd = vim.fn.pathshorten(cwd)  -- ~/foo/bar/ -> ~/f/b/
+      end
+
+      return cwd
+    end,
+    hl = { bold = true },
+  },
+}
+
 
 ---| {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄ |
 local FileStatusLine = {
@@ -519,7 +573,7 @@ local StatusLine = {
 }
 
 
----|  1:     …   | ...
+---|  1:     …   | ... |  1  2  3  4   master  ~/.config/nvim |
 local TabList = utils.make_tablist({
   init = function(self)
     local windows = vim.api.nvim_tabpage_list_wins(self.tabpage)
@@ -532,11 +586,9 @@ local TabList = utils.make_tablist({
 
   hl = function(self)
     if self.is_active then
-      -- return { bg = "TabLabelSel" }
-      return "Normal"
+      return { bg = "TabLabelSel" }
     else
-      -- return { bg = "TabLabel" }
-      return "Tabline"
+      return { bg = "TabLabel" }
     end
   end,
 
@@ -547,24 +599,28 @@ local TabList = utils.make_tablist({
     end,
   },
 
-  -- |  | tab label prefix 
+  -- |  | tab label prefix
   {
     provider = function(_)
       -- return "▎"
-      return "▏ "
-      -- return "  "
+      return "  "
+      -- return "▏ "
     end,
     hl = function(self)
-      return { fg = self.is_active and "SpecialIcon" or nil }
+      if self.is_active then
+        return { fg = "TabPrefixSel" }
+      else
+        return { fg = "TabPrefix" }
+      end
     end
   },
 
   -- | {N}: | tab number
   {
     provider = function(self)
-      return ("%d: "):format(self.tabnr, #self.buffers)
+      return ("%d: "):format(self.tabnr)
     end,
-    -- hl = { bold = true },
+    hl = { bold = true },
   },
 
   -- |       |     … | tab buffer icons
@@ -608,7 +664,7 @@ local TabList = utils.make_tablist({
         )
 
         children[#children + 1] = {
-          provider = (icon .. " "):rep(count),
+          provider = ("%s "):format(icon):rep(count),
           hl = hl,
         }
       end
@@ -616,7 +672,7 @@ local TabList = utils.make_tablist({
       if truncate == true then
         children[#children + 1] = {
           provider = "… ",
-          hl = "Comment",
+          hl = "NonText",  -- TODO:
         }
       end
 
@@ -630,71 +686,34 @@ local TabList = utils.make_tablist({
       -- | %{N}X  %X |
       return ("%%%dX  %%X"):format(self.tabnr)
     end,
-    -- hl = function(self)
-    -- end
+    hl = function(self)
+      return {
+        fg = self.is_active and "TabCloseSel" or "TabClose",
+      }
+    end
+  },
+
+  -- | ▕ | tab label postfix
+  {
+    provider = "▕",
+    hl = { fg = "TabPostfix" }
   },
 
   -- | %T | close tab label 
   { provider = "%T" },
 })
 
----|  master |
-local GitBranch = {
-  -- branch icon
-  {
-    provider = "  ",
-    hl = { fg = "GitBranch" },
-  },
-
-  -- branch name
-  {
-    provider = function()
-      return vim.b["gitsigns_head"] or vim.g["gitsigns_head"]
-    end,
-    hl = { bold = true },
-  }
-}
-
----|  ~/.config/nvim |
-local WorkDir = {
-  -- directory icon
-  {
-    provider = "  ",
-    hl = "Directory",
-  },
-
-  -- working directory
-  {
-    provider = function()
-      local cwd = vim.loop.cwd()  -- vim.fn.getcwd(0, 0)
-      cwd = vim.fn.fnamemodify(cwd, ":~")  -- modify relative to $HOME
-
-      -- if it takes up more than 50% of the screen, use shortened form
-      if not conditions.width_percent_below(#cwd, 0.50) then
-        cwd = vim.fn.pathshorten(cwd)  -- ~/foo/bar/ -> ~/f/b/
-      end
-
-      return cwd
-    end,
-    hl = { bold = true },
-  },
-}
-
--- TODO: custom tabline
+---|  1:           |  2:     …   | ... | 
 local TabLine = {
   hl = "StatusLine",
 
   TabList,
-  ALIGN,
-  WorkDir,
-  GitBranch,
+  TRUNCATE,
   ALIGN,
   WorkspaceDiagnostics,
-
-  -- tab buffers
-  -- working directory
-  -- git branch
-  -- workspace diagnostics
+  GitBranch,
+  WorkDir,
+  SPACE,
 }
 
 
