@@ -26,7 +26,7 @@ local function extract_colors()
     SpecialIcon = hl("Special").fg,
     SpecialTitle = hl("Function").fg,
 
-    -- Tabline
+    -- TabLine
     GitBranch = hl("Constant").fg,
   }
 end
@@ -40,6 +40,18 @@ local function flexible(component, priority)
   return { flexible = priority or 1, component, {} }
 end
 
+---set minimal width of a component using item group
+---@param width integer
+---@param component StatusLine
+---@return StatusLine
+local function min_width(width, component)
+  -- %-{width}({component}%)
+  return {
+    { provider = "%-" .. tostring(width) .. "(" },
+    component,
+    { provider = "%)" },
+  }
+end
 
 ---separation point between alignment sections.
 ---each section will be separated by an equal number of spaces.
@@ -61,23 +73,14 @@ local FileInfo = {
     end
 
     -- parse URL-like (e.g. protocol://content) buffer names
-    local protocol, content = self.filename:match("(%w+)://(.-)/?$")
+    local protocol, content = self.filename:match("(%w+)://(.-)/*$")
     if protocol then
       self.protocol = protocol
       self.filename = content
     end
-
-    self.filename = vim.fn.fnamemodify(self.filename, ":~")  -- modify relative to $HOME
-    self.filename = vim.fn.fnamemodify(self.filename, ":.")  -- modify relative to cwd
-    -- NOTE: relative to local cwd?
-
-    -- if it takes up 25% of the screen, use shortened form
-    if not conditions.width_percent_below(#self.filename, 0.25) then
-      self.filename = vim.fn.pathshorten(self.filename)  -- foo/bar/baz.lua -> f/b/baz.lua
-    end
   end,
 
-  -- FileProtocol | [protocol] |
+  -- | [protocol] | '{protocol}://' part of URL-like filename
   {
     condition = function(self)
       return self.protocol
@@ -93,7 +96,7 @@ local FileInfo = {
     end
   },
 
-  -- FileIcon | {icon} |
+  -- | {icon} | filetype icon from nvim-web-devicons
   {
     init = function(self)
       local devicons = require("nvim-web-devicons")
@@ -112,10 +115,20 @@ local FileInfo = {
     end,
   },
 
-  -- FileName | p/a/t/h/filename.ext | [protocol] path/filename.ext |
+  -- | p/a/t/h/filename.ext | filename (shortened if too long)
   {
     provider = function(self)
-      return self.filename
+      local filename = self.filename
+
+      filename = vim.fn.fnamemodify(filename, ":~")  -- modify relative to $HOME
+      filename = vim.fn.fnamemodify(filename, ":.")  -- modify relative to cwd
+      -- NOTE: relative to local cwd?
+
+      -- if it takes up more than 25% of the screen, use shortened form
+      if not conditions.width_percent_below(#filename, 0.25) then
+        filename = vim.fn.pathshorten(filename)  -- foo/bar/baz.lua -> f/b/baz.lua
+      end
+      return filename
     end,
 
     hl = function()
@@ -126,7 +139,7 @@ local FileInfo = {
     end,
   },
 
-  -- FileFlags | [+]  |
+  -- | [+]  | modified & readonly indicator
   {
     {
       condition = function()
@@ -485,7 +498,7 @@ local StatusLine = {
     if conditions.is_active() then
       return "StatusLine"
     else
-      return "StatusLineNC"
+      return "StatusLineNC"  -- TODO: I don't like having different bg for NC
     end
   end,
 
@@ -506,7 +519,7 @@ local StatusLine = {
 }
 
 
---- TODO: |  1:         | ...
+---|  1:     …   | ...
 local TabList = utils.make_tablist({
   init = function(self)
     local windows = vim.api.nvim_tabpage_list_wins(self.tabpage)
@@ -520,41 +533,108 @@ local TabList = utils.make_tablist({
   hl = function(self)
     if self.is_active then
       -- return { bg = "TabLabelSel" }
-      return "TablineSel"
+      return "Normal"
     else
       -- return { bg = "TabLabel" }
       return "Tabline"
     end
   end,
 
-  -- "%{N}T" : start of tab page N label
+  -- | %{N}T | start tab label N 
   {
     provider = function(self)
       return "%" .. tostring(self.tabnr) .. "T"
     end,
   },
 
-  -- label header
+  -- |  | tab label prefix 
   {
     provider = function(_)
       -- return "▎"
-      return "  "
+      return "▏ "
+      -- return "  "
     end,
     hl = function(self)
-      return {
-        fg = self.is_active and "SpecialIcon" or nil,
-      }
+      return { fg = self.is_active and "SpecialIcon" or nil }
     end
   },
 
-  -- tab number
+  -- | {N}: | tab number
   {
     provider = function(self)
-      return ("%d (%d) "):format(self.tabnr, #self.buffers)
+      return ("%d: "):format(self.tabnr, #self.buffers)
     end,
+    -- hl = { bold = true },
   },
 
-  -- "%T" : close tab label
+  -- |       |     … | tab buffer icons
+  min_width(10, {
+    provider = function(self)
+      local MAX_COUNT = 4  -- max number of icons that can fit in the label
+      local ft_count = {}  -- number of buffers with each filetype
+      local total_count = 0  -- total number of filtered buffers
+      local truncate = false  -- total_count > MAX_COUNT 
+
+      for _, bufnr in pairs(self.buffers) do
+        if total_count == MAX_COUNT then
+          truncate = true
+          break
+        end
+
+        local bo = vim.bo[bufnr]
+
+        -- filter out special buffers
+        if not (bo.buftype == "" or bo.buftype == "nowrite") then
+          goto continue
+        end
+
+        -- nameless buffers are displayed only if modified
+        if not (bo.filetype ~= "" or bo.modified) then
+          goto continue
+        end
+
+        ft_count[bo.filetype] = (ft_count[bo.filetype] or 0) + 1
+        total_count = total_count + 1
+
+        ::continue::
+      end
+
+      local devicons = require("nvim-web-devicons")
+      local children = {}
+      for filetype, count in pairs(ft_count) do
+        local icon, hl = devicons.get_icon_by_filetype(
+          filetype,
+          { default = true }
+        )
+
+        children[#children + 1] = {
+          provider = (icon .. " "):rep(count),
+          hl = hl,
+        }
+      end
+
+      if truncate == true then
+        children[#children + 1] = {
+          provider = "… ",
+          hl = "Comment",
+        }
+      end
+
+      return self:new(children):eval()
+    end,
+  }),
+
+  -- |  | tab close button
+  {
+    provider = function(self)
+      -- | %{N}X  %X |
+      return ("%%%dX  %%X"):format(self.tabnr)
+    end,
+    -- hl = function(self)
+    -- end
+  },
+
+  -- | %T | close tab label 
   { provider = "%T" },
 })
 
@@ -589,7 +669,7 @@ local WorkDir = {
       local cwd = vim.loop.cwd()  -- vim.fn.getcwd(0, 0)
       cwd = vim.fn.fnamemodify(cwd, ":~")  -- modify relative to $HOME
 
-      -- if it takes up 50% of the screen, use shortened form
+      -- if it takes up more than 50% of the screen, use shortened form
       if not conditions.width_percent_below(#cwd, 0.50) then
         cwd = vim.fn.pathshorten(cwd)  -- ~/foo/bar/ -> ~/f/b/
       end
@@ -606,8 +686,8 @@ local TabLine = {
 
   TabList,
   ALIGN,
-  GitBranch,
   WorkDir,
+  GitBranch,
   ALIGN,
   WorkspaceDiagnostics,
 
