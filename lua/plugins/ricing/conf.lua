@@ -84,7 +84,7 @@ config["zen-mode.nvim"] = function()
       vim.wo[win].scrolloff = vim.fn.float2nr(vim.fn.winheight(win)*0.4)
       vim.cmd("silent! IndentBlanklineDisable")
     end,
-    on_close = function(win)
+    on_close = function(_)
       vim.cmd("silent! IndentBlanklineEnable")
     end
   }
@@ -108,6 +108,11 @@ config["heirline.nvim"] = function()
     local hl = utils.get_highlight
 
     return {
+      BaseBG = hl("StatusLine").bg,
+
+      ActiveFG = hl("StatusLine").fg,
+      InactiveFG = hl("StatusLineNC").fg,
+
       -- FileInfo
       FileProtocol = hl("Special").fg,
       FileModified = hl("String").fg,
@@ -134,10 +139,10 @@ config["heirline.nvim"] = function()
       TabPrefixSel = hl("Special").fg,
       TabPrefix = hl("Comment").fg,
 
-      TabCloseSel = hl("Macro").fg,
+      TabCloseSel = hl("StatusLine").fg,
       TabClose = hl("Comment").fg,
 
-      TabPostfix = hl("Comment").fg,
+      TabPostfix = hl("NonText").fg,
     }
   end
 
@@ -232,7 +237,7 @@ config["heirline.nvim"] = function()
 
         filename = vim.fn.fnamemodify(filename, ":~")  -- modify relative to $HOME
         filename = vim.fn.fnamemodify(filename, ":.")  -- modify relative to cwd
-        -- NOTE: relative to local cwd?
+        -- TODO: relative to local cwd
 
         -- if it takes up more than 25% of the screen, use shortened form
         if not conditions.width_percent_below(#filename, 0.25) then
@@ -648,9 +653,9 @@ config["heirline.nvim"] = function()
   local StatusLine = {
     hl = function()
       if conditions.is_active() then
-        return "StatusLine"
+        return { fg = "ActiveFG", bg = "BaseBG" }
       else
-        return "StatusLineNC"  -- TODO: I don't like having different bg for NC
+        return { fg = "InactiveFG", bg = "BaseBG" }
       end
     end,
 
@@ -684,9 +689,9 @@ config["heirline.nvim"] = function()
 
     hl = function(self)
       if self.is_active then
-        return { bg = "TabLabelSel" }
+        return { fg = "ActiveFG", bg = "TabLabelSel" }
       else
-        return { bg = "TabLabel" }
+        return { fg = "InactiveFG", bg = "TabLabel" }
       end
     end,
 
@@ -718,7 +723,7 @@ config["heirline.nvim"] = function()
       provider = function(self)
         return ("%d: "):format(self.tabnr)
       end,
-      hl = { bold = true },
+      hl = { fg = "ActiveFG", bold = true },
     },
 
     -- |       |     … | tab buffer icons
@@ -770,7 +775,7 @@ config["heirline.nvim"] = function()
         if truncate == true then
           children[#children + 1] = {
             provider = "… ",
-            hl = "NonText",  -- TODO:
+            hl = { fg = "InactiveFG" }
           }
         end
 
@@ -803,7 +808,10 @@ config["heirline.nvim"] = function()
 
   ---|  1:           |  2:     …   | ... | 
   local TabLine = {
-    hl = "StatusLine",
+    hl = {
+      fg = "ActiveFG",
+      bg = "BaseBG",
+    },
 
     TabList,
     TRUNCATE,
