@@ -387,6 +387,7 @@ config["heirline.nvim"] = function()
     },
 
     update = {
+      "BufEnter",
       "DiagnosticChanged",
       callback = function()
         vim.cmd("redrawtabline")
