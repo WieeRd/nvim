@@ -1,7 +1,7 @@
 local config = {}
 
-config["vim-rooter"] = function()
-  vim.g.rooter_cd_cmd = "lcd"
+config["nvim-rooter.lua"] = function()
+  require("nvim-rooter").setup()
 end
 
 config["vim-fugitive"] = function()
@@ -130,7 +130,7 @@ config["diffview.nvim"] = function()
       }
     },
     hooks = {  -- See ':h diffview-config-hooks'
-      diff_buf_read = function(bufnr)
+      diff_buf_read = function(--[[ bufnr ]])
         vim.wo.relativenumber = false
         vim.wo.cursorline = true
         vim.wo.foldcolumn = "0"
@@ -150,6 +150,21 @@ config["diffview.nvim"] = function()
   map("n", "<Leader>gL", "<Cmd>DiffviewFileHistory<CR>")  -- project wide
 
   -- TODO: `:h diffview-merge-tool`
+end
+
+config["auto-session"] = function()
+  require("auto-session").setup({
+    log_level = "error",
+    auto_session_enable_last_session = false,
+    auto_session_enabled = true,
+    auto_session_create_enabled = false,
+    auto_save_enabled = true,
+    auto_restore_enabled = true,
+  })
+end
+
+config["session-lens"] = function()
+  require("session-lens").setup({})
 end
 
 return config

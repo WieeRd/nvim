@@ -16,11 +16,12 @@ o.mouse = "nv"
 opt.sessionoptions = {
   "blank",
   "curdir",
-  "folds",
+  -- "folds",
   "help",
+  "localoptions",
   "tabpages",
-  "winsize",
   "terminal",
+  "winsize",
 }
 
 -- ui

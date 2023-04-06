@@ -4,9 +4,9 @@ local function get_config(plugin, opts)
 end
 
 return {
-  -- automatically cd to project root (detects .git)
+  -- automatically cd to project root
   {
-    "airblade/vim-rooter",
+    "notjedi/nvim-rooter.lua",
     config = get_config,
   },
 
@@ -28,6 +28,24 @@ return {
   {
     "sindrets/diffview.nvim",
     event = "User InGitRepo",
+    config = get_config,
+  },
+
+  -- auto save & load sessions
+  {
+    "rmagatti/auto-session",
+    config = get_config,
+  },
+
+  -- search & load saved sessions using telescope.nvim
+  {
+    "rmagatti/session-lens",
+    keys = {
+      { "<Leader>fp", "<Cmd>SearchSession<CR>" },
+    },
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
     config = get_config,
   },
 }

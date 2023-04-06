@@ -1,8 +1,5 @@
 local command = vim.api.nvim_create_user_command
 
-command("Q", "mks! <Bar> xall", {})
-command("E", "so Session.vim", {})
-
 command(
   "Dump",
   function(opts)
