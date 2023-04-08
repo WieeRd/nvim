@@ -37,6 +37,7 @@ return {
     config = get_config,
   },
 
+  -- NOTE: auto-session & session-lens are being merged together (#161)
   -- search & load saved sessions using telescope.nvim
   {
     "rmagatti/session-lens",

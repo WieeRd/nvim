@@ -148,14 +148,16 @@ config["diffview.nvim"] = function()
   map("n", "<Leader>gl", "<Cmd>DiffviewFileHistory %<CR>")  -- current file
   map("x", "<Leader>gl", "<Cmd>'<,'>DiffviewFileHistory<CR>")  -- selected range
   map("n", "<Leader>gL", "<Cmd>DiffviewFileHistory<CR>")  -- project wide
-
-  -- TODO: `:h diffview-merge-tool`
 end
 
 config["auto-session"] = function()
+  local cwd = vim.loop.cwd()
+  local home = vim.loop.os_homedir()
+  local restore_last = cwd == home
+
   require("auto-session").setup({
     log_level = "error",
-    auto_session_enable_last_session = false,
+    auto_session_enable_last_session = restore_last,
     auto_session_enabled = true,
     auto_session_create_enabled = false,
     auto_save_enabled = true,
