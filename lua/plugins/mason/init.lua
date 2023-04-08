@@ -21,6 +21,14 @@ return {
     config = get_config,
   },
 
+  -- setup linters and formatters
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    dependencies = {
+      "jay-babu/mason-null-ls.nvim",
+    },
+    config = get_config,
+  },
+
   -- TODO: setup DAP clients
-  -- TODO: setup null-ls/formatters
 }

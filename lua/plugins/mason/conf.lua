@@ -79,7 +79,7 @@ config["nvim-lspconfig"] = function()
       },
     },
 
-    on_attach = function(client, bufnr)
+    on_attach = function(_ --[[ client ]], bufnr)
       -- buffer local mapping
       local function map(mode, lhs, rhs, opt)
         opt = opt or {}
@@ -98,8 +98,8 @@ config["nvim-lspconfig"] = function()
       map("n", "[D", bind(dg.goto_prev, { severity = dg.severity.WARN }))
       map("n", "]D", bind(dg.goto_next, { severity = dg.severity.WARN }))
 
-      -- NOTE: 'list all' stuffs (diagnostics, references)
-      --       has been replaced with trouble.nvim
+      -- NOTE: 'list all' stuff keymaps -> trouble.nvim
+      -- NOTE: lsp formatting keymaps -> null-ls.nvim
 
       -- goto definition
       map("n", "gd", vim.lsp.buf.definition)
@@ -116,11 +116,6 @@ config["nvim-lspconfig"] = function()
       -- show docs
       map("n", "K", vim.lsp.buf.hover)  -- docs
       map("n", "gK", vim.lsp.buf.signature_help)  -- signature
-
-      -- `gq{motion}` to format given range
-      vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
-      -- `gQ` to format the whole buffer
-      map("n", "gQ", vim.lsp.buf.format)
     end,
 
     handlers = {
@@ -154,7 +149,7 @@ config["nvim-lspconfig"] = function()
           plugins = true,
         },
         setup_jsonls = true,
-        override = function(root_dir, options) end,
+        -- override = function(root_dir, options) end,
         lspconfig = true,
       })
 
@@ -233,12 +228,55 @@ config["nvim-lspconfig"] = function()
   })
 end
 
-config["nvim-dap"] = function()
-  -- TODO
+config["null-ls.nvim"] = function()
+  local mason_null_ls = require("mason-null-ls")
+  local null_ls = require("null-ls")
+
+  mason_null_ls.setup({
+    ensure_installed = {},
+    automatic_installation = false,
+    automatic_setup = true,
+    handlers = {},
+  })
+
+  null_ls.setup({
+    sources = {
+      null_ls.builtins.hover.dictionary,
+    },
+  })
+
+  -- `gq{motion}` or `{Visual}gq` to format range
+  vim.keymap.set({ "o", "v" }, "gq", function()
+    local start_lnum = vim.v.lnum
+    local end_lnum = start_lnum + vim.v.count - 1
+    local range
+
+    if start_lnum < 1 or end_lnum < 1 then
+      range = nil
+    else
+      range = {
+        ["start"] = { start_lnum, 0 },
+        ["end"] = { end_lnum, 0 },
+      }
+    end
+
+    vim.lsp.buf.format({
+      async = false,
+      name = "null-ls",
+      range = range,
+    })
+
+    return 0
+  end, { expr = true })
+
+  -- `gQ` to format entire buffer
+  vim.keymap.set("n", "gQ", function()
+    vim.lsp.buf.format({ name = "null-ls" })
+  end)
 end
 
-config["null-ls.nvim"] = function()
-  -- TODO
+config["nvim-dap"] = function()
+  -- TODO: setup DAP clients
 end
 
 return config
