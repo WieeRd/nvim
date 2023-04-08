@@ -49,11 +49,11 @@ return {
   },
 
   -- WieeRd's favorite theme throughout the years
-  { "nanotech/jellybeans.vim", lazy = true },                      -- 2019
-  { "dracula/vim", name = "dracula", lazy = true },                -- 2020
-  { "sainnhe/sonokai", lazy = true },                              -- 2021
-  { "folke/tokyonight.nvim", lazy = true },                        -- 2022
-  { "rebelot/kanagawa.nvim", lazy = false, config = get_config },  -- 2023*
+  { "nanotech/jellybeans.vim", lazy = true }, -- 2019
+  { "dracula/vim", name = "dracula", lazy = true }, -- 2020
+  { "sainnhe/sonokai", lazy = true }, -- 2021
+  { "folke/tokyonight.nvim", lazy = true }, -- 2022
+  { "rebelot/kanagawa.nvim", lazy = false, config = get_config }, -- 2023*
 
   -- next year candidates
   -- { "nyoom-engineering/oxocarbon.nvim", lazy = true },

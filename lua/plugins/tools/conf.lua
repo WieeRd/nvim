@@ -46,7 +46,7 @@ config["telescope.nvim"] = function()
           ["<C-s>"] = actions.select_horizontal,
           ["<C-c>"] = actions.close,
         },
-      }
+      },
     },
 
     -- configure each builtin pickers
@@ -75,7 +75,7 @@ config["telescope.nvim"] = function()
   map("n", "<Leader>f.", builtin.resume)
 
   -- find files
-  map("n", "<Leader>ff", builtin.find_files)  -- NOTE: might use frecency extension
+  map("n", "<Leader>ff", builtin.find_files) -- NOTE: might use frecency extension
   map("n", "<Leader>fb", builtin.buffers)
 
   -- searching
@@ -120,7 +120,7 @@ config["trouble.nvim"] = function()
     group = vim.api.nvim_create_augroup("TroubleConfig", { clear = true }),
     callback = function(_)
       vim.wo.cursorline = true
-    end
+    end,
   })
 
   local map = vim.keymap.set
@@ -178,33 +178,33 @@ config["nnn.nvim"] = function()
         -- can be absolute(n>1) or ratio(n<1)
         width = 120,
         height = 35,
-        border = "solid"
+        border = "solid",
       },
-      session = "",      -- or "global" / "local" / "shared"
+      session = "", -- or "global" / "local" / "shared"
       fullscreen = false, -- whether to fullscreen picker window when current tab is empty
     },
 
     -- TODO: learn NNN keymaps & come up with mappings without conflict
     mappings = {
-      { "<C-t>", builtin.open_in_tab },       -- open file(s) in tab
-      { "<C-s>", builtin.open_in_split },     -- open file(s) in split
-      { "<C-v>", builtin.open_in_vsplit },    -- open file(s) in vertical split
+      { "<C-t>", builtin.open_in_tab }, -- open file(s) in tab
+      { "<C-s>", builtin.open_in_split }, -- open file(s) in split
+      { "<C-v>", builtin.open_in_vsplit }, -- open file(s) in vertical split
       -- { "<C-p>", builtin.open_in_preview },   -- open file in preview split keeping nnn focused
       -- { "<C-y>", builtin.copy_to_clipboard }, -- copy file(s) to clipboard
       -- { "<C-w>", builtin.cd_to_path },        -- cd to file directory
       -- { "<C-e>", builtin.populate_cmdline },  -- populate cmdline (:) with file(s)
     },
 
-    windownav = {        -- window movement mappings to navigate out of nnn
+    windownav = { -- window movement mappings to navigate out of nnn
       -- left = "<C-w>h",
       -- right = "<C-w>l",
       -- next = "<C-w>w",
       -- prev = "<C-w>W",
     },
 
-    buflisted = false,   -- whether or not nnn buffers show up in the bufferlist
-    quitcd = nil,        -- or "cd" / tcd" / "lcd", command to run on quitcd file if found
-    offset = false,      -- whether or not to write position offset to tmpfile(for use in preview-tui)
+    buflisted = false, -- whether or not nnn buffers show up in the bufferlist
+    quitcd = nil, -- or "cd" / tcd" / "lcd", command to run on quitcd file if found
+    offset = false, -- whether or not to write position offset to tmpfile(for use in preview-tui)
     replace_netrw = "picker",
   })
 
@@ -320,10 +320,26 @@ config["toggleterm.nvim"] = function()
   })
 
   local map = vim.keymap.set
-  map("n", "<Leader>ts", "<Cmd>execute v:count . 'ToggleTerm direction=horizontal'<CR>")
-  map("n", "<Leader>tv", "<Cmd>execute v:count . 'ToggleTerm direction=vertical'<CR>")
-  map("n", "<Leader>tt", "<Cmd>execute v:count . 'ToggleTerm direction=tab'<CR>")
-  map("n", "<Leader>tf", "<Cmd>execute v:count . 'ToggleTerm direction=float'<CR>")
+  map(
+    "n",
+    "<Leader>ts",
+    "<Cmd>execute v:count . 'ToggleTerm direction=horizontal'<CR>"
+  )
+  map(
+    "n",
+    "<Leader>tv",
+    "<Cmd>execute v:count . 'ToggleTerm direction=vertical'<CR>"
+  )
+  map(
+    "n",
+    "<Leader>tt",
+    "<Cmd>execute v:count . 'ToggleTerm direction=tab'<CR>"
+  )
+  map(
+    "n",
+    "<Leader>tf",
+    "<Cmd>execute v:count . 'ToggleTerm direction=float'<CR>"
+  )
 end
 
 return config

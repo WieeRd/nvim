@@ -109,39 +109,29 @@ config["heirline.nvim"] = function()
 
     return {
       BaseBG = hl("StatusLine").bg,
-
       ActiveFG = hl("StatusLine").fg,
       InactiveFG = hl("StatusLineNC").fg,
-
       -- FileInfo
       FileProtocol = hl("Special").fg,
       FileModified = hl("String").fg,
       FileReadOnly = hl("Constant").fg,
-
       -- AerialInfo
       AerialSeparator = hl("Statement").fg,
-
       -- ScrollBar
       ScrollBarFG = hl("Function").fg,
       ScrollBarBG = hl("CursorLine").bg,
-
       -- Git
       GitBranch = hl("Constant").fg,
-
       -- Special StatusLine (RTFM, Term, Scratch, Quickfix)
       SpecialIcon = hl("Special").fg,
       SpecialTitle = hl("Function").fg,
-
       -- TabLine
       TabLabelSel = hl("Normal").bg,
       TabLabel = hl("StatusLine").bg,
-
       TabPrefixSel = hl("Special").fg,
       TabPrefix = hl("Comment").fg,
-
       TabCloseSel = hl("StatusLine").fg,
       TabClose = hl("Comment").fg,
-
       TabPostfix = hl("NonText").fg,
     }
   end
@@ -194,7 +184,6 @@ config["heirline.nvim"] = function()
         self.filename = content
       end
     end,
-
     -- | [protocol] | '{protocol}://' part of URL-like filename
     {
       condition = function(self)
@@ -210,7 +199,6 @@ config["heirline.nvim"] = function()
         }
       end
     },
-
     -- | {icon} | filetype icon from nvim-web-devicons
     {
       init = function(self)
@@ -220,32 +208,28 @@ config["heirline.nvim"] = function()
           { default = true }
         )
       end,
-
       provider = function(self)
         return (" %s "):format(self.icon)
       end,
-
       hl = function(self)
         return self.highlight
       end,
     },
-
     -- | p/a/t/h/filename.ext | filename (shortened if too long)
     {
       provider = function(self)
         local filename = self.filename
 
-        filename = vim.fn.fnamemodify(filename, ":~")  -- modify relative to $HOME
-        filename = vim.fn.fnamemodify(filename, ":.")  -- modify relative to cwd
+        filename = vim.fn.fnamemodify(filename, ":~") -- modify relative to $HOME
+        filename = vim.fn.fnamemodify(filename, ":.") -- modify relative to cwd
         -- TODO: relative to local cwd
 
         -- if it takes up more than 25% of the screen, use shortened form
         if not conditions.width_percent_below(#filename, 0.25) then
-          filename = vim.fn.pathshorten(filename)  -- foo/bar/baz.lua -> f/b/baz.lua
+          filename = vim.fn.pathshorten(filename) -- foo/bar/baz.lua -> f/b/baz.lua
         end
         return filename
       end,
-
       hl = function()
         return {
           fg = vim.bo.modified and "FileModified" or nil,
@@ -253,7 +237,6 @@ config["heirline.nvim"] = function()
         }
       end,
     },
-
     -- | [+]  | modified & readonly indicator
     {
       {
@@ -284,14 +267,12 @@ config["heirline.nvim"] = function()
         markdown = true,
       }
     },
-
     condition = function(self)
       local aerial = require("aerial")
       local exact = not self.loose_hierarchy[vim.bo.filetype]
       self.symbols = aerial.get_location(exact)
       return #self.symbols > 0
     end,
-
     provider = function(self)
       local children = {}
 
@@ -316,7 +297,6 @@ config["heirline.nvim"] = function()
 
       return self:new(children):eval()
     end,
-
     update = { "CursorMoved" },
   }
 
@@ -326,11 +306,10 @@ config["heirline.nvim"] = function()
       -- NOTE: parent component must define this method
       get_diagnostic_count = nil,
       -- icons = { "E:", "W:", "I:", "H:" },
-      icons = {  " ", " ", " ", " ", },
+      icons = { " ", " ", " ", " ", },
     },
-
     init = function(self)
-      for severity=1,4 do
+      for severity = 1, 4 do
         local count = self.get_diagnostic_count(severity)
         if count > 0 then
           self[severity].provider = ("%s%d "):format(self.icons[severity], count)
@@ -339,7 +318,6 @@ config["heirline.nvim"] = function()
         end
       end
     end,
-
     { hl = "DiagnosticSignError" },
     { hl = "DiagnosticSignWarn" },
     { hl = "DiagnosticSignInfo" },
@@ -353,12 +331,10 @@ config["heirline.nvim"] = function()
         return #vim.diagnostic.get(0, { severity = severity })
       end,
     },
-
     update = {
       "BufEnter",
       "DiagnosticChanged",
     },
-
     Diagnostics,
   }
 
@@ -369,15 +345,15 @@ config["heirline.nvim"] = function()
         local cwd = vim.loop.cwd()
         local diagnostics = vim.diagnostic.get(nil, { severity = severity })
 
-        local diag_per_buffer = {}  -- number of diagnostics in each buffer
+        local diag_per_buffer = {} -- number of diagnostics in each buffer
         for _, d in pairs(diagnostics) do
           diag_per_buffer[d.bufnr] = (diag_per_buffer[d.bufnr] or 0) + 1
         end
 
-        local filtered_count = 0  -- only count diagnostics from buffers under cwd
+        local filtered_count = 0 -- only count diagnostics from buffers under cwd
         for bufnr, count in pairs(diag_per_buffer) do
           local bufname = vim.api.nvim_buf_get_name(bufnr)
-          if bufname:sub(1, #cwd) == cwd then  -- if path is prefixed with cwd
+          if bufname:sub(1, #cwd) == cwd then -- if path is prefixed with cwd
             filtered_count = filtered_count + count
           end
         end
@@ -385,7 +361,6 @@ config["heirline.nvim"] = function()
         return filtered_count
       end,
     },
-
     update = {
       "BufEnter",
       "DiagnosticChanged",
@@ -393,7 +368,6 @@ config["heirline.nvim"] = function()
         vim.cmd("redrawtabline")
       end,
     },
-
     Diagnostics,
   }
 
@@ -420,19 +394,17 @@ config["heirline.nvim"] = function()
   }
 
   ---| █ | ▇ | ▆ | ▅ | ▄ | ▃ | ▂ | ▁ |
-  local ScrollBar ={
+  local ScrollBar = {
     static = {
       sbar = { "█", "▇", "▆", "▅", "▄", "▃", "▂", "▁" }
       -- sbar = { '🭶', '🭷', '🭸', '🭹', '🭺', '🭻' }
     },
-
     provider = function(self)
       local curr_line = vim.api.nvim_win_get_cursor(0)[1]
       local lines = vim.api.nvim_buf_line_count(0)
       local i = math.floor((curr_line - 1) / lines * #self.sbar) + 1
       return self.sbar[i]:rep(2)
     end,
-
     hl = { fg = "ScrollBarFG", bg = "ScrollBarBG" },
   }
 
@@ -464,12 +436,12 @@ config["heirline.nvim"] = function()
     -- working directory
     {
       provider = function()
-        local cwd = vim.loop.cwd()  -- vim.fn.getcwd(0, 0)
-        cwd = vim.fn.fnamemodify(cwd, ":~")  -- modify relative to $HOME
+        local cwd = vim.loop.cwd()          -- vim.fn.getcwd(0, 0)
+        cwd = vim.fn.fnamemodify(cwd, ":~") -- modify relative to $HOME
 
         -- if it takes up more than 50% of the screen, use shortened form
         if not conditions.width_percent_below(#cwd, 0.50) then
-          cwd = vim.fn.pathshorten(cwd)  -- ~/foo/bar/ -> ~/f/b/
+          cwd = vim.fn.pathshorten(cwd) -- ~/foo/bar/ -> ~/f/b/
         end
 
         return cwd
@@ -484,7 +456,6 @@ config["heirline.nvim"] = function()
     condition = function()
       return vim.bo.buftype == "" or vim.bo.buftype == "nowrite"
     end,
-
     FileInfo,
     TRUNCATE,
     flexible(AerialInfo, 1),
@@ -505,11 +476,9 @@ config["heirline.nvim"] = function()
         markdown = " :h ",
       },
     },
-
     condition = function()
       return vim.bo.buftype == "help" or vim.bo.filetype == "man"
     end,
-
     -- doc icon
     {
       provider = function(self)
@@ -519,7 +488,6 @@ config["heirline.nvim"] = function()
         return { fg = "SpecialIcon", bold = true }
       end
     },
-
     -- doc name
     {
       provider = function()
@@ -530,7 +498,6 @@ config["heirline.nvim"] = function()
         return { bold = conditions.is_active() }
       end,
     },
-
     TRUNCATE,
     AerialInfo,
     ALIGN,
@@ -543,17 +510,14 @@ config["heirline.nvim"] = function()
     condition = function()
       return vim.bo.buftype == "terminal"
     end,
-
     init = function(self)
       self.insert_mode = vim.fn.mode(0) == "t"
     end,
-
     -- terminal icon
     {
       provider = "  ",
       hl = { fg = "SpecialIcon" },
     },
-
     -- terminal name
     {
       provider = function()
@@ -568,7 +532,6 @@ config["heirline.nvim"] = function()
         }
       end
     },
-
     -- mode indicator
     {
       condition = function(self)
@@ -580,7 +543,6 @@ config["heirline.nvim"] = function()
         bold = true,
       }
     },
-
     TRUNCATE,
     ALIGN,
   }
@@ -590,7 +552,6 @@ config["heirline.nvim"] = function()
     condition = function()
       return vim.bo.buftype == "nofile"
     end,
-
     provider = function()
       local title = nil
 
@@ -605,13 +566,12 @@ config["heirline.nvim"] = function()
       -- if current window width is same as screen width
       if vim.api.nvim_win_get_width(0) == vim.o.columns then
         -- bottom windows like trouble
-        return ("%%=[%s]%%="):format(title)  -- ... [Title] ...
+        return ("%%=[%s]%%="):format(title) -- ... [Title] ...
       else
         -- sidebars like aerial
-        return ("[%%=%s%%=]"):format(title)  -- [ ... Title ... ]
+        return ("[%%=%s%%=]"):format(title) -- [ ... Title ... ]
       end
     end,
-
     hl = function()
       return {
         fg = conditions.is_active() and "SpecialTitle" or nil,
@@ -622,12 +582,10 @@ config["heirline.nvim"] = function()
 
   ---| ... [Quickfix List] :vim/TODO/g **/*.lua ... |
   local QuickfixStatusLine = {
-    condition = function ()
+    condition = function()
       return vim.bo.buftype == "quickfix"
     end,
-
     ALIGN,
-
     -- [Quickfix List] or [Location List]
     {
       provider = "%q ",
@@ -639,14 +597,12 @@ config["heirline.nvim"] = function()
         }
       end,
     },
-
     -- the command that produced quickfix list
     {
       provider = function()
         return vim.w["quickfix_title"]
       end,
     },
-
     ALIGN,
   }
 
@@ -659,18 +615,15 @@ config["heirline.nvim"] = function()
         return { fg = "InactiveFG", bg = "BaseBG" }
       end
     end,
-
     -- stop evaluation at the first component whose `condition` returns true.
     -- this means only one of "~StatusLine" components will be rendered,
     -- depending on the type of the buffer it belongs to.
     fallthrough = false,
-
-    FileStatusLine,  -- ordinary file buffers
-    RTFMStatusLine,  -- help (:h) & man (:Man) pages
-    TermStatusLine,  -- terminal buffers (:term)
+    FileStatusLine,     -- ordinary file buffers
+    RTFMStatusLine,     -- help (:h) & man (:Man) pages
+    TermStatusLine,     -- terminal buffers (:term)
     ScratchStatusLine,  -- scratch buffers (e.g. sidebars) & cmdline window
-    QuickfixStatusLine,  -- quickfix & location list windows
-
+    QuickfixStatusLine, -- quickfix & location list windows
     -- NOTE: haven't dealt with buftype "acwrite" and "prompt".
     -- but I have yet to encounter any buffers with one of those buftypes
     { provider = "%=[WORKING IN PROCESS]%=", hl = "TODO" }
@@ -687,7 +640,6 @@ config["heirline.nvim"] = function()
       end
       self.buffers = buffers
     end,
-
     hl = function(self)
       if self.is_active then
         return { fg = "ActiveFG", bg = "TabLabelSel" }
@@ -695,14 +647,12 @@ config["heirline.nvim"] = function()
         return { fg = "InactiveFG", bg = "TabLabel" }
       end
     end,
-
-    -- | %{N}T | start tab label N 
+    -- | %{N}T | start tab label N
     {
       provider = function(self)
         return "%" .. tostring(self.tabnr) .. "T"
       end,
     },
-
     -- |  | tab label prefix
     {
       provider = function(_)
@@ -718,7 +668,6 @@ config["heirline.nvim"] = function()
         end
       end
     },
-
     -- | {N}: | tab number
     {
       provider = function(self)
@@ -726,14 +675,13 @@ config["heirline.nvim"] = function()
       end,
       hl = { fg = "ActiveFG", bold = true },
     },
-
     -- |       |     … | tab buffer icons
     min_width(10, {
       provider = function(self)
-        local MAX_COUNT = 4  -- max number of icons that can fit in the label
-        local ft_count = {}  -- number of buffers with each filetype
+        local MAX_COUNT = 4    -- max number of icons that can fit in the label
+        local ft_count = {}    -- number of buffers with each filetype
         local total_count = 0  -- total number of filtered buffers
-        local truncate = false  -- total_count > MAX_COUNT 
+        local truncate = false -- total_count > MAX_COUNT
 
         for _, bufnr in pairs(self.buffers) do
           if total_count == MAX_COUNT then
@@ -783,7 +731,6 @@ config["heirline.nvim"] = function()
         return self:new(children):eval()
       end,
     }),
-
     -- |  | tab close button
     {
       provider = function(self)
@@ -796,24 +743,21 @@ config["heirline.nvim"] = function()
         }
       end
     },
-
     -- | ▕ | tab label postfix
     {
       provider = "▕",
       hl = { fg = "TabPostfix" }
     },
-
-    -- | %T | close tab label 
+    -- | %T | close tab label
     { provider = "%T" },
   })
 
-  ---|  1:           |  2:     …   | ... | 
+  ---|  1:           |  2:     …   | ... |
   local TabLine = {
     hl = {
       fg = "ActiveFG",
       bg = "BaseBG",
     },
-
     TabList,
     TRUNCATE,
     ALIGN,

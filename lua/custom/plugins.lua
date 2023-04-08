@@ -20,10 +20,7 @@ if not vim.loop.fs_stat(lazypath) then
       lazypath,
     })
   else
-    vim.notify(
-      "Continuing without plugins.",
-      vim.log.levels.WARN
-    )
+    vim.notify("Continuing without plugins.", vim.log.levels.WARN)
     return false
   end
 end
@@ -37,7 +34,8 @@ require("lazy").setup("plugins", {
 
   dev = {
     path = "~/Code",
-    patterns = { --[[ "WieeRd" ]] },
+    patterns = { --[[ "WieeRd" ]]
+    },
   },
 
   install = {

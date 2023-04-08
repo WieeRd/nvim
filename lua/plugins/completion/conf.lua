@@ -6,7 +6,6 @@ config["nvim-cmp"] = function()
   local lspkind = require("lspkind")
   local luasnip = require("luasnip")
 
-
   -- open completion menu or execute fn(opt) if it's already open
   local function complete_or_fn(fn, opt)
     return function(_)
@@ -18,7 +17,6 @@ config["nvim-cmp"] = function()
     end
   end
 
-
   -- list of buffers displayed in current tabpage
   local function visible_buffers()
     local bufs = {}
@@ -28,7 +26,6 @@ config["nvim-cmp"] = function()
     end
     return vim.tbl_keys(bufs)
   end
-
 
   cmp.setup({
     snippet = {
@@ -43,7 +40,7 @@ config["nvim-cmp"] = function()
         name = "custom",
         -- "top_down", "bottom_up", "near_cursor"
         selection_order = "near_cursor",
-      }
+      },
     },
 
     window = {
@@ -56,7 +53,7 @@ config["nvim-cmp"] = function()
       documentation = {
         border = "solid",
         winhighlight = "Search:None",
-      }
+      },
     },
 
     mapping = {
@@ -94,7 +91,7 @@ config["nvim-cmp"] = function()
           name = "buffer",
           keyword_length = 3,
           max_item_count = 5,
-          option = { get_bufnrs = visible_buffers }
+          option = { get_bufnrs = visible_buffers },
         },
         {
           name = "spell",
@@ -119,7 +116,7 @@ config["nvim-cmp"] = function()
           gh_issues = "[ISSUE]",
           cmdline = "[CMD]",
         },
-      })
+      }),
     },
 
     sorting = {
@@ -130,7 +127,7 @@ config["nvim-cmp"] = function()
         cmp.config.compare.score,
 
         -- lower priority for the items prefixed with '_'
-        function (entry1, entry2)
+        function(entry1, entry2)
           local _, entry1_under = entry1.completion_item.label:find("^_+")
           local _, entry2_under = entry2.completion_item.label:find("^_+")
           entry1_under = entry1_under or 0
@@ -154,7 +151,6 @@ config["nvim-cmp"] = function()
     experimental = { ghost_text = true },
   })
 
-
   -- command line completion
   cmp.setup.cmdline(":", {
     window = {
@@ -162,7 +158,7 @@ config["nvim-cmp"] = function()
         border = "rounded",
         winhighlight = "NormalFloat:Normal,FloatBorder:Normal",
         scrollbar = true,
-      }
+      },
     },
     mapping = {
       ["<Tab>"] = { c = complete_or_fn(cmp.select_next_item) },
@@ -171,13 +167,15 @@ config["nvim-cmp"] = function()
     sources = {
       { name = "cmdline", keyword_length = 2 },
       { name = "path", keyword_length = 2 },
-    }
+    },
   })
 
   -- clear completion menu when opening cmdline window
   vim.api.nvim_create_autocmd("CmdwinEnter", {
     -- `callback = cmp.close` doesn't work somehow
-    callback = function() cmp.close() end,
+    callback = function()
+      cmp.close()
+    end,
     group = vim.api.nvim_create_augroup("CmpCmdlineFix", { clear = true }),
   })
 end
@@ -186,10 +184,10 @@ config["LuaSnip"] = function()
   local luasnip = require("luasnip")
   local map = vim.keymap.set
 
-	luasnip.config.set_config({
-		history = true,
-		delete_check_events = "TextChanged,InsertLeave",
-	})
+  luasnip.config.set_config({
+    history = true,
+    delete_check_events = "TextChanged,InsertLeave",
+  })
 
   map({ "i", "s" }, "<C-h>", function()
     if luasnip.jumpable(-1) then
@@ -224,7 +222,7 @@ config["neogen"] = function()
     return function()
       neogen.generate({
         type = doc_type,
-        annotation_convention = annotation_convention
+        annotation_convention = annotation_convention,
       })
     end
   end
@@ -259,7 +257,7 @@ config["lsp_signature.nvim"] = function()
     hint_prefix = "● ",
 
     handler_opts = {
-      border = "solid"
+      border = "solid",
     },
 
     timer_interval = 50,

@@ -23,10 +23,10 @@ return {
             require("telescope")
             vim.ui.select(...)
           end
-        end
+        end,
       },
       -- view search results in a list
-      { "folke/trouble.nvim" }
+      { "folke/trouble.nvim" },
     },
     config = get_config,
   },
@@ -41,7 +41,7 @@ return {
   -- find & highlight 'TODO' comments
   {
     "folke/todo-comments.nvim",
-    keys = { "<Leader>ft", "<Leader>xt" },
+    -- keys = { "<Leader>ft", "<Leader>xt" },
     dependencies = {
       "folke/trouble.nvim",
       "nvim-telescope/telescope.nvim",

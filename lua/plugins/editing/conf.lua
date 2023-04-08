@@ -16,36 +16,33 @@ config["nvim-autopairs"] = function()
 
   -- custom rule: add spaces between parenthesis { | }
   npairs.add_rules({
-    Rule(" ", " ")
-      :with_pair(
-        function(opts)
-          local pair = opts.line:sub(opts.col - 1, opts.col)
-          return vim.tbl_contains({ "()", "[]", "{}" }, pair)
-        end
-      ),
+    Rule(" ", " "):with_pair(function(opts)
+      local pair = opts.line:sub(opts.col - 1, opts.col)
+      return vim.tbl_contains({ "()", "[]", "{}" }, pair)
+    end),
     Rule("( ", " )")
-      :with_pair(function() return false end)
-      :with_move(
-        function(opts)
-          return opts.prev_char:match(".%)") ~= nil
-        end
-      )
+      :with_pair(function()
+        return false
+      end)
+      :with_move(function(opts)
+        return opts.prev_char:match(".%)") ~= nil
+      end)
       :use_key(")"),
     Rule("{ ", " }")
-      :with_pair(function() return false end)
-      :with_move(
-        function(opts)
-          return opts.prev_char:match(".%}") ~= nil
-        end
-      )
+      :with_pair(function()
+        return false
+      end)
+      :with_move(function(opts)
+        return opts.prev_char:match(".%}") ~= nil
+      end)
       :use_key("}"),
     Rule("[ ", " ]")
-      :with_pair(function() return false end)
-      :with_move(
-        function(opts)
-          return opts.prev_char:match(".%]") ~= nil
-        end
-      )
+      :with_pair(function()
+        return false
+      end)
+      :with_move(function(opts)
+        return opts.prev_char:match(".%]") ~= nil
+      end)
       :use_key("]"),
   })
 end
@@ -72,9 +69,7 @@ end
 
 config["Comment.nvim"] = function()
   require("Comment").setup({
-    pre_hook = require(
-      "ts_context_commentstring.integrations.comment_nvim"
-    ).create_pre_hook(),
+    pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
   })
 end
 

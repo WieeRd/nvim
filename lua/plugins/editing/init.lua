@@ -88,6 +88,6 @@ return {
         "<Cmd>lua require('tsht').nodes()<CR>",
         mode = { "n", "v", "o" },
       },
-    }
+    },
   },
 }

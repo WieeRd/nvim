@@ -21,16 +21,16 @@ map("n", "<Leader>Q", "<Cmd>quit!<CR>")
 map("n", "<Leader>:", ":lua =<C-f>a")
 
 -- I hate magic
-map("n", "/", "/\\V")  -- very nomagic
-map("n", "?", "?\\V")  -- very nomagic
+map("n", "/", "/\\V") -- very nomagic
+map("n", "?", "?\\V") -- very nomagic
 
 -- I like very magic
-map("n", "g/", "/\\v")  -- very magic
-map("n", "g?", "?\\v")  -- very magic
+map("n", "g/", "/\\v") -- very magic
+map("n", "g?", "?\\v") -- very magic
 
 -- Delete without worrying about yanked content
-map({ "n", "v" }, "yp", [["0p]])  -- paste from yank register
-map({ "n", "v" }, "yd", [["0d]])  -- delete into yank register
+map({ "n", "v" }, "yp", [["0p]]) -- paste from yank register
+map({ "n", "v" }, "yd", [["0d]]) -- delete into yank register
 
 -- Windows navigation
 -- map("n", "<Leader>w", "<C-w>", { remap = true })

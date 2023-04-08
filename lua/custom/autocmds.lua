@@ -8,7 +8,6 @@ end
 
 local doautocmd = vim.api.nvim_exec_autocmds
 
-
 -- [[ Custom Event: "User InGitRepo" ]]
 -- dispatch custom event when cwd is inside git repo
 -- original vimscript code from:
@@ -19,15 +18,15 @@ local function check_git_repo()
   if vim.fn.system(cmd) == "true\n" then
     -- BUG: loading fugitive.vim at VimEnter somehow clears startup screen
     doautocmd("User", { pattern = "InGitRepo" })
-    return true  -- remove autocmd after lazy loading git plugins
+    return true -- remove autocmd after lazy loading git plugins
   end
 end
 
-autocmd(
-  { "VimEnter", "DirChanged" },
-  { callback = function() vim.schedule(check_git_repo) end }
-)
-
+autocmd({ "VimEnter", "DirChanged" }, {
+  callback = function()
+    vim.schedule(check_git_repo)
+  end,
+})
 
 -- [[ Remember last accessed Tab ]]
 -- When current tab is closed, go to last accessed tab
@@ -52,12 +51,12 @@ local function tab_enter()
 end
 
 local function tab_closed()
-  if (
+  if
     -- current tabpage is being closed
     last_left == last_entered
     -- last accessed page is still available
     and vim.api.nvim_tabpage_is_valid(last_accessed)
-  ) then
+  then
     vim.api.nvim_set_current_tabpage(last_accessed)
   end
 end
@@ -66,13 +65,12 @@ autocmd("TabLeave", { callback = tab_leave })
 autocmd("TabEnter", { callback = tab_enter })
 autocmd("TabClosed", { callback = tab_closed })
 
-
 -- [[ Enable 'after/colors' directory ]]
 -- 'after/colors/*.vim' will be sourced after running `:colorscheme *`
 -- can be used to override highlight groups of each colorscheme
 
 local function colorscheme(info)
-  vim.cmd("runtime! after/colors/init.vim")  -- applied to every colorscheme
+  vim.cmd("runtime! after/colors/init.vim") -- applied to every colorscheme
   vim.cmd("runtime! after/colors/" .. info.match .. ".vim")
 
   -- custom hl group used by smart float background below
@@ -81,7 +79,6 @@ local function colorscheme(info)
 end
 
 autocmd("ColorScheme", { callback = colorscheme })
-
 
 -- [[ Smart Float Background ]]
 -- only borderless floating windows will get darker background
@@ -109,7 +106,7 @@ local function nvim_open_win(buf, enter, config)
   end
 
   if type(border) == "table" then
-    for i=1,#border do
+    for i = 1, #border do
       if type(border[i]) == "table" then
         return win
       end
@@ -127,11 +124,10 @@ local function nvim_open_win(buf, enter, config)
   return win
 end
 
--- most GUI clients provide nice borders 
+-- most GUI clients provide nice borders
 if vim.fn.has("gui_running") == 0 then
   vim.api.nvim_open_win = nvim_open_win
 end
-
 
 -- [[ Terminal Buffer Options ]]
 -- wish they had 'terminal' filetype
@@ -147,7 +143,6 @@ local function term_open()
 end
 
 autocmd("TermOpen", { callback = term_open })
-
 
 -- [[ Highlight Yanked Area ]]
 autocmd("TextYankPost", {

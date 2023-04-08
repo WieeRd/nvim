@@ -3,10 +3,9 @@ local config = {}
 config["mason.nvim"] = function()
   require("mason").setup({
     install_root_dir = vim.fn.stdpath("data") .. "/mason",
-    PATH = "prepend",  -- prepend | append | skip
+    PATH = "prepend", -- prepend | append | skip
     log_level = vim.log.levels.INFO,
     max_concurrent_installers = 4,
-
     ui = {
       check_outdated_packages_on_open = true,
       border = "none",
@@ -41,7 +40,7 @@ config["nvim-lspconfig"] = function()
             tagSupport = {
               valueSet = {
                 1, -- Deprecated
-              }
+              },
             },
             insertReplaceSupport = true,
             resolveSupport = {
@@ -55,7 +54,7 @@ config["nvim-lspconfig"] = function()
               valueSet = {
                 1, -- asIs
                 2, -- adjustIndentation
-              }
+              },
             },
             labelDetailsSupport = true,
           },
@@ -63,23 +62,26 @@ config["nvim-lspconfig"] = function()
           insertTextMode = 1,
           completionList = {
             itemDefaults = {
-              'commitCharacters',
-              'editRange',
-              'insertTextFormat',
-              'insertTextMode',
-              'data',
-            }
-          }
+              "commitCharacters",
+              "editRange",
+              "insertTextFormat",
+              "insertTextMode",
+              "data",
+            },
+          },
         },
         -- for `nvim-ufo`
         foldingRange = {
           dynamicRegistration = false,
-          lineFoldingOnly = true
-        }
+          lineFoldingOnly = true,
+        },
       },
     },
 
-    on_attach = function(_ --[[ client ]], bufnr)
+    on_attach = function(
+      _, --[[ client ]]
+      bufnr
+    )
       -- buffer local mapping
       local function map(mode, lhs, rhs, opt)
         opt = opt or {}
@@ -88,7 +90,9 @@ config["nvim-lspconfig"] = function()
       end
 
       local function bind(func, opts)
-        return function() func(opts) end
+        return function()
+          func(opts)
+        end
       end
 
       -- navigate diagnostics
@@ -114,20 +118,19 @@ config["nvim-lspconfig"] = function()
       map("n", "<Leader>la", vim.lsp.buf.code_action)
 
       -- show docs
-      map("n", "K", vim.lsp.buf.hover)  -- docs
-      map("n", "gK", vim.lsp.buf.signature_help)  -- signature
+      map("n", "K", vim.lsp.buf.hover) -- docs
+      map("n", "gK", vim.lsp.buf.signature_help) -- signature
     end,
-
     handlers = {
       ["textDocument/hover"] = vim.lsp.with(
         vim.lsp.handlers["textDocument/hover"],
         { border = "solid" }
-      )
-    }
+      ),
+    },
   }
 
   -- set global config
-  for k,v in pairs(global_config) do
+  for k, v in pairs(global_config) do
     ---@diagnostic disable-next-line: assign-type-mismatch
     lspconfig.util.default_config[k] = v
   end
@@ -138,7 +141,6 @@ config["nvim-lspconfig"] = function()
     function(server)
       lspconfig[server].setup({})
     end,
-
     -- Lua: setup for neovim config & plugin development
     ["lua_ls"] = function()
       require("neodev").setup({
@@ -165,11 +167,10 @@ config["nvim-lspconfig"] = function()
             workspace = {
               checkThirdParty = false,
             },
-          }
-        }
+          },
+        },
       })
     end,
-
     -- LTeX: disable gitcommit & enable plaintext
     -- TODO: move extra setup to LspAttach
     ["ltex"] = function()
@@ -188,12 +189,12 @@ config["nvim-lspconfig"] = function()
         on_attach = function(client, bufnr)
           require("ltex_extra").setup({
             load_langs = { "en-US" },
-            init_check = true,  -- load dictionaries on startup
-            path = vim.fn.stdpath("data") .. "/ltex",  -- where to save dictionaries
+            init_check = true, -- load dictionaries on startup
+            path = vim.fn.stdpath("data") .. "/ltex", -- where to save dictionaries
             log_level = "error",
           })
           lspconfig.util.default_config.on_attach(client, bufnr)
-        end
+        end,
       })
     end,
   })
@@ -204,14 +205,12 @@ config["nvim-lspconfig"] = function()
   vim.diagnostic.config({
     signs = false,
     underline = true,
-
     -- TODO: diagnostic count (e.g. [1/4])
     -- TODO: override with lsp_lines
     float = {
       border = "solid",
       source = false,
     },
-
     virtual_text = {
       severity = { min = vim.diagnostic.severity.WARN },
       prefix = " ●",
@@ -222,7 +221,6 @@ config["nvim-lspconfig"] = function()
         return string.format("%s: %s ", icon[diagnostic.severity], message)
       end,
     },
-
     update_in_insert = false,
     severity_sort = true,
   })
@@ -245,6 +243,7 @@ config["null-ls.nvim"] = function()
     },
   })
 
+  -- FIXME: uses wrong formatter somehow
   -- `gq{motion}` or `{Visual}gq` to format range
   vim.keymap.set({ "o", "v" }, "gq", function()
     local start_lnum = vim.v.lnum
@@ -271,7 +270,10 @@ config["null-ls.nvim"] = function()
 
   -- `gQ` to format entire buffer
   vim.keymap.set("n", "gQ", function()
-    vim.lsp.buf.format({ name = "null-ls" })
+    vim.lsp.buf.format({
+      async = false,
+      name = "null-ls",
+    })
   end)
 end
 

@@ -110,7 +110,6 @@ local config = {
   },
 }
 
-
 return function()
   require("nvim-treesitter.configs").setup(config)
 
@@ -128,4 +127,3 @@ return function()
   --   return string.format("%s ... %s  [%sL]", fstart, fend, range)
   -- end
 end
-
