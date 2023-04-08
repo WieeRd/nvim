@@ -41,7 +41,7 @@ return {
   -- find & highlight 'TODO' comments
   {
     "folke/todo-comments.nvim",
-    -- keys = { "<Leader>ft", "<Leader>xt" },
+    keys = { "<Leader>ft", "<Leader>xt" },
     dependencies = {
       "folke/trouble.nvim",
       "nvim-telescope/telescope.nvim",
@@ -52,7 +52,8 @@ return {
   -- TUI file explorer
   {
     "luukvbaal/nnn.nvim",
-    keys = { "<C-n>", "g<C-n>" },
+    -- has to be loaded on startup to replace netrw
+    -- keys = { "<C-n>", "g<C-n>" },
     config = get_config,
   },
 

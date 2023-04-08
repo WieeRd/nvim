@@ -6,6 +6,7 @@ return {
   "nvim-lua/plenary.nvim",
 
   -- filetype icons
+  -- TODO: help & man page icon
   "kyazdani42/nvim-web-devicons",
 
   -- profile startup time

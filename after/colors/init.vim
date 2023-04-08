@@ -19,6 +19,6 @@ highlight! link IlluminatedWordText LspReferenceText
 highlight default link GitSignsCurrentLineBlame CursorLine
 
 " nnn.nvim
-highlight default link NnnBorder FloatBorder
-highlight default link NnnNormal NormalFloat
-highlight default link NnnNormalNC NormalFloat
+highlight! link NnnBorder FloatBorder
+highlight! link NnnNormal NormalFloat
+highlight! link NnnNormalNC NormalFloat

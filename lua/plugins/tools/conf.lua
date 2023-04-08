@@ -70,11 +70,12 @@ config["telescope.nvim"] = function()
     builtin.find_files(themes.get_dropdown({ previewer = false }))
   end)
 
-  -- see all available pickers
+  -- meta
   map("n", "<Leader>f ", builtin.builtin)
+  map("n", "<Leader>f.", builtin.resume)
 
   -- find files
-  map("n", "<Leader>ff", builtin.find_files)
+  map("n", "<Leader>ff", builtin.find_files)  -- NOTE: might use frecency extension
   map("n", "<Leader>fb", builtin.buffers)
 
   -- searching

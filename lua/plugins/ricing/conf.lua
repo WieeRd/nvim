@@ -148,17 +148,17 @@ config["heirline.nvim"] = function()
 
   ---hide the component when lacking space
   ---lower priority will be hidden first
-  ---@param component StatusLine
+  ---@param component table
   ---@param priority? integer
-  ---@return StatusLine
+  ---@return table
   local function flexible(component, priority)
     return { flexible = priority or 1, component, {} }
   end
 
   ---set minimal width of a component using item group
   ---@param width integer
-  ---@param component StatusLine
-  ---@return StatusLine
+  ---@param component table
+  ---@return table
   local function min_width(width, component)
     -- %-{width}({component}%)
     return {
