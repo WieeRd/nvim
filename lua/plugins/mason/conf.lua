@@ -31,18 +31,15 @@ config["nvim-lspconfig"] = function()
       textDocument = {
         -- for `cmp-nvim-lsp`
         completion = {
-          dynamicRegistration = false,
           completionItem = {
-            snippetSupport = true,
             commitCharactersSupport = true,
             deprecatedSupport = true,
-            preselectSupport = true,
-            tagSupport = {
-              valueSet = {
-                1, -- Deprecated
-              },
-            },
             insertReplaceSupport = true,
+            insertTextModeSupport = {
+              valueSet = { 1, 2 },
+            },
+            labelDetailsSupport = true,
+            preselectSupport = true,
             resolveSupport = {
               properties = {
                 "documentation",
@@ -50,16 +47,11 @@ config["nvim-lspconfig"] = function()
                 "additionalTextEdits",
               },
             },
-            insertTextModeSupport = {
-              valueSet = {
-                1, -- asIs
-                2, -- adjustIndentation
-              },
+            snippetSupport = true,
+            tagSupport = {
+              valueSet = { 1 },
             },
-            labelDetailsSupport = true,
           },
-          contextSupport = true,
-          insertTextMode = 1,
           completionList = {
             itemDefaults = {
               "commitCharacters",
@@ -69,6 +61,9 @@ config["nvim-lspconfig"] = function()
               "data",
             },
           },
+          contextSupport = true,
+          dynamicRegistration = false,
+          insertTextMode = 1,
         },
         -- for `nvim-ufo`
         foldingRange = {
@@ -77,11 +72,9 @@ config["nvim-lspconfig"] = function()
         },
       },
     },
-
-    on_attach = function(
-      _, --[[ client ]]
-      bufnr
-    )
+    ---@diagnostic disable-next-line: unused-local
+    on_attach = function(client, bufnr)
+      -- TODO: should move to LspAttach autocmd
       -- buffer local mapping
       local function map(mode, lhs, rhs, opt)
         opt = opt or {}
@@ -243,29 +236,21 @@ config["null-ls.nvim"] = function()
     },
   })
 
-  -- FIXME: uses wrong formatter somehow
-  -- `gq{motion}` or `{Visual}gq` to format range
-  vim.keymap.set({ "o", "v" }, "gq", function()
+  -- `gq{motion}` to format range
+  -- `vim.lsp.formatexpr` does not provide a way to filter clients
+  -- so I had to do this manually
+  vim.keymap.set("o", "gq", function()
     local start_lnum = vim.v.lnum
     local end_lnum = start_lnum + vim.v.count - 1
-    local range
-
-    if start_lnum < 1 or end_lnum < 1 then
-      range = nil
-    else
-      range = {
-        ["start"] = { start_lnum, 0 },
-        ["end"] = { end_lnum, 0 },
-      }
-    end
 
     vim.lsp.buf.format({
       async = false,
       name = "null-ls",
-      range = range,
+      range = {
+        ["start"] = { start_lnum, 0 },
+        ["end"] = { end_lnum, 0 },
+      },
     })
-
-    return 0
   end, { expr = true })
 
   -- `gQ` to format entire buffer

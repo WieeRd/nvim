@@ -34,6 +34,7 @@ return {
   -- auto save & load sessions
   {
     "rmagatti/auto-session",
+    event = "VimEnter",
     config = get_config,
   },
 
