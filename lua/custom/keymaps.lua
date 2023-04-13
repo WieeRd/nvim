@@ -18,7 +18,7 @@ map("n", "<Leader>q", "<Cmd>quit<CR>")
 map("n", "<Leader>Q", "<Cmd>quit!<CR>")
 
 -- Open cmdline window with `:lua =` prefilled
-map("n", "<Leader>:", ":lua =<C-f>a")
+map("n", "<Leader>=", ":lua =")
 
 -- I hate magic
 map("n", "/", "/\\V") -- very nomagic

@@ -16,7 +16,7 @@ o.mouse = "nv"
 opt.sessionoptions = {
   "blank",
   "curdir",
-  -- "folds",
+  "folds",
   "help",
   "localoptions",
   "tabpages",
@@ -26,6 +26,7 @@ opt.sessionoptions = {
 
 -- ui
 o.laststatus = 2
+o.showtabline = 2
 o.shortmess = "fTOicoltxFn"
 o.cursorline = false
 

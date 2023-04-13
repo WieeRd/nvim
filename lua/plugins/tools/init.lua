@@ -41,10 +41,11 @@ return {
   -- find & highlight 'TODO' comments
   {
     "folke/todo-comments.nvim",
+    -- has to be loaded on startup to highlight comments
     -- keys = { "<Leader>ft", "<Leader>xt" },
     dependencies = {
-      "folke/trouble.nvim",
-      "nvim-telescope/telescope.nvim",
+      -- "folke/trouble.nvim",
+      -- "nvim-telescope/telescope.nvim",
     },
     config = get_config,
   },
