@@ -223,6 +223,7 @@ config["null-ls.nvim"] = function()
   local mason_null_ls = require("mason-null-ls")
   local null_ls = require("null-ls")
 
+  -- setup linters & formatters installed with mason
   mason_null_ls.setup({
     ensure_installed = {},
     automatic_installation = false,
@@ -230,6 +231,7 @@ config["null-ls.nvim"] = function()
     handlers = {},
   })
 
+  -- sources that are not from mason
   null_ls.setup({
     sources = {
       null_ls.builtins.hover.dictionary,
@@ -237,8 +239,8 @@ config["null-ls.nvim"] = function()
   })
 
   -- `gq{motion}` to format range
-  -- `vim.lsp.formatexpr` does not provide a way to filter clients
-  -- so I had to do this manually
+  -- I had to do this manually since `vim.lsp.formatexpr`
+  -- does not provide a way to filter clients
   vim.keymap.set("o", "gq", function()
     local start_lnum = vim.v.lnum
     local end_lnum = start_lnum + vim.v.count - 1
@@ -263,7 +265,73 @@ config["null-ls.nvim"] = function()
 end
 
 config["nvim-dap"] = function()
-  -- TODO: setup DAP clients
+  local mason_nvim_dap = require("mason-nvim-dap")
+  local dap = require("dap")
+  local dap_ui = require("dapui")
+  local dap_vtext = require("nvim-dap-virtual-text")
+
+  -- setup DAP clients installed with mason
+  mason_nvim_dap.setup({
+    ensure_installed = {},
+    automatic_installation = false,
+    automatic_setup = true,
+    handlers = {},
+  })
+
+  dap_ui.setup({})
+  dap_vtext.setup({
+    virt_text_win_col = 80,
+  })
+
+  -- -- automatically open/close dapui
+  -- dap.listeners.after["event_initialized"]["dapui"] = vim.schedule_wrap(dapui.open)
+  -- dap.listeners.before["event_terminated"]["dapui"] = vim.schedule_wrap(dapui.close)
+  -- dap.listeners.before["event_exited"]["dapui"] = vim.schedule_wrap(dapui.close)
+
+  -- TODO: mappings: jump to UI component
+  -- TODO: get internal console working
+  -- TODO: breakpoint icons
+  local mappings = {
+    -- start/stop
+    ["<Leader>d]"] = dap.continue,
+    ["<Leader>d["] = dap.reverse_continue,
+    ["<Leader>d "] = dap.pause,
+    ["<Leader>dr"] = dap.restart,
+    ["<Leader>dt"] = dap.terminate,
+
+    -- breakpoints
+    ["<Leader>db"] = dap.toggle_breakpoint,
+    ["<Leader>dc"] = function()
+      vim.ui.input({ prompt = "Breakpoint Condition: " }, function(input)
+        return input and dap.set_breakpoint(input, nil, nil)
+      end)
+    end,
+    ["<Leader>dh"] = function()
+      vim.ui.input({ prompt = "Breakpoint Hit Condition: " }, function(input)
+        return input and dap.set_breakpoint(nil, input, nil)
+      end)
+    end,
+    ["<Leader>dl"] = function()
+      vim.ui.input({ prompt = "Log Point Message: " }, function(input)
+        return input and dap.set_breakpoint(nil, nil, input)
+      end)
+    end,
+    ["<Leader>dx"] = dap.clear_breakpoints,
+
+    -- step
+    ["<Right>"] = dap.step_over,
+    ["<Left>"] = dap.step_back,
+    ["<Up>"] = dap.step_out,
+    ["<Down>"] = dap.step_into,
+
+    -- UI
+    ["<Leader>du"] = dap_ui.toggle,
+  }
+
+  local map = vim.keymap.set
+  for lhs, rhs in pairs(mappings) do
+    map("n", lhs, rhs)
+  end
 end
 
 return config

@@ -30,5 +30,16 @@ return {
     config = get_config,
   },
 
-  -- TODO: setup DAP clients
+  -- setup DAP clients
+  {
+    "mfussenegger/nvim-dap",
+    keys = { "<Leader>d" },
+    dependencies = {
+      "jay-babu/mason-nvim-dap.nvim",
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+      -- "nvim-telescope/telescope-dap.nvim",
+    },
+    config = get_config,
+  },
 }
