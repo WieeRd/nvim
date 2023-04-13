@@ -108,12 +108,13 @@ config["heirline.nvim"] = function()
     local hl = utils.get_highlight
 
     return {
+      -- Global
       BaseBG = hl("StatusLine").bg,
       ActiveFG = hl("StatusLine").fg,
       InactiveFG = hl("StatusLineNC").fg,
+      Modified = hl("String").fg,
       -- FileInfo
       FileProtocol = hl("Special").fg,
-      FileModified = hl("String").fg,
       FileReadOnly = hl("Constant").fg,
       -- AerialInfo
       AerialSeparator = hl("Statement").fg,
@@ -124,7 +125,7 @@ config["heirline.nvim"] = function()
       GitBranch = hl("Constant").fg,
       -- Special StatusLine (RTFM, Term, Scratch, Quickfix)
       SpecialIcon = hl("Special").fg,
-      SpecialTitle = hl("Function").fg,
+      SpecialTitle = hl("Title").fg,
       -- TabLine
       TabLabelSel = hl("Normal").bg,
       TabLabel = hl("StatusLine").bg,
@@ -232,7 +233,7 @@ config["heirline.nvim"] = function()
       end,
       hl = function()
         return {
-          fg = vim.bo.modified and "FileModified" or nil,
+          fg = vim.bo.modified and "Modified" or nil,
           bold = conditions.is_active(),
         }
       end,
@@ -244,7 +245,7 @@ config["heirline.nvim"] = function()
           return vim.bo.modified
         end,
         provider = " [+]",
-        hl = { fg = "FileModified", bold = true },
+        hl = { fg = "Modified", bold = true },
       },
       {
         condition = function()
@@ -410,6 +411,11 @@ config["heirline.nvim"] = function()
 
   ---|  master |
   local GitBranch = {
+    condition = function(self)
+      self.branch = vim.b["gitsigns_head"] or vim.g["gitsigns_head"]
+      return self.branch and self.branch ~= ""
+    end,
+
     -- branch icon
     {
       provider = "  ",
@@ -418,8 +424,8 @@ config["heirline.nvim"] = function()
 
     -- branch name
     {
-      provider = function()
-        return vim.b["gitsigns_head"] or vim.g["gitsigns_head"]
+      provider = function(self)
+        return self.branch
       end,
       hl = { bold = true },
     }
@@ -439,8 +445,8 @@ config["heirline.nvim"] = function()
         local cwd = vim.loop.cwd()          -- vim.fn.getcwd(0, 0)
         cwd = vim.fn.fnamemodify(cwd, ":~") -- modify relative to $HOME
 
-        -- if it takes up more than 50% of the screen, use shortened form
-        if not conditions.width_percent_below(#cwd, 0.50) then
+        -- if it takes up more than 25% of the screen, use shortened form
+        if cwd:len() > (0.25 * vim.o.columns) then
           cwd = vim.fn.pathshorten(cwd) -- ~/foo/bar/ -> ~/f/b/
         end
 
@@ -527,7 +533,7 @@ config["heirline.nvim"] = function()
       end,
       hl = function(self)
         return {
-          fg = self.insert_mode and "FileModified" or nil,
+          fg = self.insert_mode and "Modified" or nil,
           bold = conditions.is_active(),
         }
       end
@@ -539,7 +545,7 @@ config["heirline.nvim"] = function()
       end,
       provider = " [+]",
       hl = {
-        fg = "FileModified",
+        fg = "Modified",
         bold = true,
       }
     },
@@ -548,22 +554,23 @@ config["heirline.nvim"] = function()
   }
 
   ---| [ ... Title ... ] | ... [ Title ] ... |
-  local ScratchStatusLine = {
+  local SpecialStatusLine = {
     condition = function()
-      return vim.bo.buftype == "nofile"
+      return vim.bo.buftype == "nofile" or vim.bo.buftype == "prompt"
     end,
     provider = function()
       local title = nil
 
       if vim.fn.getcmdwintype() ~= "" then
-        -- turns out command line windows are also "nofile" buffers
         title = "Command Line"
+      elseif vim.fn.bufname() ~= "" then
+        title = vim.fn.expand("%:t")
+        title = title:match("%[(.+)%]") or title -- remove surrounding []
       else
-        -- filetype but with the first character capitalized
-        title, _ = vim.bo.filetype:gsub("^%l", string.upper)
+        title = vim.bo.filetype
       end
 
-      -- if current window width is same as screen width
+      -- if current window width takes up the whole screen
       if vim.api.nvim_win_get_width(0) == vim.o.columns then
         -- bottom windows like trouble
         return ("%%=[%s]%%="):format(title) -- ... [Title] ...
@@ -574,7 +581,7 @@ config["heirline.nvim"] = function()
     end,
     hl = function()
       return {
-        fg = conditions.is_active() and "SpecialTitle" or nil,
+        fg = conditions.is_active() and "Modified" or "SpecialTitle",
         bold = true,
       }
     end,
@@ -615,6 +622,7 @@ config["heirline.nvim"] = function()
         return { fg = "InactiveFG", bg = "BaseBG" }
       end
     end,
+
     -- stop evaluation at the first component whose `condition` returns true.
     -- this means only one of "~StatusLine" components will be rendered,
     -- depending on the type of the buffer it belongs to.
@@ -622,14 +630,16 @@ config["heirline.nvim"] = function()
     FileStatusLine,     -- ordinary file buffers
     RTFMStatusLine,     -- help (:h) & man (:Man) pages
     TermStatusLine,     -- terminal buffers (:term)
-    ScratchStatusLine,  -- scratch buffers (e.g. sidebars) & cmdline window
     QuickfixStatusLine, -- quickfix & location list windows
-    -- NOTE: haven't dealt with buftype "acwrite" and "prompt".
-    -- but I have yet to encounter any buffers with one of those buftypes
+    SpecialStatusLine,  -- scratch buffers (e.g. sidebars) & cmdline window
+
+    -- NOTE: haven't dealt with buftype "acwrite"
+    -- not sure what to do since I never encountered an acwrite buffer
     { provider = "%=[WORKING IN PROCESS]%=", hl = "TODO" }
   }
 
 
+  --- TODO: minimized tab label (flexible component)
   ---|  1:     …   | ... |  1  2  3  4   master  ~/.config/nvim |
   local TabList = utils.make_tablist({
     init = function(self)
