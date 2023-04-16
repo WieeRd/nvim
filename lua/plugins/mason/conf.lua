@@ -278,23 +278,68 @@ config["nvim-dap"] = function()
     handlers = {},
   })
 
-  dap_ui.setup({})
-  dap_vtext.setup({
-    virt_text_win_col = 80,
+  dap_ui.setup({
+    -- TODO: move controls to statusline (heirline config)
+    controls = { enabled = true },
+    icons = {
+      collapsed = "▶",
+      current_frame = "▶",
+      expanded = "▼",
+    },
+    layouts = {
+      {
+        elements = {
+          { id = "stacks", size = 0.25 },
+          { id = "breakpoints", size = 0.25 },
+          { id = "scopes", size = 0.25 },
+          { id = "watches", size = 0.25 },
+        },
+        position = "left",
+        size = 40,
+      },
+      {
+        elements = {
+          { id = "repl", size = 0.5 },
+          { id = "console", size = 0.5 },
+        },
+        position = "bottom",
+        size = 10,
+      },
+    },
   })
 
-  -- -- automatically open/close dapui
-  -- dap.listeners.after["event_initialized"]["dapui"] = vim.schedule_wrap(dapui.open)
-  -- dap.listeners.before["event_terminated"]["dapui"] = vim.schedule_wrap(dapui.close)
-  -- dap.listeners.before["event_exited"]["dapui"] = vim.schedule_wrap(dapui.close)
+  dap_vtext.setup({
+    display_callback = function(variable, _buf, _stackframe, _node)
+      return (" ◍ %s = %s "):format(variable.name, variable.value)
+    end,
+  })
 
-  -- TODO: mappings: jump to UI component
-  -- TODO: get internal console working
-  -- TODO: breakpoint icons
+  -- automatically open/close dapui
+  dap.listeners.after["event_initialized"]["dapui"] = dap_ui.open
+  dap.listeners.before["event_terminated"]["dapui"] = dap_ui.close
+  dap.listeners.before["event_exited"]["dapui"] = dap_ui.close
+
+  local signs = {
+    DapBreakpoint = { text = "○", texthl = "DiagnosticSignError" },
+    DapBreakpointCondition = { text = "", texthl = "DiagnosticSignWarn" },
+    DapLogPoint = { text = "", texthl = "DiagnosticSignOk" },
+    DapStopped = { text = "●", texthl = "DiagnosticSignError" },
+    DapBreakpointRejected = { text = "", texthl = "DiagnosticError" },
+  }
+
+  local sign_define = vim.fn.sign_define
+  for name, attr in pairs(signs) do
+    sign_define(name, attr)
+  end
+
+  -- TODO: mapping for jumping to a certain UI component
+  -- iterate through all windows in the tabpage,
+  -- identify component with filetype.
+
   local mappings = {
-    -- start/stop
-    ["<Leader>d]"] = dap.continue,
-    ["<Leader>d["] = dap.reverse_continue,
+    -- start/stop debugging
+    ["<Leader>d."] = dap.continue,
+    ["<Leader>d,"] = dap.reverse_continue,
     ["<Leader>d "] = dap.pause,
     ["<Leader>dr"] = dap.restart,
     ["<Leader>dt"] = dap.terminate,

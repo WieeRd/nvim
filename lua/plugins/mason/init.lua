@@ -38,7 +38,6 @@ return {
       "jay-babu/mason-nvim-dap.nvim",
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",
-      -- "nvim-telescope/telescope-dap.nvim",
     },
     config = get_config,
   },

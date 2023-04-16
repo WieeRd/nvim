@@ -22,3 +22,8 @@ highlight default link GitSignsCurrentLineBlame CursorLine
 highlight! link NnnBorder FloatBorder
 highlight! link NnnNormal NormalFloat
 highlight! link NnnNormalNC NormalFloat
+
+" nvim-dap-virtual-text
+highlight! link NvimDapVirtualText DiagnosticInfo
+highlight! link NvimDapVirtualTextChanged DiagnosticVirtualTextWarn
+highlight! link NvimDapVirtualTextError DiagnosticVirtualTextError
