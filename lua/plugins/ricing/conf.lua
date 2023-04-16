@@ -560,10 +560,9 @@ config["heirline.nvim"] = function()
     end,
     provider = function()
       local title = nil
+      local bufname = vim.api.nvim_buf_get_name(0)
 
-      if vim.fn.getcmdwintype() ~= "" then
-        title = "Command Line"
-      elseif vim.fn.bufname() ~= "" then
+      if bufname ~= "" then
         title = vim.fn.expand("%:t")
         title = title:match("%[(.+)%]") or title -- remove surrounding []
       else
