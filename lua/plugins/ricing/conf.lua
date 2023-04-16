@@ -167,7 +167,7 @@ config["heirline.nvim"] = function()
   local SPACE = { provider = " " }
 
 
-  ---| {icon} path/filename.ext [+]  |
+  -- | {icon} path/filename.ext [+]  |
   local FileInfo = {
     init = function(self)
       self.protocol = nil
@@ -257,7 +257,7 @@ config["heirline.nvim"] = function()
     },
   }
 
-  ---|  ﴯ foo   bar |
+  -- |  ﴯ foo   bar |
   local AerialInfo = {
     static = {
       -- filetypes where `exact=false` works better
@@ -301,7 +301,7 @@ config["heirline.nvim"] = function()
     update = { "CursorMoved" },
   }
 
-  ---| E:1 W:2 I:3 H:4 |  1  2  3  4 |
+  -- | E:1 W:2 I:3 H:4 |  1  2  3  4 |
   local Diagnostics = {
     static = {
       -- NOTE: parent component must define this method
@@ -325,7 +325,7 @@ config["heirline.nvim"] = function()
     { hl = "DiagnosticSignHint" },
   }
 
-  ---| Diagnostics: only from current buffer |
+  -- | Diagnostics: only from current buffer |
   local BufferDiagnostics = {
     static = {
       get_diagnostic_count = function(severity)
@@ -339,7 +339,7 @@ config["heirline.nvim"] = function()
     Diagnostics,
   }
 
-  ---| Diagnostics: only from current workspace |
+  -- | Diagnostics: only from current workspace |
   local WorkspaceDiagnostics = {
     static = {
       get_diagnostic_count = function(severity)
@@ -348,7 +348,8 @@ config["heirline.nvim"] = function()
 
         local diag_per_buffer = {} -- number of diagnostics in each buffer
         for _, d in pairs(diagnostics) do
-          diag_per_buffer[d.bufnr] = (diag_per_buffer[d.bufnr] or 0) + 1
+          local bufnr = d["bufnr"]
+          diag_per_buffer[bufnr] = (diag_per_buffer[bufnr] or 0) + 1
         end
 
         local filtered_count = 0 -- only count diagnostics from buffers under cwd
@@ -372,14 +373,14 @@ config["heirline.nvim"] = function()
     Diagnostics,
   }
 
-  ---| unix | dos | mac |
+  -- | unix | dos | mac |
   local FileFormat = {
     provider = function()
       return (" %s "):format(vim.bo.fileformat)
     end
   }
 
-  ---| tab:4 | space:2 |
+  -- | tab:4 | space:2 |
   local IndentStyle = {
     provider = function()
       return (" %s:%d "):format(
@@ -389,12 +390,12 @@ config["heirline.nvim"] = function()
     end,
   }
 
-  ---| 64:128 |
+  -- | 64:128 |
   local Ruler = {
     provider = " %2l:%2c ",
   }
 
-  ---| █ | ▇ | ▆ | ▅ | ▄ | ▃ | ▂ | ▁ |
+  -- | █ | ▇ | ▆ | ▅ | ▄ | ▃ | ▂ | ▁ |
   local ScrollBar = {
     static = {
       sbar = { "█", "▇", "▆", "▅", "▄", "▃", "▂", "▁" }
@@ -409,7 +410,7 @@ config["heirline.nvim"] = function()
     hl = { fg = "ScrollBarFG", bg = "ScrollBarBG" },
   }
 
-  ---|  master |
+  -- |  master |
   local GitBranch = {
     condition = function(self)
       self.branch = vim.b["gitsigns_head"] or vim.g["gitsigns_head"]
@@ -431,7 +432,7 @@ config["heirline.nvim"] = function()
     }
   }
 
-  ---|  ~/.config/nvim |
+  -- |  ~/.config/nvim |
   local WorkDir = {
     -- directory icon
     {
@@ -457,7 +458,7 @@ config["heirline.nvim"] = function()
   }
 
 
-  ---| {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄ |
+  -- | {icon} filename.ext [+]   ﴯ foo   bar | ... |  1  2  3  4  unix  tab:4  128:64 ▄▄ |
   local FileStatusLine = {
     condition = function()
       return vim.bo.buftype == "" or vim.bo.buftype == "nowrite"
@@ -473,7 +474,7 @@ config["heirline.nvim"] = function()
     flexible(ScrollBar, 4),
   }
 
-  ---| :h options.txt   3. Options summary   'statusline' | ... | 128:64 ▄▄ |
+  -- | :h options.txt   3. Options summary   'statusline' | ... | 128:64 ▄▄ |
   local RTFMStatusLine = {
     static = {
       icons = {
@@ -511,7 +512,7 @@ config["heirline.nvim"] = function()
     ScrollBar,
   }
 
-  ---|  /bin/bash [+] ... |
+  -- |  /bin/bash [+] ... |
   local TermStatusLine = {
     condition = function()
       return vim.bo.buftype == "terminal"
@@ -553,7 +554,7 @@ config["heirline.nvim"] = function()
     ALIGN,
   }
 
-  ---| [ ... Title ... ] | ... [ Title ] ... |
+  -- | [ ... Title ... ] | ... [ Title ] ... |
   local SpecialStatusLine = {
     condition = function()
       return vim.bo.buftype == "nofile" or vim.bo.buftype == "prompt"
@@ -586,7 +587,7 @@ config["heirline.nvim"] = function()
     end,
   }
 
-  ---| ... [Quickfix List] :vim/TODO/g **/*.lua ... |
+  -- | ... [Quickfix List] :vim/TODO/g **/*.lua ... |
   local QuickfixStatusLine = {
     condition = function()
       return vim.bo.buftype == "quickfix"
@@ -612,7 +613,7 @@ config["heirline.nvim"] = function()
     ALIGN,
   }
 
-  ---| the 'root' component that deals with all the conditional statuslines |
+  -- | the 'root' component that deals with all the conditional statuslines |
   local StatusLine = {
     hl = function()
       if conditions.is_active() then
@@ -630,6 +631,7 @@ config["heirline.nvim"] = function()
     RTFMStatusLine,     -- help (:h) & man (:Man) pages
     TermStatusLine,     -- terminal buffers (:term)
     QuickfixStatusLine, -- quickfix & location list windows
+    -- DebugStatusLine,  -- TODO: nvim-dap repl statusline with control
     SpecialStatusLine,  -- scratch buffers (e.g. sidebars) & cmdline window
 
     -- NOTE: haven't dealt with buftype "acwrite"
@@ -639,7 +641,7 @@ config["heirline.nvim"] = function()
 
 
   --- TODO: minimized tab label (flexible component)
-  ---|  1:     …   | ... |  1  2  3  4   master  ~/.config/nvim |
+  -- |  1:     …   | ... |  1  2  3  4   master  ~/.config/nvim |
   local TabList = utils.make_tablist({
     init = function(self)
       local windows = vim.api.nvim_tabpage_list_wins(self.tabpage)
@@ -761,7 +763,7 @@ config["heirline.nvim"] = function()
     { provider = "%T" },
   })
 
-  ---|  1:           |  2:     …   | ... |
+  -- |  1:           |  2:     …   | ... |
   local TabLine = {
     hl = {
       fg = "ActiveFG",
