@@ -265,6 +265,7 @@ config["null-ls.nvim"] = function()
 end
 
 config["nvim-dap"] = function()
+  local vim = vim
   local mason_nvim_dap = require("mason-nvim-dap")
   local dap = require("dap")
   local dap_ui = require("dapui")
@@ -332,20 +333,39 @@ config["nvim-dap"] = function()
     sign_define(name, attr)
   end
 
-  -- TODO: mapping for jumping to a certain UI component
-  -- iterate through all windows in the tabpage,
-  -- identify component with filetype.
+  ---jump to the window of specified dapui element
+  ---@param element string filetype of the element
+  local function jump_to_element(element)
+    local visible_wins = vim.api.nvim_tabpage_list_wins(0)
+
+    for _, win in ipairs(visible_wins) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      if vim.bo[buf].filetype == element then
+        vim.api.nvim_set_current_win(win)
+        return
+      end
+    end
+
+    vim.notify(("element '%s' not found"):format(element), vim.log.levels.WARN)
+  end
+
+  local function bind(func, ...)
+    local args = ...
+    return function()
+      return func(args)
+    end
+  end
 
   local mappings = {
     -- start/stop debugging
-    ["<Leader>d."] = dap.continue,
-    ["<Leader>d,"] = dap.reverse_continue,
+    ["<Leader>d]"] = dap.continue,
+    ["<Leader>d["] = dap.reverse_continue,
     ["<Leader>d "] = dap.pause,
     ["<Leader>dr"] = dap.restart,
     ["<Leader>dt"] = dap.terminate,
 
     -- breakpoints
-    ["<Leader>db"] = dap.toggle_breakpoint,
+    ["<Leader>d."] = dap.toggle_breakpoint,
     ["<Leader>dc"] = function()
       vim.ui.input({ prompt = "Breakpoint Condition: " }, function(input)
         return input and dap.set_breakpoint(input, nil, nil)
@@ -371,6 +391,12 @@ config["nvim-dap"] = function()
 
     -- UI
     ["<Leader>du"] = dap_ui.toggle,
+    ["<Leader>dw"] = bind(jump_to_element, "dapui_watches"),
+    ["<Leader>dv"] = bind(jump_to_element, "dapui_scopes"),
+    ["<Leader>db"] = bind(jump_to_element, "dapui_breakpoints"),
+    ["<Leader>ds"] = bind(jump_to_element, "dapui_stacks"),
+    -- ["<Leader>d?"] = bind(jump_to_element, "dapui_console"),
+    -- ["<Leader>d?"] = bind(jump_to_element, "dap-repl),
   }
 
   local map = vim.keymap.set
