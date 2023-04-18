@@ -1,72 +1,74 @@
--- [[ options: ':set' stuff ]] --
-local o = vim.o
-local opt = vim.opt
+local options = {
+  langmenu = "en_US",
 
-o.langmenu = "en_US"
-o.encoding = "utf-8"
+  -- recovery files
+  undofile = false,
+  swapfile = false,
+  updatetime = 200,
 
-o.undofile = false
-o.swapfile = false
-o.updatetime = 200
+  -- meta
+  termguicolors = true,
+  clipboard = "unnamedplus",
+  mouse = "nv",
 
-o.termguicolors = true
-o.clipboard = "unnamedplus"
-o.mouse = "nv"
+  sessionoptions = table.concat({
+    "blank",
+    "curdir",
+    "folds",
+    "help",
+    "localoptions",
+    "tabpages",
+    "terminal",
+    "winsize",
+  }, ","),
 
-opt.sessionoptions = {
-  "blank",
-  "curdir",
-  "folds",
-  "help",
-  "localoptions",
-  "tabpages",
-  "terminal",
-  "winsize",
+  -- ui
+  laststatus = 2,
+  showtabline = 1,
+  shortmess = "fTOicoltxFn",
+  cursorline = false,
+
+  signcolumn = "auto",
+  foldcolumn = "0",
+  number = true,
+  relativenumber = true,
+
+  scrolloff = 7,
+  sidescrolloff = 5,
+  wrap = false,
+  list = false,
+
+  showcmd = false,
+  showmode = false,
+
+  listchars = "eol:↲,tab:» ,trail:•",
+  fillchars = "diff: ,eob: ,fold: ",
+
+  -- completion menu
+  wildmode = "full",
+  wildmenu = true,
+  pumheight = 10,
+  completeopt = "menu,menuone,noselect",
+
+  -- searching
+  hlsearch = true,
+  incsearch = true,
+  ignorecase = true,
+  smartcase = true,
+
+  -- tabs / indenting
+  expandtab = false,
+  tabstop = 4,
+  shiftwidth = 0,
+  autoindent = true,
+  cindent = true,
+
+  -- spell
+  spelllang = "en",
+  spelloptions = "camel",
 }
 
--- ui
-o.laststatus = 2
-o.showtabline = 2
-o.shortmess = "fTOicoltxFn"
-o.cursorline = false
-
-o.signcolumn = "auto"
-o.foldcolumn = "0"
-
-o.number = true
-o.relativenumber = true
-
-o.scrolloff = 7
-o.sidescrolloff = 5
-
-o.wrap = false
-o.list = false
-
-o.showcmd = false
-o.showmode = false
-
-opt.listchars = { eol = "↲", tab = "» ", trail = "•" }
-opt.fillchars = { diff = " ", eob = " ", fold = " " }
-
--- completion menu
-o.wildmode = "full"
-o.wildmenu = true
-o.pumheight = 10
-opt.completeopt = { "menu", "menuone", "noselect" }
-
--- searching
-o.hlsearch = true
-o.incsearch = true
-o.ignorecase = true
-o.smartcase = true
-
--- tabs / indenting
-o.expandtab = false
-o.tabstop = 4
-o.shiftwidth = 0
-o.autoindent = true
-o.cindent = true
-
--- spell
-o.spelllang = "en"
-o.spelloptions = "camel"
+local o = vim.o
+for opt, value in pairs(options) do
+  o[opt] = value
+end
