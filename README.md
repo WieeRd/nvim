@@ -15,18 +15,17 @@ I'm too lazy to use a mouse.
 ### Custom
 
 - `custom/keymaps`
-	+ centralize all keymaps, including plugins'
-	+ Add mapping descriptions
-	+ Toggle boolean value (`true` ↔ `false`)
+  - centralize all keymaps, including plugins'
+  - Add mapping descriptions
+  - Toggle boolean value (`true` ↔ `false`)
 - `custom/options`
-	+ Refactor using a single table and for loop
+  - Refactor using a single table and for loop
 - `ftplugin/`
-	+ `after/ftplugin/`: Real filetypes like `markdown`
-	+ `ftplugin/`: Plugin filetypes like `fugitive`
+  - `after/ftplugin/`: Real filetypes like `markdown`
+  - `ftplugin/`: Plugin filetypes like `fugitive`
 
 ### Plugin
 
-- setup `nvim-dap`
 - setup `which-key`
 - try out `coq_nvim`
 - check out `markdown-preview.nvim`
@@ -35,19 +34,19 @@ I'm too lazy to use a mouse.
 
 - [ ] [Skuld Norniern](https://github.com/SkuldNorniern) (3/5)
 
-	1. [x] Hmm I should try it out
-	2. [x] Oh hey it's not bad
-	3. [x] Yooo this is amazing
-	4. [ ] Half of my life was a complete WASTE
-	5. [x] Hol up why are you using Emacs
+  1. [x] Hmm I should try it out
+  2. [x] Oh hey it's not bad
+  3. [x] Yooo this is amazing
+  4. [ ] Half of my life was a complete WASTE
+  5. [x] Hol up why are you using Emacs
 
 - [ ] [Numberer](https://github.com/ybs1164) (3/5)
 
-	1. [x] Hmm I should try it out
-	2. [x] Oh hey it's not bad
-	3. [x] Yooo this is amazing
-	4. [ ] Half of my life was a complete WASTE
-	5. [ ] I'M UNINSTALLING VSCODE
+  1. [x] Hmm I should try it out
+  2. [x] Oh hey it's not bad
+  3. [x] Yooo this is amazing
+  4. [ ] Half of my life was a complete WASTE
+  5. [ ] I'M UNINSTALLING VSCODE
 
 ## Plugin Ideas
 
