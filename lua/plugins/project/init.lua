@@ -37,17 +37,4 @@ return {
     event = "VimEnter",
     config = get_config,
   },
-
-  -- NOTE: auto-session & session-lens are being merged together (#161)
-  -- search & load saved sessions using telescope.nvim
-  {
-    "rmagatti/session-lens",
-    keys = {
-      { "<Leader>fp", "<Cmd>SearchSession<CR>" },
-    },
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
-    config = get_config,
-  },
 }

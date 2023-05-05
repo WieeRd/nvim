@@ -172,7 +172,14 @@ config["auto-session"] = function()
     auto_session_create_enabled = false,
     auto_save_enabled = true,
     auto_restore_enabled = true,
+    session_lens = { previewer = false },
   })
+
+  vim.keymap.set(
+    "n",
+    "<Leader>fp",
+    require("auto-session.session-lens").search_session
+  )
 end
 
 config["session-lens"] = function()
