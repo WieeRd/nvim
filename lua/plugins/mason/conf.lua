@@ -112,7 +112,7 @@ config["nvim-lspconfig"] = function()
 
       -- show docs
       map("n", "K", vim.lsp.buf.hover) -- docs
-      map("n", "gK", vim.lsp.buf.signature_help) -- signature
+      map("i", "<C-s>", vim.lsp.buf.signature_help) -- signature
     end,
     handlers = {
       ["textDocument/hover"] = vim.lsp.with(

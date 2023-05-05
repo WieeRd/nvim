@@ -42,10 +42,4 @@ return {
     dependencies = "LuaSnip",
     config = get_config,
   },
-
-  -- show signature help in insert mode
-  {
-    "ray-x/lsp_signature.nvim",
-    config = get_config,
-  },
 }

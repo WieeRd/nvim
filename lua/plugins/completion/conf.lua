@@ -58,21 +58,21 @@ config["nvim-cmp"] = function()
 
     mapping = {
       -- works only if menu is already opened
-      ["<Tab>"] = cmp.mapping.select_next_item(),
-      ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-      ["<CR>"] = cmp.mapping.confirm(),
+      ["<Tab>"] = { i = cmp.mapping.select_next_item() },
+      ["<S-Tab>"] = { i = cmp.mapping.select_prev_item() },
+      ["<CR>"] = { i = cmp.mapping.confirm() },
 
       -- opens completion menu if it's not visible
-      ["<C-n>"] = complete_or_fn(cmp.select_next_item),
-      ["<C-p>"] = complete_or_fn(cmp.select_prev_item),
-      ["<C-Space>"] = complete_or_fn(cmp.confirm, { select = true }),
+      ["<C-n>"] = { i = complete_or_fn(cmp.select_next_item) },
+      ["<C-p>"] = { i = complete_or_fn(cmp.select_prev_item) },
+      ["<C-Space>"] = { i = complete_or_fn(cmp.confirm, { select = true }) },
 
       -- revert to original text
-      ["<C-a>"] = cmp.mapping.abort(),
+      ["<C-a>"] = { i = cmp.mapping.abort() },
 
       -- why is +4 invalid in Lua I want to line up columns :(
-      ["<C-f>"] = cmp.mapping.scroll_docs(4),
-      ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-f>"] = { i = cmp.mapping.scroll_docs(4) },
+      ["<C-b>"] = { i = cmp.mapping.scroll_docs(-4) },
 
       -- NOTE: snippet keymaps are defined in LuaSnip config below
     },
@@ -135,20 +135,19 @@ config["nvim-cmp"] = function()
           return entry1_under < entry2_under
         end,
 
-        -- how 'relevant' the match is
+        ---@diagnostic disable-next-line: assign-type-mismatch
         cmp.config.compare.recently_used,
-        cmp.config.compare.scopes,
+        ---@diagnostic disable-next-line: assign-type-mismatch
         cmp.config.compare.locality,
 
         -- last resort
         cmp.config.compare.kind,
         cmp.config.compare.length,
-        cmp.config.compare.sort_text,
         cmp.config.compare.order,
       },
     },
 
-    experimental = { ghost_text = true },
+    experimental = { ghost_text = { hl = "NonText" } },
   })
 
   -- command line completion
@@ -243,26 +242,6 @@ config["neogen"] = function()
   map("n", "<Leader>nc", generate_doc("class"))
   map("n", "<Leader>nt", generate_doc("type"))
   map("n", "<Leader>nm", generate_doc("file"))
-end
-
-config["lsp_signature.nvim"] = function()
-  require("lsp_signature").setup({
-    max_height = 12,
-    max_width = 80,
-
-    floating_window_off_x = 1,
-    floating_window_off_y = 0,
-
-    hint_enable = false,
-    hint_prefix = "● ",
-
-    handler_opts = {
-      border = "solid",
-    },
-
-    timer_interval = 50,
-    toggle_key = "<C-s>",
-  })
 end
 
 return config
