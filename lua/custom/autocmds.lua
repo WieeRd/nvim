@@ -74,7 +74,7 @@ local function colorscheme(info)
   vim.cmd("runtime! after/colors/" .. info.match .. ".vim")
 
   -- custom hl group used by smart float background below
-  local float = vim.api.nvim_get_hl_by_name("FloatBorder", true)
+  local float = vim.api.nvim_get_hl(0, { name = "FloatBorder" })
   vim.api.nvim_set_hl(0, "FloatBorderLine", { fg = float.foreground })
 end
 
