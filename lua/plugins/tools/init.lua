@@ -69,7 +69,7 @@ return {
   -- manage terminal windows
   {
     "akinsho/toggleterm.nvim",
-    keys = { "<S-Tab>", "<Leader>t" },
+    keys = "<S-Tab>",
     config = get_config,
   },
 }

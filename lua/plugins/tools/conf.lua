@@ -318,28 +318,6 @@ config["toggleterm.nvim"] = function()
       winblend = nil,
     },
   })
-
-  local map = vim.keymap.set
-  map(
-    "n",
-    "<Leader>ts",
-    "<Cmd>execute v:count . 'ToggleTerm direction=horizontal'<CR>"
-  )
-  map(
-    "n",
-    "<Leader>tv",
-    "<Cmd>execute v:count . 'ToggleTerm direction=vertical'<CR>"
-  )
-  map(
-    "n",
-    "<Leader>tt",
-    "<Cmd>execute v:count . 'ToggleTerm direction=tab'<CR>"
-  )
-  map(
-    "n",
-    "<Leader>tf",
-    "<Cmd>execute v:count . 'ToggleTerm direction=float'<CR>"
-  )
 end
 
 return config

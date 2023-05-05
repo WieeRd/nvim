@@ -20,6 +20,7 @@ local mappings = {
     ["<Leader>W"] = "<Cmd>silent wall<CR>",
     ["<Leader>q"] = "<Cmd>quit<CR>",
     ["<Leader>Q"] = "<Cmd>quit!<CR>",
+    ["<Leader>t"] = "<Cmd>term<CR>",
 
     -- open cmdline window with `:lua =` prefilled
     ["<Leader>="] = ":lua =",
