@@ -36,13 +36,14 @@ local config = {
         ["ic"] = "@class.inner",
         ["af"] = "@function.outer",
         ["if"] = "@function.inner",
-        ["ai"] = "@conditional.outer",
-        ["ii"] = "@conditional.inner",
-        ["al"] = "@loop.outer",
-        ["il"] = "@loop.inner",
-        ["as"] = "@statement.outer",
+        ["ab"] = "@block.outer",
+        ["ib"] = "@block.inner",
+        ["a/"] = "@comment.outer",
       },
-      include_surrounding_whitespace = true,
+      -- include_surrounding_whitespace = true,
+      include_surrounding_whitespace = function(args)
+        return args.query_string:match("outer")
+      end,
     },
 
     move = {
@@ -52,25 +53,25 @@ local config = {
         ["]]"] = "@class.outer",
         ["]m"] = "@function.outer",
         ["]i"] = "@conditional.outer",
-        ["]w"] = "@loop.outer",
+        ["]l"] = "@loop.outer",
       },
       goto_next_end = {
         ["]["] = "@class.outer",
         ["]M"] = "@function.outer",
         ["]I"] = "@conditional.outer",
-        ["]W"] = "@loop.outer",
+        ["]L"] = "@loop.outer",
       },
       goto_previous_start = {
         ["[["] = "@class.outer",
         ["[m"] = "@function.outer",
         ["[i"] = "@conditional.outer",
-        ["[w"] = "@loop.outer",
+        ["[l"] = "@loop.outer",
       },
       goto_previous_end = {
         ["[]"] = "@class.outer",
         ["[M"] = "@function.outer",
         ["[I"] = "@conditional.outer",
-        ["[W"] = "@loop.outer",
+        ["[L"] = "@loop.outer",
       },
     },
 

@@ -17,7 +17,10 @@ return {
   { "RRethy/nvim-treesitter-textsubjects" },
 
   -- auto insert matching keyword (e.g. function/end in Lua)
-  { "RRethy/nvim-treesitter-endwise", ft = { "ruby", "lua", "vim", "sh" } },
+  {
+    "RRethy/nvim-treesitter-endwise",
+    ft = { "ruby", "lua", "vim", "sh", "elixir" },
+  },
 
   -- view & interact with TS syntax tree
   { "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" },
