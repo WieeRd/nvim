@@ -20,11 +20,6 @@ config["vim-illuminate"] = function()
   local map = vim.keymap.set
   map("n", "]r", illuminate.goto_next_reference)
   map("n", "[r", illuminate.goto_prev_reference)
-
-  -- remove default keymaps
-  map("n", "<A-n>", "")
-  map("n", "<A-p>", "")
-  map("n", "<A-i>", "")
 end
 
 config["neoscroll.nvim"] = function()

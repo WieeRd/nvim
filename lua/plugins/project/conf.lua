@@ -165,6 +165,10 @@ config["auto-session"] = function()
   local home = vim.loop.os_homedir()
   local restore_last = cwd == home
 
+  -- TODO: make Issue & PR
+  -- auto_session_create_enabled = function|boolean
+  -- auto_session_enable_last_session = function|boolean
+
   require("auto-session").setup({
     log_level = "error",
     auto_session_enable_last_session = restore_last,

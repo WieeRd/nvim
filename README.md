@@ -18,8 +18,6 @@ I'm too lazy to use a mouse.
   - centralize all keymaps, including plugins'
   - Add mapping descriptions
   - Toggle boolean value (`true` ↔ `false`)
-- `custom/options`
-  - Refactor using a single table and for loop
 - `ftplugin/`
   - `after/ftplugin/`: Real filetypes like `markdown`
   - `ftplugin/`: Plugin filetypes like `fugitive`
