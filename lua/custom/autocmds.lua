@@ -6,27 +6,6 @@ local function autocmd(event, opts)
   return vim.api.nvim_create_autocmd(event, opts)
 end
 
-local doautocmd = vim.api.nvim_exec_autocmds
-
--- [[ Custom Event: "User InGitRepo" ]]
--- dispatch custom event when cwd is inside git repo
--- original vimscript code from:
--- https://github.com/wbthomason/packer.nvim/discussions/534
-
-local function check_git_repo()
-  local cmd = "git rev-parse --is-inside-work-tree"
-  if vim.fn.system(cmd) == "true\n" then
-    -- BUG: loading fugitive.vim at VimEnter somehow clears startup screen
-    doautocmd("User", { pattern = "InGitRepo" })
-    return true -- remove autocmd after lazy loading git plugins
-  end
-end
-
-autocmd({ "VimEnter", "DirChanged" }, {
-  callback = function()
-    vim.schedule(check_git_repo)
-  end,
-})
 
 -- [[ Remember last accessed Tab ]]
 -- When current tab is closed, go to last accessed tab
@@ -155,5 +134,22 @@ autocmd("TextYankPost", {
     })
   end,
 })
+
+-- -- highlight current symbol and references
+-- autocmd("LspAttach", {
+--   callback = function(args)
+--     local client = vim.lsp.get_client_by_id(args.data.client_id)
+--     if client.server_capabilities.documentHighlightProvider then
+--       autocmd({ "CursorHold", "CursorHoldI" }, {
+--         buffer = args.buf,
+--         callback = vim.lsp.buf.document_highlight,
+--       })
+--       autocmd({ "CursorMoved", "CursorMovedI" }, {
+--         buffer = args.buf,
+--         callback = vim.lsp.buf.clear_references,
+--       })
+--     end
+--   end
+-- })
 
 -- TODO: "LspProgressUpdate"

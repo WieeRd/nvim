@@ -5,7 +5,23 @@ config["nvim-rooter.lua"] = function()
 end
 
 config["vim-fugitive"] = function()
-  vim.keymap.set("n", "<Leader>gi", "<Cmd>tab G<CR>")
+  local vim = vim
+  local map = vim.keymap.set
+
+  map("n", "<Leader>gi", "<Cmd>tab G<CR>")
+
+  -- trigger "User InGitRepo" event upon entering a Git repository
+  -- can be used to lazy load other Git related plugins
+  -- `nvim-rooter.lua` allows us to use "DirChanged" instead of "BufRead"
+  vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
+    callback = function()
+      if vim.fn.FugitiveIsGitDir() == 1 then
+        vim.api.nvim_exec_autocmds("User", { pattern = "InGitRepo" })
+        return true -- remove this autocmd after loading other plugins
+      end
+    end,
+    group = vim.api.nvim_create_augroup("DetectGitRepo", {}),
+  })
 end
 
 config["gitsigns.nvim"] = function()
@@ -165,10 +181,6 @@ config["auto-session"] = function()
   local home = vim.loop.os_homedir()
   local restore_last = cwd == home
 
-  -- TODO: make Issue & PR
-  -- auto_session_create_enabled = function|boolean
-  -- auto_session_enable_last_session = function|boolean
-
   require("auto-session").setup({
     log_level = "error",
     auto_session_enable_last_session = restore_last,
@@ -184,10 +196,6 @@ config["auto-session"] = function()
     "<Leader>fp",
     require("auto-session.session-lens").search_session
   )
-end
-
-config["session-lens"] = function()
-  require("session-lens").setup({})
 end
 
 return config

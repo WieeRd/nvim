@@ -13,7 +13,6 @@ return {
   -- `$ git` wrapped as `:G`, interactable git index
   {
     "tpope/vim-fugitive",
-    event = "User InGitRepo",
     config = get_config,
   },
 
