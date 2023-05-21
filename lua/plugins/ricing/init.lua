@@ -19,7 +19,7 @@ return {
   -- smooth scrolling
   {
     "karb94/neoscroll.nvim",
-    keys = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "zt", "zz", "zb" },
+    keys = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "z" },
     config = get_config,
   },
 
@@ -63,4 +63,6 @@ return {
   -- { "navarasu/onedark.nvim", lazy = true },
   -- { "tiagovla/tokyodark.nvim", lazy = true }
   -- { "vim-scripts/greenvision", lazy = true },
+  { "rose-pine/neovim", name = "rose-pine", lazy = true },
+  { "catppuccin/nvim", name = "catppuccin", lazy = true },
 }
