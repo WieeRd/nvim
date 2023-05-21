@@ -9,13 +9,19 @@ config["vim-fugitive"] = function()
   local map = vim.keymap.set
 
   map("n", "<Leader>gi", "<Cmd>tab G<CR>")
+  map("n", "<Leader>gr", "<Cmd>Git restore %<CR>")
+  map("n", "<Leader>gs", "<Cmd>Git stage %<CR>")
+  map("n", "<Leader>gu", "<Cmd>Git reset -q %<CR>")
 
   -- trigger "User InGitRepo" event upon entering a Git repository
   -- can be used to lazy load other Git related plugins
   -- `nvim-rooter.lua` allows us to use "DirChanged" instead of "BufRead"
   vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
     callback = function()
-      if vim.fn.FugitiveIsGitDir() == 1 then
+      -- local gitdir = vim.loop.cwd() .. "/.git"
+      -- if vim.loop.fs_stat(gitdir) then
+      local cmd = "git rev-parse --is-inside-work-tree"
+      if vim.fn.system(cmd) == "true\n" then
         vim.api.nvim_exec_autocmds("User", { pattern = "InGitRepo" })
         return true -- remove this autocmd after loading other plugins
       end
@@ -28,40 +34,26 @@ config["gitsigns.nvim"] = function()
   local gs = require("gitsigns")
 
   gs.setup({
+    -- diff indicator
     signcolumn = false, -- :Gitsigns toggle_signs
     numhl = false, -- :Gitsigns toggle_numhl
     linehl = false, -- :Gitsigns toggle_linehl
     word_diff = false, -- :Gitsigns toggle_word_diff
-    watch_gitdir = {
-      interval = 1000,
-      follow_files = true,
-    },
-    attach_to_untracked = true,
+
+    -- show blame result in virtual text
     current_line_blame = false, -- :Gitsigns toggle_current_line_blame
-    current_line_blame_opts = {
-      virt_text = true,
-      virt_text_pos = "eol", -- "eol" | "overlay" | "right_align"
-      delay = 100,
-      ignore_whitespace = false,
-    },
+    current_line_blame_opts = { delay = 100 },
     current_line_blame_formatter = " <author> (<author_time:%R>) <summary> ",
-    sign_priority = 6,
-    update_debounce = 100,
-    status_formatter = nil, -- Use default
-    max_file_length = 40000,
+
+    -- options passed to `nvim_open_win()`
     preview_config = {
-      -- options passed to nvim_open_win
       border = "rounded",
       style = "minimal",
       relative = "cursor",
       row = 1,
       col = 1,
     },
-    yadm = { enable = false },
-    -- on_attach = on_attach,
   })
-
-  local map = vim.keymap.set
 
   local function next_hunk()
     if vim.wo.diff then
@@ -83,20 +75,17 @@ config["gitsigns.nvim"] = function()
     return "<Ignore>"
   end
 
-  local function line_info(blame_opts)
+  local function hunk_or_blame(...)
     local acts = gs.get_actions()
-    if not acts then
-      return false
+    if acts ~= nil then
+      local func = acts.preview_hunk or acts.blame_line
+      if func ~= nil then
+        return func(...)
+      end
     end
-
-    local func = acts.preview_hunk or acts.blame_line
-    if not func then
-      return false
-    end
-
-    func(blame_opts)
-    return true
   end
+
+  local map = vim.keymap.set
 
   -- hunk motion
   map({ "n", "v" }, "]c", next_hunk, { expr = true })
@@ -107,18 +96,13 @@ config["gitsigns.nvim"] = function()
   map({ "o", "v" }, "ah", gs.select_hunk)
 
   -- hunk actions
-  map({ "n", "v" }, "<Leader>gr", ":Gitsigns reset_hunk<CR>")
-  map({ "n", "v" }, "<Leader>gs", ":Gitsigns stage_hunk<CR>")
-  map({ "n", "v" }, "<Leader>gu", ":Gitsigns undo_stage_hunk<CR>")
+  map({ "n", "v" }, "ghr", ":Gitsigns reset_hunk<CR>")
+  map({ "n", "v" }, "ghs", ":Gitsigns stage_hunk<CR>")
+  map({ "n", "v" }, "ghu", ":Gitsigns undo_stage_hunk<CR>")
 
-  -- buffer actions
-  map("n", "<Leader>gR", gs.reset_buffer) -- :Git restore %
-  map("n", "<Leader>gS", gs.stage_buffer) -- :Git add %
-  map("n", "<Leader>gU", gs.reset_buffer_index) -- :Git reset %
-
-  -- line info: hunk or blame preview
+  -- preview hunk or blame result of current line
   map("n", "<Leader>gp", function()
-    line_info({ full = true })
+    hunk_or_blame({ full = true })
   end)
 
   -- toggle diff highlight
@@ -128,7 +112,7 @@ config["gitsigns.nvim"] = function()
   map("n", "<Leader>g-", gs.toggle_deleted)
 
   -- live blame current line
-  map("n", "<Leader>gc", gs.toggle_current_line_blame)
+  map("n", "<Leader>gb", gs.toggle_current_line_blame)
 end
 
 config["diffview.nvim"] = function()
@@ -172,15 +156,11 @@ config["diffview.nvim"] = function()
 
   -- git log
   map("n", "<Leader>gl", "<Cmd>DiffviewFileHistory %<CR>") -- current file
-  map("x", "<Leader>gl", "<Cmd>'<,'>DiffviewFileHistory<CR>") -- selected range
+  map("v", "<Leader>gl", "<Cmd>'<,'>DiffviewFileHistory<CR>") -- selected range
   map("n", "<Leader>gL", "<Cmd>DiffviewFileHistory<CR>") -- project wide
 end
 
 config["auto-session"] = function()
-  local cwd = vim.loop.cwd()
-  local home = vim.loop.os_homedir()
-  local restore_last = cwd == home
-
   require("auto-session").setup({
     log_level = "error",
     -- restore last session only when opening Neovim in the home directory
@@ -195,12 +175,6 @@ config["auto-session"] = function()
       load_on_setup = false, -- NOTE: keymap defined in telescope config
     },
   })
-
-  vim.keymap.set(
-    "n",
-    "<Leader>fp",
-    require("auto-session.session-lens").search_session
-  )
 end
 
 return config
