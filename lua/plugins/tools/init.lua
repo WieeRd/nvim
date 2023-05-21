@@ -25,6 +25,8 @@ return {
           end
         end,
       },
+      -- search created sessions with session-lens
+      { "rmagatti/auto-session" },
       -- view search results in a list
       { "folke/trouble.nvim" },
     },

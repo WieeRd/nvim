@@ -183,12 +183,17 @@ config["auto-session"] = function()
 
   require("auto-session").setup({
     log_level = "error",
-    auto_session_enable_last_session = restore_last,
+    -- restore last session only when opening Neovim in the home directory
+    -- which usually right after launching the terminal or GUI client
+    auto_session_enable_last_session = vim.loop.cwd() == vim.loop.os_homedir(),
     auto_session_enabled = true,
     auto_session_create_enabled = false,
     auto_save_enabled = true,
     auto_restore_enabled = true,
-    session_lens = { previewer = false },
+    session_lens = {
+      path_display = { "shorten" },
+      load_on_setup = false, -- NOTE: keymap defined in telescope config
+    },
   })
 
   vim.keymap.set(

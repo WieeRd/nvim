@@ -60,10 +60,10 @@ config["telescope.nvim"] = function()
     },
   })
 
+  local map = vim.keymap.set
+
   telescope.load_extension("fzf")
   telescope.load_extension("ui-select")
-
-  local map = vim.keymap.set
 
   -- I've been using CtrlP for so long
   map("n", "<C-p>", function()
@@ -101,6 +101,14 @@ config["telescope.nvim"] = function()
   -- RTFM, I must
   map("n", "<Leader>fh", builtin.help_tags)
   map("n", "<Leader>fm", builtin.man_pages)
+
+  -- search saved sessions
+  local auto_session = require("auto-session")
+  auto_session.setup_session_lens()
+
+  -- telescope.load_extension("session-lens")
+  local session_lens = require("auto-session.session-lens")
+  map("n", "<Leader>fp", session_lens.search_session)
 end
 
 config["trouble.nvim"] = function()
