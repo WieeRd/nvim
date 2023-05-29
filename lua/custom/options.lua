@@ -5,6 +5,7 @@ local options = {
   undofile = false,
   swapfile = false,
   updatetime = 200,
+  timeoutlen = 300,
 
   -- meta
   termguicolors = true,
@@ -14,7 +15,7 @@ local options = {
   sessionoptions = table.concat({
     "blank",
     "curdir",
-    "folds",
+    -- "folds",
     "help",
     "localoptions",
     "tabpages",

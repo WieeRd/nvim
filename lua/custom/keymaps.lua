@@ -47,6 +47,17 @@ local mappings = {
     ["<Leader>+"] = "<Cmd>tabnew<CR>",
     ["<Leader>-"] = "<Cmd>tabclose<CR>",
     ["<Leader>0"] = "<Cmd>tabonly<CR>",
+
+    -- -- yes I use colemak, how could you tell?
+    -- ["<C-w>h"] = "<C-w>h",
+    -- ["<C-w>n"] = "<C-w>j",
+    -- ["<C-w>e"] = "<C-w>k",
+    -- ["<C-w>i"] = "<C-w>l",
+
+    -- ["<M-h>"] = "h",
+    -- ["<M-n>"] = "j",
+    -- ["<M-e>"] = "k",
+    -- ["<M-i>"] = "l",
   },
 
   -- normal & visual

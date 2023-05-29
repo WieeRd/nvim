@@ -136,9 +136,11 @@ config["nvim-cmp"] = function()
         end,
 
         ---@diagnostic disable-next-line: assign-type-mismatch
-        cmp.config.compare.recently_used,
-        ---@diagnostic disable-next-line: assign-type-mismatch
-        cmp.config.compare.locality,
+        cmp.config.compare.scopes,
+        -- ---@diagnostic disable-next-line: assign-type-mismatch
+        -- cmp.config.compare.recently_used,
+        -- ---@diagnostic disable-next-line: assign-type-mismatch
+        -- cmp.config.compare.locality,
 
         -- last resort
         cmp.config.compare.kind,

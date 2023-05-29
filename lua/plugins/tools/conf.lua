@@ -21,19 +21,15 @@ config["telescope.nvim"] = function()
           prompt_position = "bottom",
           preview_width = 0.6,
           results_width = 0.8,
+          width = 0.7,
+          height = 0.8,
         },
-        vertical = {
-          mirror = false,
-        },
-        width = 0.7,
-        height = 0.8,
         preview_cutoff = 120,
       },
 
-      file_ignore_patterns = { "node_modules" },
-      path_display = { "truncate" },
-
-      border = true,
+      -- file_ignore_patterns = { "node_modules" },
+      -- path_display = { "truncate" },
+      -- border = true,
 
       mappings = {
         i = {
@@ -277,10 +273,10 @@ config["aerial.nvim"] = function()
     -- Show box drawing characters for the tree hierarchy
     show_guides = true,
     guides = {
-      mid_item = "├ ",
-      last_item = "└ ",
-      nested_top = "│ ",
-      whitespace = "  ",
+      -- mid_item = "├ ",
+      -- last_item = "└ ",
+      -- nested_top = "│ ",
+      -- whitespace = "  ",
     },
   })
 

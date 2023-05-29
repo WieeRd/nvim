@@ -35,9 +35,7 @@ config["nvim-lspconfig"] = function()
             commitCharactersSupport = true,
             deprecatedSupport = true,
             insertReplaceSupport = true,
-            insertTextModeSupport = {
-              valueSet = { 1, 2 },
-            },
+            insertTextModeSupport = { valueSet = { 1, 2 } },
             labelDetailsSupport = true,
             preselectSupport = true,
             resolveSupport = {
@@ -48,9 +46,7 @@ config["nvim-lspconfig"] = function()
               },
             },
             snippetSupport = true,
-            tagSupport = {
-              valueSet = { 1 },
-            },
+            tagSupport = { valueSet = { 1 } },
           },
           completionList = {
             itemDefaults = {
@@ -321,8 +317,9 @@ config["nvim-dap"] = function()
   dap.listeners.before["event_exited"]["dapui"] = dap_ui.close
 
   local signs = {
+    -- TODO:   󰁕
     DapBreakpoint = { text = "○", texthl = "DiagnosticSignError" },
-    DapBreakpointCondition = { text = "", texthl = "DiagnosticSignWarn" },
+    DapBreakpointCondition = { text = "", texthl = "DiagnosticSignWarn" },
     DapLogPoint = { text = "", texthl = "DiagnosticSignOk" },
     DapStopped = { text = "●", texthl = "DiagnosticSignError" },
     DapBreakpointRejected = { text = "", texthl = "DiagnosticError" },
