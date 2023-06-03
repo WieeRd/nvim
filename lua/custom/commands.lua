@@ -5,3 +5,4 @@ command("Dump", function(opts)
 end, { nargs = 1 })
 
 -- TODO: reload configs
+-- TODO: autoformat autocmd/command
