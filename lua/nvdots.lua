@@ -38,8 +38,10 @@ M.load_keymaps = function(keymaps)
   end
 end
 
-M.load_autocmds = function(autocmds, group)
+M.load_autocmds = function(autocmds)
   local autocmd = vim.api.nvim_create_autocmd
+  local augroup = vim.api.nvim_create_augroup
+  local group = augroup("nvdots", { clear = true })
 
   for i = 1, #autocmds do
     local opts = autocmds[i]
