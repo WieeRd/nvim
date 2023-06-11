@@ -59,13 +59,13 @@ M.load_commands = function(commands)
   for name, cmd_and_opts in pairs(commands) do
     local cmd, opts
 
-    if type(cmd_and_opts) == "string" then
-      cmd = cmd_and_opts
-      opts = {}
-    else
+    if type(cmd_and_opts) == "table" then
       cmd = cmd_and_opts[1]
       cmd_and_opts[1] = nil
       opts = cmd_and_opts
+    else
+      cmd = cmd_and_opts
+      opts = {}
     end
 
     command(name, cmd, opts)
