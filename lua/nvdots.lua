@@ -72,8 +72,19 @@ M.load_commands = function(commands)
   end
 end
 
-M.setup = function(opts)
+M.load_plugins = function(args)
   -- TODO:
+end
+
+M.setup = function(cfg)
+  if cfg.builtin ~= nil then
+    local builtin = cfg.builtin
+    M.load_globals(builtin.globals)
+    M.load_options(builtin.options)
+    M.load_keymaps(builtin.keymaps)
+    M.load_autocmds(builtin.autocmds)
+    M.load_commands(builtin.commands)
+  end
 end
 
 return M
