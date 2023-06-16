@@ -72,19 +72,62 @@ M.load_commands = function(commands)
   end
 end
 
-M.load_plugins = function(args)
-  -- TODO:
+M.load_plugin = function(args)
+  if type(args.enable) == "function" then
+    args.enable = args.enable()
+  end
+
+  if not args.enable then
+    return false
+  end
+
+  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+  if not vim.loop.fs_stat(lazypath) then
+    if type(args.bootstrap) == "function" then
+      args.bootstrap = args.bootstrap()
+    end
+
+    if args.bootstrap then
+      vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim",
+        lazypath,
+      })
+    else
+      return false
+    end
+  end
+
+  vim.opt.runtimepath:prepend(lazypath)
+  require("lazy").setup(args.spec, args.opts)
+  return true
 end
 
 M.setup = function(cfg)
-  if cfg.builtin ~= nil then
+  if cfg.builtin then
     local builtin = cfg.builtin
-    M.load_globals(builtin.globals)
-    M.load_options(builtin.options)
-    M.load_keymaps(builtin.keymaps)
-    M.load_autocmds(builtin.autocmds)
-    M.load_commands(builtin.commands)
+    M.load_globals(builtin.globals or {})
+    M.load_options(builtin.options or {})
+    M.load_keymaps(builtin.keymaps or {})
+    M.load_autocmds(builtin.autocmds or {})
+    M.load_commands(builtin.commands or {})
   end
+
+  if cfg.plugin and M.load_plugin(cfg.plugin) then
+    vim.cmd.colorscheme(cfg.colorscheme.plugin)
+  else
+    vim.cmd.colorscheme(cfg.colorscheme.builtin)
+  end
+end
+
+M.deactivate = function()
+  -- FEAT: LATER: make the config reloadable
+  -- * avoid modifying the original table
+  -- * receive module path rather than calling `require()`
+  -- * global/static variable to check for 2nd setup
+  -- * unloading code should be lazy loaded (separate submodule maybe)
 end
 
 return M
