@@ -5,7 +5,7 @@ return {
       vim.cmd.runtime("after/colors/default.vim") -- ran for every colorscheme
       vim.cmd.runtime(("after/colors/%s.vim"):format(args.match))
     end,
-    desc = "override each colorscheme with `after/colors/*.vim`",
+    desc = "override each colorscheme in `after/colors/*.vim`",
   },
 
   {
@@ -17,7 +17,7 @@ return {
       wo.number = false
       wo.relativenumber = false
     end,
-    desc = "set local options for the terminal buffers",
+    desc = "set terminal window options",
   },
 
   {
@@ -55,5 +55,17 @@ return {
       end
     end,
     desc = "go to last visited tab when current tab is closed",
+  },
+
+  {
+    { "FocusGained", "TermClose", "TermLeave" },
+    command = "checktime",
+    desc = "check if any buffers were changed outside of Vim",
+  },
+
+  {
+    "VimResized",
+    command = "tabdo wincmd =",
+    desc = "resize splits on window resize",
   },
 }

@@ -15,8 +15,8 @@ return {
   },
 
   [NORMAL] = {
-    -- clear search highlights and last executed command with <Esc>
-    ["<Esc>"] = "<Esc><C-l>",
+    -- clear search highlights and cmdline output
+    ["<Esc>"] = "<Esc><Cmd>noh <Bar> echo ''<CR>",
 
     -- frequently used commands
     ["<Leader>w"] = { "<Cmd>silent write<CR>", desc = "write" },

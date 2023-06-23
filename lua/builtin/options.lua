@@ -12,12 +12,14 @@ return {
   timeoutlen = 300,
 
   -- what to save in session files
+  -- loading folds frequently fail when using semantic folding methods
+  -- like treesitter foldexpr or LSP foldingRange with nvim-ufo.
+  -- would be great if we can lazy load folds in sessions
   sessionoptions = {
     "blank",
     "curdir",
     -- "folds",
-    -- "help",
-    -- "resize",
+    "help",
     "localoptions",
     "tabpages",
     "terminal",
@@ -64,6 +66,8 @@ return {
   incsearch = true,
   ignorecase = true,
   smartcase = true,
+  grepformat = "%f:%l:%c:%m",
+  grepprg = "rg --vimgrep",
 
   -- tabs / indentation
   expandtab = false,
