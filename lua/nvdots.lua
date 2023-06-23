@@ -26,13 +26,13 @@ M.load_keymaps = function(keymaps)
     for lhs, rhs_and_opts in pairs(mappings) do
       local rhs, opts
 
-      if type(rhs_and_opts) == "string" then
-        rhs = rhs_and_opts
-        opts = {}
-      else
+      if type(rhs_and_opts) == "table" then
         rhs = rhs_and_opts[1]
         rhs_and_opts[1] = nil
         opts = rhs_and_opts
+      else
+        rhs = rhs_and_opts
+        opts = {}
       end
 
       map(mode, lhs, rhs, opts)
