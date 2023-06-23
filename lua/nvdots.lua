@@ -1,6 +1,8 @@
 local M = {}
 local vim = vim
 
+-- FEAT: LATER: add type annotations
+
 M.load_globals = function(globals)
   local g = vim.g
 
@@ -81,7 +83,9 @@ M.load_plugin = function(args)
     return false
   end
 
-  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+  args.opts.root = args.opts.root or vim.fn.stdpath("data") .. "/lazy"
+  local lazypath = args.opts.root .. "/lazy.nvim"
+
   if not vim.loop.fs_stat(lazypath) then
     if type(args.bootstrap) == "function" then
       args.bootstrap = args.bootstrap()
@@ -122,12 +126,22 @@ M.setup = function(cfg)
   end
 end
 
+-- FEAT: LATER: make the config reloadable
 M.deactivate = function()
-  -- FEAT: LATER: make the config reloadable
   -- * avoid modifying the original table
   -- * receive module path rather than calling `require()`
-  -- * global/static variable to check for 2nd setup
+  -- * global variable to check for 2nd setup `g:nvdots_did_setup`
   -- * unloading code should be lazy loaded (separate submodule maybe)
+end
+
+-- FEAT: MAYBE: LSP client configuration
+M.load_lsp = function()
+  -- lsp = {
+  --   -- LspAttach + load_keymaps()
+  --   keymaps = {},
+  --   -- vim.diagnostic.config()
+  --   diagnostic = {},
+  -- }
 end
 
 return M
