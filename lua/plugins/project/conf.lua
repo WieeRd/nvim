@@ -8,10 +8,12 @@ config["vim-fugitive"] = function()
   local vim = vim
   local map = vim.keymap.set
 
+  -- FIXME: :G commands does not work well with modified buffers
+  -- might as well switch back to gitsigns API
   map("n", "<Leader>gi", "<Cmd>tab G<CR>")
-  map("n", "<Leader>gr", "<Cmd>Git restore %<CR>")
-  map("n", "<Leader>gs", "<Cmd>Git stage %<CR>")
-  map("n", "<Leader>gu", "<Cmd>Git reset -q %<CR>")
+  map("n", "<Leader>gr", "<Cmd>G restore %<CR>")
+  map("n", "<Leader>gs", "<Cmd>G stage %<CR>")
+  map("n", "<Leader>gu", "<Cmd>G reset -q %<CR>")
 
   -- trigger "User InGitRepo" event upon entering a Git repository
   -- can be used to lazy load other Git related plugins
@@ -88,17 +90,17 @@ config["gitsigns.nvim"] = function()
   local map = vim.keymap.set
 
   -- hunk motion
-  map({ "n", "v" }, "]c", next_hunk, { expr = true })
-  map({ "n", "v" }, "[c", prev_hunk, { expr = true })
+  map({ "n", "x" }, "]c", next_hunk, { expr = true })
+  map({ "n", "x" }, "[c", prev_hunk, { expr = true })
 
   -- hunk text object
-  map({ "o", "v" }, "ih", gs.select_hunk)
-  map({ "o", "v" }, "ah", gs.select_hunk)
+  map({ "o", "x" }, "ih", gs.select_hunk)
+  map({ "o", "x" }, "ah", gs.select_hunk)
 
   -- hunk actions
-  map({ "n", "v" }, "ghr", ":Gitsigns reset_hunk<CR>")
-  map({ "n", "v" }, "ghs", ":Gitsigns stage_hunk<CR>")
-  map({ "n", "v" }, "ghu", ":Gitsigns undo_stage_hunk<CR>")
+  map({ "n", "x" }, "ghr", ":Gitsigns reset_hunk<CR>")
+  map({ "n", "x" }, "ghs", ":Gitsigns stage_hunk<CR>")
+  map({ "n", "x" }, "ghu", ":Gitsigns undo_stage_hunk<CR>")
 
   -- preview hunk or blame result of current line
   map("n", "<Leader>gp", function()
@@ -156,7 +158,7 @@ config["diffview.nvim"] = function()
 
   -- git log
   map("n", "<Leader>gl", "<Cmd>DiffviewFileHistory %<CR>") -- current file
-  map("v", "<Leader>gl", "<Cmd>'<,'>DiffviewFileHistory<CR>") -- selected range
+  map("x", "<Leader>gl", "<Cmd>'<,'>DiffviewFileHistory<CR>") -- selected range
   map("n", "<Leader>gL", "<Cmd>DiffviewFileHistory<CR>") -- project wide
 end
 

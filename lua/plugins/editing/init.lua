@@ -14,7 +14,7 @@ return {
   -- manipulate surrounding pair
   {
     "kylechui/nvim-surround",
-    keys = { "cs", "ds", "ys", { "S", mode = "v" } },
+    keys = { "cs", "ds", "ys", { "S", mode = "x" } },
     config = get_config,
   },
 
@@ -34,8 +34,8 @@ return {
   {
     "numToStr/Comment.nvim",
     keys = {
-      { "gc", mode = { "n", "v" } },
-      { "gb", mode = { "n", "v" } },
+      { "gc", mode = { "n", "x" } },
+      { "gb", mode = { "n", "x" } },
     },
     dependencies = "JoosepAlviste/nvim-ts-context-commentstring",
     config = get_config,
@@ -65,7 +65,7 @@ return {
   {
     "junegunn/vim-easy-align",
     keys = {
-      { "ga", "<Plug>(EasyAlign)", mode = { "n", "v" } },
+      { "ga", "<Plug>(EasyAlign)", mode = { "n", "x" } },
     },
   },
 
@@ -73,8 +73,8 @@ return {
   {
     "phaazon/hop.nvim",
     keys = {
-      { "<Leader>j", "<Cmd>HopWordAC<CR>", mode = { "n", "v" } },
-      { "<Leader>k", "<Cmd>HopWordBC<CR>", mode = { "n", "v" } },
+      { "<Leader>j", "<Cmd>HopWordAC<CR>", mode = { "n", "x" } },
+      { "<Leader>k", "<Cmd>HopWordBC<CR>", mode = { "n", "x" } },
     },
     config = get_config,
   },
@@ -86,7 +86,7 @@ return {
       {
         "<Leader>s",
         "<Cmd>lua require('tsht').nodes()<CR>",
-        mode = { "n", "v", "o" },
+        mode = { "n", "x", "o" },
       },
     },
   },
