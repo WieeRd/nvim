@@ -1,8 +1,15 @@
 local M = {}
 local vim = vim
 
--- FEAT: LATER: add type annotations
+-- FIXME: ASAP: add examples of loader usage
+-- some of them have f*cked up types and are nearly unreadable
+-- maybe we should switch to teal or moonscript
 
+---@alias NvDots.GlobalValue string | number | table
+---@alias NvDots.Globals table<string, NvDots.GlobalValue>
+
+---load table of `:let g:` variables
+---@param globals NvDots.Globals
 M.load_globals = function(globals)
   local g = vim.g
 
@@ -11,6 +18,11 @@ M.load_globals = function(globals)
   end
 end
 
+---@alias NvDots.OptionValue string | number | table
+---@alias NvDots.Options table<string, NvDots.OptionValue>
+
+---load table of `:set` values
+---@param options NvDots.Options
 M.load_options = function(options)
   local opt = vim.opt
 
@@ -19,6 +31,21 @@ M.load_options = function(options)
   end
 end
 
+---@alias NvDots.MapModes "n" | "v" | "s" | "x" | "o" | "i" | "l" | "c" | "t"
+---@alias NvDots.MapMode NvDots.MapModes | NvDots.MapModes[]
+
+---@alias NvDots.MapLhs string
+---@alias NvDots.MapRhs string | function
+
+---@class NvDots.MapOpts pack {rhs} and {opts} in a single table
+---@field [1] NvDots.MapRhs rhs
+---@field [string] any option dict
+
+---@alias NvDots.MapPairs table<NvDots.MapLhs, NvDots.MapRhs | NvDots.MapOpts>
+---@alias NvDots.Keymaps table<NvDots.MapMode, NvDots.MapPairs>
+
+---load table of `:map` definitions
+---@param keymaps NvDots.Keymaps
 M.load_keymaps = function(keymaps)
   local map = vim.keymap.set
 
@@ -35,11 +62,20 @@ M.load_keymaps = function(keymaps)
         opts = {}
       end
 
+      ---@cast rhs NvDots.MapRhs
       map(mode, lhs, rhs, opts)
     end
   end
 end
 
+---@class NvDots.AutocmdSpec pack {event} and {opts} in a single table
+---@field [1] string event name
+---@field [string] any options dict
+
+---@alias NvDots.Autocmds NvDots.AutocmdSpec[]
+
+---load table of `:autocmd` definitions
+---@param autocmds NvDots.Autocmds
 M.load_autocmds = function(autocmds)
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
@@ -55,6 +91,16 @@ M.load_autocmds = function(autocmds)
   end
 end
 
+---@alias Nvdots.CommandImpl string | function
+
+---@class NvDots.CommandOpts pack {command} and {opts} in a single table
+---@field [1] Nvdots.CommandImpl target command / callback function
+---@field [string] any options dict
+
+---@alias NvDots.Commands table<string, Nvdots.CommandImpl | NvDots.CommandOpts>
+
+---load table of `:command` definitions
+---@param commands NvDots.Commands
 M.load_commands = function(commands)
   local command = vim.api.nvim_create_user_command
 
@@ -74,6 +120,27 @@ M.load_commands = function(commands)
   end
 end
 
+-- FEAT: MAYBE: LSP client configuration
+-- neovim lsp is a builtin feature
+-- and technically does not require plugins to setup
+M.load_lsp = function(_)
+  -- lsp = {
+  --   -- LspAttach + load_keymaps()
+  --   keymaps = {},
+  --   -- vim.diagnostic.config()
+  --   diagnostic = {},
+  -- }
+end
+
+---@class NvDots.Plugin
+---@field enable boolean | function if the plugins should be loaded
+---@field bootstrap boolean | function boostrap lazy.nvim if it's missing
+---@field spec LazySpec lazy.nvim plugin specs
+---@field opts LazyConfig lazy.nvim setup options
+
+---setup lazy.nvim and load plugins
+---@param args NvDots.Plugin
+---@return boolean loaded if the plugins have been loaded or not
 M.load_plugin = function(args)
   if type(args.enable) == "function" then
     args.enable = args.enable()
@@ -109,6 +176,24 @@ M.load_plugin = function(args)
   return true
 end
 
+---@class NvDots.Builtin
+---@field globals NvDots.Globals
+---@field options NvDots.Options
+---@field keymaps NvDots.Keymaps
+---@field autocmds NvDots.Autocmds
+---@field commands NvDots.Commands
+
+---@class NvDots.ColorScheme
+---@field plugin string main theme when plugins are available
+---@field builtin string fallback theme when plugins aren't available
+
+---@class NvDots.Config
+---@field builtin NvDots.Builtin
+---@field plugin NvDots.Plugin
+---@field colorscheme NvDots.ColorScheme
+
+---configure entirety of neovim using a single table
+---@param cfg NvDots.Config
 M.setup = function(cfg)
   if cfg.builtin then
     local builtin = cfg.builtin
@@ -132,16 +217,6 @@ M.deactivate = function()
   -- * receive module path rather than calling `require()`
   -- * global variable to check for 2nd setup `g:nvdots_did_setup`
   -- * unloading code should be lazy loaded (separate submodule maybe)
-end
-
--- FEAT: MAYBE: LSP client configuration
-M.load_lsp = function()
-  -- lsp = {
-  --   -- LspAttach + load_keymaps()
-  --   keymaps = {},
-  --   -- vim.diagnostic.config()
-  --   diagnostic = {},
-  -- }
 end
 
 return M
