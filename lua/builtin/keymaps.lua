@@ -81,6 +81,7 @@ return {
     ["ae"] = function()
       vim.cmd("norm! m'vV")
       vim.cmd("keepjumps 0")
+      vim.cmd("norm! o")
       vim.cmd("keepjumps $")
     end,
   },
