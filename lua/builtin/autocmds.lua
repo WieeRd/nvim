@@ -49,7 +49,7 @@ return {
       local g, api = vim.g, vim.api
       if
         g.tabpage_curr ~= api.nvim_get_current_tabpage()
-        and api.nvim_tabpage_is_valid(g.tabpage_prev)
+        and api.nvim_tabpage_is_valid(g.tabpage_prev or -1)
       then
         api.nvim_set_current_tabpage(g.tabpage_prev)
       end
