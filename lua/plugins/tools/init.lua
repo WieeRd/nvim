@@ -74,4 +74,10 @@ return {
     keys = "<S-Tab>",
     config = get_config,
   },
+
+  -- extend features of `gx` keybind
+  {
+    "chrishrb/gx.nvim",
+    config = true,
+  },
 }
