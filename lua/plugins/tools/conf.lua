@@ -1,5 +1,14 @@
 local config = {}
 
+config["neorg"] = function()
+  require("neorg").setup({
+    load = {
+      ["core.defaults"] = {},
+      ["core.concealer"] = {},
+    },
+  })
+end
+
 config["telescope.nvim"] = function()
   local telescope = require("telescope")
   local actions = require("telescope.actions")

@@ -4,6 +4,12 @@ local function get_config(plugin, opts)
 end
 
 return {
+  {
+    "nvim-neorg/neorg",
+    build = ":Neorg sync-parsers",
+    config = get_config,
+  },
+
   -- find stuffs
   {
     "nvim-telescope/telescope.nvim",
