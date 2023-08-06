@@ -47,17 +47,6 @@ return {
     ["<Leader>+"] = "<Cmd>tabnew<CR>",
     ["<Leader>-"] = "<Cmd>tabclose<CR>",
     ["<Leader>0"] = "<Cmd>tabonly<CR>",
-
-    -- -- yes I use colemak, how could you tell?
-    -- ["<C-w>h"] = "<C-w>h",
-    -- ["<C-w>n"] = "<C-w>j",
-    -- ["<C-w>e"] = "<C-w>k",
-    -- ["<C-w>i"] = "<C-w>l",
-
-    -- ["<M-h>"] = "h",
-    -- ["<M-n>"] = "j",
-    -- ["<M-e>"] = "k",
-    -- ["<M-i>"] = "l",
   },
 
   [VISUAL] = {
@@ -73,6 +62,25 @@ return {
     -- delete without worrying about yanked content
     ["yp"] = [["0p]], -- paste from yank register
     ["yd"] = [["0d]], -- delete into yank register
+
+    -- FEAT: LATER: configure ALT+HNEI to HJKL using kmonad
+    ["<M-h>"] = "h",
+    ["<M-n>"] = "j",
+    ["<M-e>"] = "k",
+    ["<M-i>"] = "l",
+
+    -- yes I use colemak, how could you tell?
+    ["<C-w>n"] = "<C-w>j",
+    ["<C-w>e"] = "<C-w>k",
+    ["<C-w>i"] = "<C-w>l",
+
+    ["<C-w><C-n>"] = "<C-w>j",
+    ["<C-w><C-e>"] = "<C-w>k",
+    ["<C-w><C-i>"] = "<C-w>l",
+
+    ["<C-w>N"] = "<C-W>J",
+    ["<C-w>E"] = "<C-w>K",
+    ["<C-w>I"] = "<C-w>L",
   },
 
   [TEXTOBJ] = {
