@@ -86,4 +86,10 @@ return {
     "chrishrb/gx.nvim",
     config = true,
   },
+
+  -- read/write with sudo without having to restart neovim
+  {
+    "lambdalisue/suda.vim",
+    cmd = { "SudaRead", "SudaWrite" },
+  },
 }
