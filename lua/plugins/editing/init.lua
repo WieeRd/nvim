@@ -71,7 +71,7 @@ return {
 
   -- 'sneak' mode; jump to anywhere on buffer
   {
-    "phaazon/hop.nvim",
+    "smoka7/hop.nvim",
     keys = {
       { "<Leader>j", "<Cmd>HopWordAC<CR>", mode = { "n", "x" } },
       { "<Leader>k", "<Cmd>HopWordBC<CR>", mode = { "n", "x" } },
