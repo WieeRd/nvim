@@ -1,11 +1,13 @@
 local config = {}
 
 config["indent-blankline.nvim"] = function()
-  require("indent_blankline").setup({
-    char = '┊',
-    context_char = '┊',
-    show_current_context = true,
-    show_current_context_start = false,
+  require("ibl").setup({
+    indent = {
+      char = '┊',
+    },
+    scope = {
+      show_start = false,
+    },
   })
 end
 
