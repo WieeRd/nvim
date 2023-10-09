@@ -186,6 +186,19 @@ config["nvim-lspconfig"] = function()
         end,
       })
     end,
+    -- Rust: rust-tools.nvim
+    ["rust_analyzer"] = function()
+      require("rust-tools").setup({
+        server = {
+          on_attach = lspconfig.util.default_config.on_attach,
+          settings = {
+            ["rust-analyzer"] = {
+              checkOnSave = true,
+            },
+          },
+        },
+      })
+    end,
   })
 
   -- diagnostic appearance

@@ -17,6 +17,7 @@ return {
       "williamboman/mason-lspconfig.nvim",
       "folke/neodev.nvim",
       "barreiroleo/ltex_extra.nvim",
+      "simrat39/rust-tools.nvim",
     },
     config = get_config,
   },
