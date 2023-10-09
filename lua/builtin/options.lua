@@ -79,4 +79,6 @@ return {
   -- spell
   spelllang = "en",
   spelloptions = "camel",
+
+  -- FEAT: `:h 'diffopt'`
 }

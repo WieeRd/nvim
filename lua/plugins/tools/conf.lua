@@ -4,7 +4,7 @@ config["neorg"] = function()
   require("neorg").setup({
     load = {
       ["core.defaults"] = {},
-      ["core.concealer"] = {},
+      -- ["core.concealer"] = {},
     },
   })
 end

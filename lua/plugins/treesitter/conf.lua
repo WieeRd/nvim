@@ -2,7 +2,7 @@ local config = {
   -- install these on startup
   ensure_installed = {
     "bash",
-    "comment",
+    -- "comment",
     "git_rebase",
     "gitcommit",
   },

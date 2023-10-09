@@ -56,6 +56,7 @@ return {
       -- "nvim-telescope/telescope.nvim",
     },
     config = get_config,
+    enabled = false,
   },
 
   -- TUI file explorer
