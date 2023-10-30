@@ -1,7 +1,9 @@
 local config = {}
 
 config["nvim-rooter.lua"] = function()
-  require("nvim-rooter").setup()
+  require("nvim-rooter").setup({
+    manual = true,
+  })
 end
 
 config["vim-fugitive"] = function()
