@@ -167,6 +167,9 @@ end
 config["auto-session"] = function()
   require("auto-session").setup({
     log_level = "error",
+    auto_session_root_dir = vim.fn.stdpath('data') .. "/sessions/",
+    -- FIX: what is this
+    auto_session_last_session_dir = "this options does nothing why is this required smh smh",
     -- restore last session only when opening Neovim in the home directory
     -- which usually right after launching the terminal or GUI client
     auto_session_enable_last_session = vim.loop.cwd() == vim.loop.os_homedir(),
