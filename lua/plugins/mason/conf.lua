@@ -1,3 +1,5 @@
+---@diagnostic disable: missing-fields
+
 local config = {}
 
 config["mason.nvim"] = function()
@@ -290,7 +292,10 @@ config["nvim-dap"] = function()
 
   dap_ui.setup({
     -- TODO: move controls to statusline (heirline config)
-    controls = { enabled = true },
+    controls = {
+      element = "repl",
+      enabled = true,
+    },
     icons = {
       collapsed = "▶",
       current_frame = "▶",
@@ -330,9 +335,9 @@ config["nvim-dap"] = function()
   dap.listeners.before["event_exited"]["dapui"] = dap_ui.close
 
   local signs = {
-    -- TODO:   󰁕
+    -- TODO:   󰁕 
     DapBreakpoint = { text = "○", texthl = "DiagnosticSignError" },
-    DapBreakpointCondition = { text = "", texthl = "DiagnosticSignWarn" },
+    DapBreakpointCondition = { text = "❓", texthl = "DiagnosticSignWarn" },
     DapLogPoint = { text = "", texthl = "DiagnosticSignOk" },
     DapStopped = { text = "●", texthl = "DiagnosticSignError" },
     DapBreakpointRejected = { text = "", texthl = "DiagnosticError" },
@@ -394,10 +399,10 @@ config["nvim-dap"] = function()
     ["<Leader>dx"] = dap.clear_breakpoints,
 
     -- step
-    ["<Right>"] = dap.step_over,
-    ["<Left>"] = dap.step_back,
-    ["<Up>"] = dap.step_out,
-    ["<Down>"] = dap.step_into,
+    ["<C-Right>"] = dap.step_over,
+    ["<C-Left>"] = dap.step_back,
+    ["<C-Up>"] = dap.step_out,
+    ["<C-Down>"] = dap.step_into,
 
     -- UI
     ["<Leader>du"] = dap_ui.toggle,

@@ -56,8 +56,8 @@ return {
 
   [MOTION] = {
     -- scroll with mouse wheel
-    ["<Up>"] = "<C-y>",
-    ["<Down>"] = "<C-e>",
+    -- ["<Up>"] = "<C-y>",
+    -- ["<Down>"] = "<C-e>",
 
     -- delete without worrying about yanked content
     ["yp"] = [["0p]], -- paste from yank register
