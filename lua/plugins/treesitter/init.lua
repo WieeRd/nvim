@@ -24,7 +24,4 @@ return {
 
   -- view & interact with TS syntax tree
   { "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" },
-
-  -- get correct 'commentstring' value inside embedded languages
-  { "JoosepAlviste/nvim-ts-context-commentstring", lazy = true },
 }

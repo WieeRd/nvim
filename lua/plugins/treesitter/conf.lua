@@ -104,11 +104,6 @@ local config = {
     disable_virtual_text = true,
     include_match_words = true,
   },
-
-  context_commentstring = {
-    enable = true,
-    enable_autocmd = false,
-  },
 }
 
 return function()
