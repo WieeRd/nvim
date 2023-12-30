@@ -6,7 +6,6 @@ I'm too lazy to use a mouse.
 
 ### Meta
 
-- Move things under `lua/wieerd/` and add `wieerd.setup()`
 - Light mode - minimal config to use over SSH
 - Add `README.md` to each directory with descriptions
 - Keep track of external dependencies and manage it with Nix
@@ -15,7 +14,6 @@ I'm too lazy to use a mouse.
 ### Custom
 
 - `custom/keymaps`
-  - centralize all keymaps, including plugins'
   - Add mapping descriptions
   - Toggle boolean value (`true` ↔ `false`)
 - `ftplugin/`
@@ -25,8 +23,6 @@ I'm too lazy to use a mouse.
 ### Plugin
 
 - setup `which-key`
-- try out `coq_nvim`
-- check out `markdown-preview.nvim`
 
 ## Spreading the Neovim cult to my friends
 
@@ -55,7 +51,6 @@ Future myself will have to guess what I meant from the names :P
 - `codebreak.nvim`
 - `keysounds.nvim`
 - `colorwheel.nvim`
-- `barebone.nvim`
 - `this.nvim`
 - `bootcamp.nvim`
 - `treeblock.nvim`
