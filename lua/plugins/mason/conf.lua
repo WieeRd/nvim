@@ -230,7 +230,7 @@ config["nvim-lspconfig"] = function()
   })
 end
 
-config["null-ls.nvim"] = function()
+config["none-ls.nvim"] = function()
   local mason_null_ls = require("mason-null-ls")
   local null_ls = require("null-ls")
 
