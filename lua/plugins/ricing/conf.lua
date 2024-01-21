@@ -8,6 +8,18 @@ config["indent-blankline.nvim"] = function()
     scope = {
       show_start = false,
     },
+    exclude = {
+      filetypes = {
+        "lspinfo",
+        "checkhealth",
+        "help",
+        "man",
+        "gitcommit",
+        "TelescopePrompt",
+        "TelescopeResults",
+        "text",
+      },
+    },
   })
 end
 

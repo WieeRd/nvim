@@ -175,7 +175,7 @@ config["nvim-lspconfig"] = function()
           "rst",
           "rnoweb",
           "tex",
-          "text",
+          -- "text",
         },
         on_attach = function(client, bufnr)
           require("ltex_extra").setup({
