@@ -152,33 +152,33 @@ config["nvim-cmp"] = function()
     experimental = { ghost_text = { hl = "NonText" } },
   })
 
-  -- command line completion
-  cmp.setup.cmdline(":", {
-    window = {
-      completion = {
-        border = "rounded",
-        winhighlight = "NormalFloat:Normal,FloatBorder:Normal",
-        scrollbar = true,
-      },
-    },
-    mapping = {
-      ["<Tab>"] = { c = complete_or_fn(cmp.select_next_item) },
-      ["<S-Tab>"] = { c = complete_or_fn(cmp.select_prev_item) },
-    },
-    sources = {
-      { name = "cmdline", keyword_length = 2 },
-      { name = "path", keyword_length = 2 },
-    },
-  })
-
-  -- clear completion menu when opening cmdline window
-  vim.api.nvim_create_autocmd("CmdwinEnter", {
-    -- `callback = cmp.close` doesn't work somehow
-    callback = function()
-      cmp.close()
-    end,
-    group = vim.api.nvim_create_augroup("CmpCmdlineFix", { clear = true }),
-  })
+  -- -- command line completion
+  -- cmp.setup.cmdline(":", {
+  --   window = {
+  --     completion = {
+  --       border = "rounded",
+  --       winhighlight = "NormalFloat:Normal,FloatBorder:Normal",
+  --       scrollbar = true,
+  --     },
+  --   },
+  --   mapping = {
+  --     ["<Tab>"] = { c = complete_or_fn(cmp.select_next_item) },
+  --     ["<S-Tab>"] = { c = complete_or_fn(cmp.select_prev_item) },
+  --   },
+  --   sources = {
+  --     { name = "cmdline", keyword_length = 2 },
+  --     { name = "path", keyword_length = 2 },
+  --   },
+  -- })
+  --
+  -- -- clear completion menu when opening cmdline window
+  -- vim.api.nvim_create_autocmd("CmdwinEnter", {
+  --   -- `callback = cmp.close` doesn't work somehow
+  --   callback = function()
+  --     cmp.close()
+  --   end,
+  --   group = vim.api.nvim_create_augroup("CmpCmdlineFix", { clear = true }),
+  -- })
 end
 
 config["LuaSnip"] = function()
