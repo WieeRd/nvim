@@ -14,8 +14,13 @@ return {
     config = function()
       require("nu").setup({})
     end,
+    enabled = false,
   },
 
   -- KMonad's `.kbd` format support
   { "kmonad/kmonad-vim" },
+
+  -- Direnv integration
+  -- FEAT: direnv.nvim
+  { "direnv/direnv.vim", enabled = false },
 }
