@@ -85,6 +85,7 @@ return {
   -- extend features of `gx` keybind
   {
     "chrishrb/gx.nvim",
+    keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
     config = true,
   },
 
