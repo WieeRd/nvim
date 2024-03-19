@@ -6,6 +6,13 @@ return {
     ft = "markdown",
   },
 
+  -- Rust analyzer & codelldb DAP setup
+  {
+    "mrcjkb/rustaceanvim",
+    version = "^4",
+    ft = { "rust" },
+  },
+
   -- nushell script
   {
     "LhKipp/nvim-nu",
