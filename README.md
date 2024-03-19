@@ -4,25 +4,10 @@ I'm too lazy to use a mouse.
 
 ## TODO
 
-### Meta
-
-- Light mode - minimal config to use over SSH
-- Add `README.md` to each directory with descriptions
-- Keep track of external dependencies and manage it with Nix
+- Eventually archive this repository and move on to [ricefield]
 - Stop ricing Linux and focus on actual projects you idiot
 
-### Custom
-
-- `custom/keymaps`
-  - Add mapping descriptions
-  - Toggle boolean value (`true` ↔ `false`)
-- `ftplugin/`
-  - `after/ftplugin/`: Real filetypes like `markdown`
-  - `ftplugin/`: Plugin filetypes like `fugitive`
-
-### Plugin
-
-- setup `which-key`
+[ricefield]: https://github.com/WieeRd/ricefield
 
 ## Spreading the Neovim cult to my friends
 
