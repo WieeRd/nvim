@@ -1,5 +1,51 @@
 return {
   {
+    "LspAttach",
+    callback = function(args)
+      local bufnr = args.buf
+      -- local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+      local function map(mode, lhs, rhs, opt)
+        opt = opt or {}
+        opt.buffer = bufnr
+        vim.keymap.set(mode, lhs, rhs, opt)
+      end
+
+      local function bind(func, opts)
+        return function()
+          func(opts)
+        end
+      end
+
+      -- navigate diagnostics
+      local dg = vim.diagnostic
+      map("n", "[d", dg.goto_prev)
+      map("n", "]d", dg.goto_next)
+      map("n", "[D", bind(dg.goto_prev, { severity = dg.severity.WARN }))
+      map("n", "]D", bind(dg.goto_next, { severity = dg.severity.WARN }))
+
+      -- NOTE: 'list all' stuff keymaps -> trouble.nvim
+      -- NOTE: lsp formatting keymaps -> null-ls.nvim
+
+      -- goto definition
+      map("n", "gd", vim.lsp.buf.definition)
+      map("n", "gD", vim.lsp.buf.type_definition)
+
+      -- call hierarchy
+      map("n", "<Leader>li", vim.lsp.buf.incoming_calls)
+      map("n", "<Leader>lo", vim.lsp.buf.outgoing_calls)
+
+      -- actions
+      map("n", "<Leader>lr", vim.lsp.buf.rename)
+      map("n", "<Leader>la", vim.lsp.buf.code_action)
+
+      -- show docs
+      map("n", "K", vim.lsp.buf.hover) -- docs
+      map("i", "<C-s>", vim.lsp.buf.signature_help) -- signature
+    end,
+  },
+
+  {
     "ColorScheme",
     callback = function(args)
       vim.cmd.runtime("after/colors/default.vim") -- ran for every colorscheme
