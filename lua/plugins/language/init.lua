@@ -21,7 +21,6 @@ return {
     config = function()
       require("nu").setup({})
     end,
-    enabled = false,
   },
 
   -- KMonad's `.kbd` format support
