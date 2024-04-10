@@ -6,8 +6,8 @@ end
 return {
   {
     "nvim-neorg/neorg",
-    build = ":Neorg sync-parsers",
     config = get_config,
+    enabled = false,
   },
 
   -- find stuffs
