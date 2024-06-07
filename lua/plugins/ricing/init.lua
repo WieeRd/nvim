@@ -14,6 +14,7 @@ return {
   {
     "RRethy/vim-illuminate",
     config = get_config,
+    enabled = false,
   },
 
   -- smooth scrolling

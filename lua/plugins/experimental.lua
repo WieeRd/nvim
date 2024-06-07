@@ -13,6 +13,7 @@ return {
     init = function()
       vim.g.keysound_volume = 600
     end,
+    enabled = false,
   },
 
   -- online pair programming

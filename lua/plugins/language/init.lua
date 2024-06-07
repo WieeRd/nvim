@@ -4,6 +4,7 @@ return {
     "iamcco/markdown-preview.nvim",
     build = "cd app && yarn install",
     ft = "markdown",
+    enabled = false,
   },
 
   -- Rust analyzer & codelldb DAP setup
@@ -21,6 +22,7 @@ return {
     config = function()
       require("nu").setup({})
     end,
+    enabled = false,
   },
 
   -- KMonad's `.kbd` format support
